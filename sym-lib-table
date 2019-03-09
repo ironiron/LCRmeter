@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name lcrmeter-rescue)(type Legacy)(uri ${KIPRJMOD}/lcrmeter-rescue.lib)(options "")(descr ""))
+)
