@@ -1607,26 +1607,26 @@ Wire Wire Line
 $Comp
 L Connector:Conn_Coaxial J5
 U 1 1 5C8FE9B7
-P 9425 6125
-F 0 "J5" H 9524 6101 50  0000 L CNN
-F 1 "OSCILLOSCOPE" H 9524 6010 50  0000 L CNN
-F 2 "" H 9425 6125 50  0001 C CNN
-F 3 " ~" H 9425 6125 50  0001 C CNN
-	1    9425 6125
+P 9505 5740
+F 0 "J5" H 9604 5716 50  0000 L CNN
+F 1 "OSCILLOSCOPE" H 9604 5625 50  0000 L CNN
+F 2 "" H 9505 5740 50  0001 C CNN
+F 3 " ~" H 9505 5740 50  0001 C CNN
+	1    9505 5740
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0135
 U 1 1 5C90A4C6
-P 9425 6325
-F 0 "#PWR0135" H 9425 6075 50  0001 C CNN
-F 1 "GND" H 9425 6175 50  0000 C CNN
-F 2 "" H 9425 6325 50  0001 C CNN
-F 3 "" H 9425 6325 50  0001 C CNN
-	1    9425 6325
+P 9560 6340
+F 0 "#PWR0135" H 9560 6090 50  0001 C CNN
+F 1 "GND" H 9560 6190 50  0000 C CNN
+F 2 "" H 9560 6340 50  0001 C CNN
+F 3 "" H 9560 6340 50  0001 C CNN
+	1    9560 6340
 	1    0    0    -1  
 $EndComp
-Text Label 9225 6125 2    50   ~ 0
+Text Label 9230 6070 2    50   ~ 0
 OSCILLOSCOPE
 $Comp
 L Connector:USB_B_Micro J4
@@ -1746,12 +1746,6 @@ Wire Notes Line
 Wire Notes Line
 	3665 4790 490  4790
 Wire Notes Line
-	11085 4625 8275 4625
-Wire Notes Line
-	3745 5125 8275 5125
-Wire Notes Line
-	8275 4625 8275 6555
-Wire Notes Line
 	8970 530  8970 2050
 Wire Notes Line
 	8970 2050 9455 2050
@@ -1761,9 +1755,9 @@ Wire Notes Line
 	455  2030 1225 2030
 Wire Notes Line
 	1225 2030 1225 525 
-Text Notes 7190 5510 0    100  ~ 0
+Text Notes 6795 5285 0    100  ~ 0
 Buttons
-Text Notes 8280 6490 0    100  ~ 0
+Text Notes 7690 6440 0    100  ~ 0
 miscellaneous\nconnectors
 Text Notes 9705 3590 1    100  ~ 0
 TVS protection
@@ -1774,4 +1768,54 @@ Caps
 Text Notes 745  750  0    100  ~ 0
 Power
 NoConn ~ 9265 5510
+$Comp
+L Device:R R?
+U 1 1 5C873FB1
+P 9275 5910
+F 0 "R?" H 9345 5956 50  0000 L CNN
+F 1 "100" H 9345 5865 50  0000 L CNN
+F 2 "" V 9205 5910 50  0001 C CNN
+F 3 "~" H 9275 5910 50  0001 C CNN
+	1    9275 5910
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5C874C9F
+P 9275 6235
+F 0 "R?" H 9345 6281 50  0000 L CNN
+F 1 "100" H 9345 6190 50  0000 L CNN
+F 2 "" V 9205 6235 50  0001 C CNN
+F 3 "~" H 9275 6235 50  0001 C CNN
+	1    9275 6235
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9435 6385 9435 6340
+Wire Wire Line
+	9275 6385 9435 6385
+Wire Wire Line
+	9505 5940 9505 6340
+Wire Wire Line
+	9435 6340 9505 6340
+Connection ~ 9505 6340
+Wire Wire Line
+	9505 6340 9560 6340
+Wire Wire Line
+	9275 6085 9275 6070
+Wire Wire Line
+	9305 5740 9275 5740
+Wire Wire Line
+	9275 5740 9275 5760
+Wire Wire Line
+	9275 6070 9230 6070
+Connection ~ 9275 6070
+Wire Wire Line
+	9275 6070 9275 6060
+Wire Notes Line
+	11190 4715 7560 4715
+Wire Notes Line
+	7560 4715 7560 6505
+Wire Notes Line
+	7475 5110 3715 5110
 $EndSCHEMATC
