@@ -744,20 +744,6 @@ Wire Wire Line
 	2050 1920 2050 1955
 Wire Wire Line
 	2050 1955 2005 1955
-$Comp
-L Connector:TestPoint TP1
-U 1 1 5C974AC9
-P 1660 1485
-F 0 "TP1" H 1718 1605 50  0000 L CNN
-F 1 "Reset" H 1718 1514 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 1860 1485 50  0001 C CNN
-F 3 "~" H 1860 1485 50  0001 C CNN
-	1    1660 1485
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1660 1485 1660 1520
-Connection ~ 1660 1520
 Wire Wire Line
 	2210 3920 1880 3920
 Wire Wire Line
