@@ -182,12 +182,12 @@ $EndComp
 $Comp
 L power:+1V5 #PWR06
 U 1 1 5A1343EE
-P 970 1145
-F 0 "#PWR06" H 970 995 50  0001 C CNN
-F 1 "+1V5" H 970 1285 50  0000 C CNN
-F 2 "" H 970 1145 50  0001 C CNN
-F 3 "" H 970 1145 50  0001 C CNN
-	1    970  1145
+P 955 975
+F 0 "#PWR06" H 955 825 50  0001 C CNN
+F 1 "+1V5" H 955 1115 50  0000 C CNN
+F 2 "" H 955 975 50  0001 C CNN
+F 3 "" H 955 975 50  0001 C CNN
+	1    955  975 
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -672,15 +672,6 @@ Wire Wire Line
 	1035 5730 1035 5570
 Wire Wire Line
 	610  770  610  725 
-Wire Wire Line
-	585  1345 585  1360
-Wire Wire Line
-	970  1145 970  1360
-Wire Wire Line
-	970  1360 585  1360
-Connection ~ 585  1360
-Wire Wire Line
-	585  1360 585  1385
 $Comp
 L Device:R_Small R2
 U 1 1 5C95140A
@@ -1281,39 +1272,6 @@ PWM_OUT
 Text Label 10750 3440 0    50   ~ 0
 8_MHz_OUT
 $Comp
-L power:+1V5 #PWR0119
-U 1 1 5C861FBA
-P 9650 1380
-F 0 "#PWR0119" H 9650 1230 50  0001 C CNN
-F 1 "+1V5" H 9650 1520 50  0000 C CNN
-F 2 "" H 9650 1380 50  0001 C CNN
-F 3 "" H 9650 1380 50  0001 C CNN
-	1    9650 1380
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:VCC #PWR0120
-U 1 1 5C8623A1
-P 9400 1115
-F 0 "#PWR0120" H 9400 965 50  0001 C CNN
-F 1 "VCC" H 9400 1265 50  0000 C CNN
-F 2 "" H 9400 1115 50  0001 C CNN
-F 3 "" H 9400 1115 50  0001 C CNN
-	1    9400 1115
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0121
-U 1 1 5C862650
-P 9400 1715
-F 0 "#PWR0121" H 9400 1465 50  0001 C CNN
-F 1 "GND" H 9400 1565 50  0000 C CNN
-F 2 "" H 9400 1715 50  0001 C CNN
-F 3 "" H 9400 1715 50  0001 C CNN
-	1    9400 1715
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector_Generic:Conn_01x06 J3
 U 1 1 5C862939
 P 8775 4220
@@ -1453,21 +1411,6 @@ F 3 "" H 10150 3755 50  0001 C CNN
 	1    10150 3755
 	1    0    0    -1  
 $EndComp
-$Comp
-L Diode:BAT54S D1
-U 1 1 5C8BDC1A
-P 9400 1415
-F 0 "D1" H 9400 1640 50  0000 C CNN
-F 1 "BAT54S" H 9400 1549 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 9475 1540 50  0001 L CNN
-F 3 "https://www.diodes.com/assets/Datasheets/ds11005.pdf" H 9280 1415 50  0001 C CNN
-	1    9400 1415
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	9600 1415 9650 1415
-Wire Wire Line
-	9650 1415 9650 1380
 $Comp
 L Connector:Conn_01x06_Female J7
 U 1 1 5C8CA5DE
@@ -1696,10 +1639,6 @@ Wire Notes Line
 Wire Notes Line
 	3665 4790 490  4790
 Wire Notes Line
-	8970 530  8970 2050
-Wire Notes Line
-	8970 2050 9455 2050
-Wire Notes Line
 	9455 2050 9455 4625
 Wire Notes Line
 	455  2030 1225 2030
@@ -1823,4 +1762,142 @@ F 3 "" H 8980 2550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8980 2550 8980 2585
+$Comp
+L Amplifier_Operational:MCP6001-OT U5
+U 1 1 5C8BED48
+P 9140 1185
+F 0 "U5" H 9295 1295 50  0000 L CNN
+F 1 "MCP6001-OT" H 9125 1395 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-5" H 9040 985 50  0001 L CNN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf" H 9140 1385 50  0001 C CNN
+	1    9140 1185
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	585  1345 585  1355
+$Comp
+L Device:R R21
+U 1 1 5C8BFB53
+P 955 1150
+F 0 "R21" H 1025 1196 50  0000 L CNN
+F 1 "0" H 1025 1105 50  0000 L CNN
+F 2 "Resistor_SMD:R_2010_5025Metric_Pad1.52x2.65mm_HandSolder" V 885 1150 50  0001 C CNN
+F 3 "~" H 955 1150 50  0001 C CNN
+	1    955  1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	955  1000 955  975 
+Wire Wire Line
+	955  1300 955  1355
+Wire Wire Line
+	955  1355 585  1355
+Connection ~ 585  1355
+Wire Wire Line
+	585  1355 585  1385
+Text Notes 1210 1300 1    50   ~ 0
+Optional
+$Comp
+L power:VCC #PWR018
+U 1 1 5C8CFAF1
+P 8595 675
+F 0 "#PWR018" H 8595 525 50  0001 C CNN
+F 1 "VCC" H 8595 825 50  0000 C CNN
+F 2 "" H 8595 675 50  0001 C CNN
+F 3 "" H 8595 675 50  0001 C CNN
+	1    8595 675 
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR019
+U 1 1 5C8CFB7E
+P 8595 1590
+F 0 "#PWR019" H 8595 1340 50  0001 C CNN
+F 1 "GND" H 8595 1440 50  0000 C CNN
+F 2 "" H 8595 1590 50  0001 C CNN
+F 3 "" H 8595 1590 50  0001 C CNN
+	1    8595 1590
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R22
+U 1 1 5C8CFF17
+P 8595 845
+F 0 "R22" H 8665 891 50  0000 L CNN
+F 1 "10k" H 8665 800 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8525 845 50  0001 C CNN
+F 3 "~" H 8595 845 50  0001 C CNN
+	1    8595 845 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R23
+U 1 1 5C8D0B85
+P 8595 1300
+F 0 "R23" H 8665 1346 50  0000 L CNN
+F 1 "10k" H 8665 1255 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8525 1300 50  0001 C CNN
+F 3 "~" H 8595 1300 50  0001 C CNN
+	1    8595 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8840 1285 8840 1585
+Wire Wire Line
+	8840 1585 9440 1585
+Wire Wire Line
+	9440 1585 9440 1185
+Wire Wire Line
+	8595 1150 8595 1085
+Wire Wire Line
+	8595 1085 8840 1085
+Wire Wire Line
+	8595 995  8595 1085
+Connection ~ 8595 1085
+Wire Wire Line
+	8595 675  8595 695 
+$Comp
+L power:VCC #PWR020
+U 1 1 5C8F08F3
+P 9040 860
+F 0 "#PWR020" H 9040 710 50  0001 C CNN
+F 1 "VCC" H 9040 1010 50  0000 C CNN
+F 2 "" H 9040 860 50  0001 C CNN
+F 3 "" H 9040 860 50  0001 C CNN
+	1    9040 860 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9040 860  9040 885 
+Wire Wire Line
+	8595 1450 8595 1485
+Connection ~ 8595 1485
+Wire Wire Line
+	8595 1485 8595 1590
+Wire Wire Line
+	8595 1485 9040 1485
+Wire Notes Line
+	10020 2050 10020 490 
+$Comp
+L power:+1V5 #PWR021
+U 1 1 5C91B336
+P 9780 1120
+F 0 "#PWR021" H 9780 970 50  0001 C CNN
+F 1 "+1V5" H 9780 1260 50  0000 C CNN
+F 2 "" H 9780 1120 50  0001 C CNN
+F 3 "" H 9780 1120 50  0001 C CNN
+	1    9780 1120
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9780 1120 9780 1185
+Wire Wire Line
+	9780 1185 9440 1185
+Connection ~ 9440 1185
+Wire Notes Line
+	8000 2050 8000 480 
+Wire Notes Line
+	8000 2050 10020 2050
+Text Notes 9115 1820 0    50   ~ 0
+Optional
 $EndSCHEMATC
