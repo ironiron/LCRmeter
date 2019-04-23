@@ -5,10 +5,10 @@
  *      Author: Rafa³ Mazurkiewicz
  */
 
+#include <Pwm_hardware.hpp>
 #include <Pwm.hpp>
 #include "catch.hpp"
 #include "fakeit.hpp"
-#include "Pwm_hardware.hpp"
 
 //using namespace fakeit;
 

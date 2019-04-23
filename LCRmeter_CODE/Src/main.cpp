@@ -51,6 +51,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"
+#include "Pwm.hpp"
 ///aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 /* Private includes ----------------------------------------------------------*/
@@ -90,13 +91,29 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
+#if 1
+volatile int k;
+extern "C" {
+void TIM1_CC_IRQHandler(void);
+}
 
+void TIM1_CC_IRQHandler(void)
+{
+
+  k++;
+  if (TIM1->SR & TIM_SR_CC2IF)
+
+  TIM1->SR=0;
+}
+#endif
 /**
   * @brief  The application entry point.
   * @retval int
   */
 int main(void)
 {
+
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -112,15 +129,95 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+  MX_GPIO_Init();
 
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+
  // MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  __HAL_RCC_TIM1_CLK_ENABLE();
+
+
+#if 0
+  TIM_HandleTypeDef htim1;
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+   /* USER CODE END TIM1_Init 0 */
+
+   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+   TIM_MasterConfigTypeDef sMasterConfig = {0};
+   TIM_OC_InitTypeDef sConfigOC = {0};
+   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+   /* USER CODE BEGIN TIM1_Init 1 */
+
+   /* USER CODE END TIM1_Init 1 */
+   htim1.Instance = TIM1;
+   htim1.Init.Prescaler = 72000;
+   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+   htim1.Init.Period = 1000;
+   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+   htim1.Init.RepetitionCounter = 0;
+   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+   if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+   {
+     Error_Handler();
+   }
+   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+   if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+   {
+     Error_Handler();
+   }
+   if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+   {
+     Error_Handler();
+   }
+   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+   {
+     Error_Handler();
+   }
+   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+   sConfigOC.Pulse = 500;
+   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
+   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+   {
+     Error_Handler();
+   }
+   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+   sBreakDeadTimeConfig.DeadTime = 0;
+   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+   {
+    // Error_Handler();
+   }
+   /* USER CODE BEGIN TIM1_Init 2 */
+
+   /* USER CODE END TIM1_Init 2 */
+  // HAL_TIM_MspPostInit(&htim1);
+
+#else
+   Pwm <TIM_TypeDef,uint16_t>Pwm(TIM1);
+   Pwm.Set_Frequency(2000);
+  Pwm.Set_Duty(41);
+  //Pwm.Initialise();
+
+  Pwm.Enable();
+
+#endif
 
   /* USER CODE END 2 */
 
@@ -129,7 +226,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+      GPIOC->ODR^=(1<<13);
+      HAL_Delay(100);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -180,7 +278,8 @@ void SystemClock_Config(void)
   HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
   /**Enables the Clock Security System 
   */
-  HAL_RCC_EnableCSS();
+ HAL_RCC_EnableCSS();
+
 }
 
 /**
@@ -196,12 +295,23 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin : PA8 */
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 

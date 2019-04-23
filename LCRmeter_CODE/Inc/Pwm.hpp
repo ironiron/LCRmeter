@@ -29,11 +29,7 @@ public:
 public:
   Pwm (T *tim):_timer(tim)
   {
-    // TODO Auto-generated constructor stub
-    //CR1|=(1<<ARPE)|	;//(1<<CEN);
-   // CCMR1|=(1<<OC1M2-1);
-    //EGR|=(1<<UG);
-
+    Initialise();
   }
 virtual  ~Pwm ()
   {
@@ -46,7 +42,6 @@ virtual  ~Pwm ()
    * @param frequency : desired frequency in intiger.
    *
    */
-
   void Set_Frequency (uint32_t frequency)
   {
     int psc=0;
@@ -65,9 +60,6 @@ virtual  ~Pwm ()
     Set_Counter(cnt-1);
 
     Set_Duty(duty);// Update after frequency change.
-
-
-   // _timer->PSC=0;
   }
 
   void Set_Duty (uint8_t duty)
@@ -87,17 +79,23 @@ virtual  ~Pwm ()
     this->duty=duty;
   }
 
+
+   void Enable (void);
+   void Disable (void);
+  //void Initialise (void);
+
 private:
   void Set_Prescaler (width);
   void Set_Counter (width);
   void Set_Compare (width);
   uint32_t Get_Clock (void);
+  void Initialise (void);
 
-  const T* _timer;
+  T* _timer;
   uint8_t duty=0;
   const int cnt_initialvalue=100;
   int cnt=cnt_initialvalue;
 #endif
 };
-#include "Pwm_hardware.hpp"
+#include <Pwm_hardware.hpp>
 #endif /* PWM_HPP_ */
