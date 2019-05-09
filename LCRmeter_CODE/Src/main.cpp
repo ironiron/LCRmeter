@@ -91,20 +91,40 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-#if 1
-volatile int k;
-extern "C" {
-void TIM1_CC_IRQHandler(void);
-}
 
-void TIM1_CC_IRQHandler(void)
+#if 0
+template<typename port_type,
+typename bval_type,
+const port_type port,
+const bval_type bval>
+  class led_template
+  {
+  public:
+    led_template ()
+    {
+// Set the port pin value to low.
+     // *reinterpret_cast<volatile bval_type*> (port) &=
+	  //static_cast<bval_type> (~bval);
+// Set the port pin direction to output.
+      //*reinterpret_cast<volatile bval_type*> (pdir) |= bval;
+    }
+    static void
+    toggle ()
+    {
+// Toggle the LED.
+      *reinterpret_cast<volatile bval_type*> (port) ^= bval;
+    }
+  private:
+    static constexpr port_type pdir = port - 1U;
+  };
+
+
+
+namespace
 {
-
-  k++;
-  if (TIM1->SR & TIM_SR_CC2IF)
-
-  TIM1->SR=0;
+  const led_template<uint32_t, uint32_t, &uint32_t(GPIOC->ODR), (1<<13)> led_c13;
 }
+
 #endif
 /**
   * @brief  The application entry point.
@@ -141,8 +161,38 @@ int main(void)
   /* USER CODE BEGIN 2 */
   __HAL_RCC_TIM1_CLK_ENABLE();
 
-
+GPIOC->ODR^=(1<<13);
+HAL_Delay(20);
+GPIOC->ODR^=(1<<13);
 #if 0
+#if 1
+
+
+int psc=0;
+psc=72000000/100/2000-1;
+
+
+
+TIM1->PSC=psc;
+
+TIM1->CCR2=30;
+
+  TIM1->ARR=99;
+  TIM1->EGR|=TIM_EGR_UG;
+
+
+
+  TIM1->SR=0;
+  TIM1->CR1|=TIM_CR1_ARPE;
+  TIM1->BDTR |= TIM_BDTR_MOE;
+  TIM1->CCMR1|=TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2PE| TIM_CCMR1_OC2FE;
+  TIM1->CCER=TIM_CCER_CC2E;
+  TIM1->EGR|=TIM_EGR_UG;
+
+  TIM1->CR1|=TIM_CR1_CEN;
+
+
+#else
   TIM_HandleTypeDef htim1;
   /* USER CODE BEGIN TIM1_Init 0 */
 
@@ -208,26 +258,28 @@ int main(void)
 
    /* USER CODE END TIM1_Init 2 */
   // HAL_TIM_MspPostInit(&htim1);
-
+#endif
 #else
-   Pwm <TIM_TypeDef,uint16_t>Pwm(TIM1);
-   Pwm.Set_Frequency(2000);
-  Pwm.Set_Duty(41);
-  //Pwm.Initialise();
 
-  Pwm.Enable();
+ Pwm<TIM_TypeDef, uint16_t, 2> Pwm (TIM1, 100);
+ Pwm.Initialise();//one timer-two channels->thus only one initialisation
+ Pwm.Set_Frequency(5000);
+ Pwm.Set_Duty(0);
+ Pwm.Enable();
 
 #endif
-
+ GPIOC->ODR^=(1<<13);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-      GPIOC->ODR^=(1<<13);
       HAL_Delay(100);
+    /* USER CODE EN
+     * D WHILE */
+      GPIOC->ODR^=(1<<13);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

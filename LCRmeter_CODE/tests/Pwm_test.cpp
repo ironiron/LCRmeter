@@ -13,16 +13,9 @@
 //using namespace fakeit;
 
 int* kak;
-Pwm <int,uint16_t>PWM(kak);
+Pwm <int,uint16_t,2>PWM(kak,100);
 
 TEST_CASE( "Set PWM frequency") {
-  //Pwm <int>PWM(kak);
-  //Mock<Pwm<int>> mock;
-
-
-
-  //Fake(Method(mock,Set_Frequency));
-  //When(Method(mock,Set_Frequency)).Return(72000000);
 
     PWM.Set_Frequency(20000);
     int result=(testing::clockfreq)/((testing::prescaler+1)*(testing::counter+1));
@@ -49,11 +42,13 @@ TEST_CASE( "Set PWM frequency out-of-bounds") {
 
 TEST_CASE( "Set PWM duty") {
     PWM.Set_Duty(40);
-    REQUIRE( (testing::compare)== 40 );
+    REQUIRE( (testing::compare2)== 40 );
+    PWM.Set_Duty(70);
+    REQUIRE( (testing::compare2)== 70 );
 }
 
 TEST_CASE( "Set PWM duty out-of-bounds") {
     PWM.Set_Duty(101);
-    REQUIRE( (testing::compare)== 100 );
+    REQUIRE( (testing::compare2)== 100 );
 }
 

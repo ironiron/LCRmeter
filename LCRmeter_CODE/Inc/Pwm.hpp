@@ -12,8 +12,8 @@
 
 #define deb
 
-template <class T, typename width>
-class Pwm
+template < class  T, typename width,uint8_t chn>
+ class Pwm
 {
 #ifndef deb
 public:
@@ -27,26 +27,24 @@ public:
   virtual  ~Pwm ();
 #else
 public:
-  Pwm (T *tim):_timer(tim)
+  Pwm ( T* tim,width period=100):
+    _timer(tim),
+    cnt_initialvalue(period)
   {
-    Initialise();
+    //static_assert(channel<=4,"edsdd");
+    //Initialise();
   }
-virtual  ~Pwm ()
-  {
-    // TODO Auto-generated destructor stub
-  }
-
   /**@brief This function computes optimal prescaler and ARR registers
    * for desired frequency. Ensuring at least 1% of duty resolution.
    *
    * @param frequency : desired frequency in intiger.
    *
    */
-  void Set_Frequency (uint32_t frequency)
+ void Set_Frequency (uint32_t frequency)
   {
     int psc=0;
     cnt=cnt_initialvalue;//- set initial value
-    psc=Get_Clock()/cnt/frequency;
+     psc=Get_Clock()/cnt/frequency;
     if (psc>0xffff)
       {
 	 psc=0xffff;
@@ -62,7 +60,7 @@ virtual  ~Pwm ()
     Set_Duty(duty);// Update after frequency change.
   }
 
-  void Set_Duty (uint8_t duty)
+ void Set_Duty (uint8_t duty )
   {
     if (duty>100)
       {
@@ -70,11 +68,18 @@ virtual  ~Pwm ()
       }
     if(cnt!=cnt_initialvalue)
       {
-	Set_Compare(duty*cnt/cnt_initialvalue);
+	Set_Compare(duty*cnt/cnt_initialvalue,channel);
       }
     else
       {
-	Set_Compare(duty);
+	if(cnt!=0)
+	  {
+	    Set_Compare(duty*cnt/100,channel);
+	  }
+	else
+	{
+	    Set_Compare(duty,channel);
+	}
       }
     this->duty=duty;
   }
@@ -82,19 +87,19 @@ virtual  ~Pwm ()
 
    void Enable (void);
    void Disable (void);
-  //void Initialise (void);
+  void Initialise (void);
+   void Set_Prescaler (width);
+   void Set_Counter (width);
+   void Set_Compare  (width,uint8_t) ;
+   uint32_t Get_Clock (void);
 
 private:
-  void Set_Prescaler (width);
-  void Set_Counter (width);
-  void Set_Compare (width);
-  uint32_t Get_Clock (void);
-  void Initialise (void);
-
   T* _timer;
-  uint8_t duty=0;
-  const int cnt_initialvalue=100;
+  const uint8_t channel=chn;
+  uint8_t duty;
+  const int cnt_initialvalue;
   int cnt=cnt_initialvalue;
+
 #endif
 };
 #include <Pwm_hardware.hpp>
