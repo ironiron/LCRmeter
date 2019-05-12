@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 8)
+    (drawings 9)
     (tracks 919)
     (zones 0)
     (modules 63)
@@ -2817,6 +2817,9 @@
     )
   )
 
+  (gr_text "COPYRIGHT(c) 2019 Rafał Mazurkiewicz" (at 152.55 146.5) (layer B.SilkS)
+    (effects (font (size 1.5 1.5) (thickness 0.3)) (justify mirror))
+  )
   (dimension 54.102 (width 0.3) (layer Cmts.User)
     (gr_text "54.102 mm" (at 188.79 122.301 270) (layer Cmts.User)
       (effects (font (size 1.5 1.5) (thickness 0.3)))

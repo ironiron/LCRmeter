@@ -46,6 +46,15 @@
   *
   ******************************************************************************
   */
+
+
+/**@mainpage This project contains source code for simple and cheap LCRmeter
+ * It is capable of measuring resistance, inductance, capacitance, as well as
+ * outputs 8MHz clock from oscillator, and PWM. For more hardware related stuff go to
+ * LCRmeter_PCB directory outside this folder.
+ * \ref md_LICENSE.md
+ */
+
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
