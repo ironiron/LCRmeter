@@ -17,7 +17,7 @@
 #define deb
 
 /*! @class Pwm
- *  @brief This is intended to generate waveform on desired Timer channel.
+ *  @brief This class is intended to generate waveform on desired Timer channel.
  *  @tparam T timer structure
  *  @tparam width base resolution of timer(uint16_t etc.)
  *  @tparam chn timer's channel on which will be generated signal
@@ -34,8 +34,6 @@ public:
     _timer(tim),
     cnt_initialvalue(period)
   {
-    //static_assert(channel<=4,"edsdd");
-    //Initialise();
   }
   /**@brief This function computes optimal prescaler and ARR registers
    * for desired frequency. Ensuring at least 1% of duty resolution.
@@ -72,17 +70,17 @@ public:
       }
     if(cnt!=cnt_initialvalue)
       {
-	Set_Compare(duty*cnt/cnt_initialvalue,channel);
+	Set_Compare(duty*cnt/cnt_initialvalue);
       }
     else
       {
 	if(cnt!=100)
 	  {
-	    Set_Compare(duty*cnt/100,channel);
+	    Set_Compare(duty*cnt/100);
 	  }
 	else
 	{
-	    Set_Compare(duty,channel);
+	    Set_Compare(duty);
 	}
       }
     this->duty=duty;
@@ -113,7 +111,7 @@ public:
    /**@brief Sets timer's compare register
     * @param width : prescaler to set
     */
-   void Set_Compare  (width,uint8_t) ;
+   void Set_Compare  (width) ;
 
    /**@brief Gets base frequency of timer clock
     * @return  clock value in integer

@@ -171,7 +171,7 @@ int main(void)
   __HAL_RCC_TIM1_CLK_ENABLE();
 
 GPIOC->ODR^=(1<<13);
-HAL_Delay(20);
+HAL_Delay(40);
 GPIOC->ODR^=(1<<13);
 #if 0
 #if 1
@@ -270,14 +270,67 @@ TIM1->CCR2=30;
 #endif
 #else
 
- Pwm<TIM_TypeDef, uint16_t, 2> Pwm (TIM1, 100);
- Pwm.Initialise();//one timer-two channels->thus only one initialisation
- Pwm.Set_Frequency(5000);
- Pwm.Set_Duty(0);
- Pwm.Enable();
+ Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
+ pwm.Initialise();//one timer-two channels->thus only one initialisation
+ pwm.Set_Frequency(5000);
+ pwm.Set_Duty(0);
+ pwm.Enable();
 
 #endif
  GPIOC->ODR^=(1<<13);
+ ///////////////////////////////////////////////////////////////////////////
+ __HAL_RCC_I2C1_CLK_ENABLE();
+ __HAL_RCC_I2C2_CLK_ENABLE();
+
+ /*Initialize in full speed 400kHz
+  * freq=36MHz=>TPCLK1=28ns
+  * Thigh = 9 * CCR * TPCLK1
+  * Tlow = 16 * CCR * TPCLK1
+  * tr(SCL)=300ns
+  * tw(SCLH)=1,3us
+  * thigh = tr(SCL) + tw(SCLH)=1,6us
+  * tf(SCL)=300ns
+  * tw(SCLL)=0,6us
+  * tlow = tr(SCL) + tw(SCLH)=0,9us
+  * CCR~4
+  */
+
+if (1)
+{
+    I2C1->CR1|= I2C_CR1_SWRST;
+    HAL_Delay(50);
+    I2C1->CR1&=~ I2C_CR1_SWRST;
+  I2C1->CR2|=36;
+  //CCR = 50ns
+  I2C1->CCR|=0xb4;//I2C_CCR_FS| I2C_CCR_DUTY | 8;
+  I2C1->TRISE|=0x25;//7;
+  I2C1->CR1|= I2C_CR1_PE;
+  I2C1->CR1|=I2C_CR1_START;
+}
+
+// HAL_I2C_Master_Transmit(&hi2c1,0x44,&u,1,200);
+
+     /* I2C1 interrupt Init */
+  //   HAL_NVIC_SetPriority(I2C1_EV_IRQn, 0, 0);
+//     HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
+
+ volatile uint32_t jk=I2C1->SR1;
+ printf("\n\r sds kjhui%d",jk);
+
+ I2C1->DR=0x24;
+
+ while((I2C1->SR1 & I2C_SR1_ADDR)==0);
+
+ jk=I2C1->SR1;
+  printf("\n\rsds%d",jk);
+  jk=I2C1->SR2;
+   printf("\n\rsds%d",jk);
+
+ I2C1->DR=0x76;
+
+ printf("sds%d",jk);
+
+ ///////////////////////////////////////////////////////////////////////////
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -288,7 +341,7 @@ TIM1->CCR2=30;
     /* USER CODE EN
      * D WHILE */
       GPIOC->ODR^=(1<<13);
-
+      printf("sdshm  mj",jk);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -373,6 +426,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  //I2C
+
+  GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_6 | GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 

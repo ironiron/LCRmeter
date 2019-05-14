@@ -30,10 +30,10 @@ void Pwm<T,width,chn>::Set_Prescaler (width psc)
 }
 
 template <class T, typename width,uint8_t chn>
-void Pwm<T,width,chn>::Set_Compare (width comp,uint8_t channel)
+void Pwm<T,width,chn>::Set_Compare (width comp)
 {
-  //static_assert(channel<=4,"error, channel can be of value 0-4");
-  switch(channel)
+  static_assert(chn<=4,"error, channel can be of value 0-4");
+  switch(chn)
   {
     case 1:
       _timer->CCR1=comp;
@@ -67,7 +67,7 @@ void Pwm<T,width,chn>::Set_Counter (width cnt)
 template <class T, typename width,uint8_t chn>
 uint32_t Pwm<T,width,chn>::Get_Clock (void)
 {
-  return 84000000;
+  return 72000000;
 }
 
 template <class T, typename width,uint8_t chn>
