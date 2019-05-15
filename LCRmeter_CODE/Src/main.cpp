@@ -317,7 +317,7 @@ if (1)
  volatile uint32_t jk=I2C1->SR1;
  printf("\n\r sds kjhui%d",jk);
 
- I2C1->DR=0x24;
+ I2C1->DR=0x78;
 
  while((I2C1->SR1 & I2C_SR1_ADDR)==0);
 
@@ -326,7 +326,7 @@ if (1)
   jk=I2C1->SR2;
    printf("\n\rsds%d",jk);
 
- I2C1->DR=0x76;
+ I2C1->DR=0xAE;
 
  printf("sds%d",jk);
 
