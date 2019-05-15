@@ -327,6 +327,17 @@ if (1)
    printf("\n\rsds%d",jk);
 
  I2C1->DR=0xAE;
+ while((I2C1->SR1 & I2C_SR1_TXE)==0);
+ I2C1->DR=0xd5;
+ while((I2C1->SR1 & I2C_SR1_TXE)==0);
+ I2C1->DR=0x80;
+ while((I2C1->SR1 & I2C_SR1_TXE)==0);
+ I2C1->DR=0xA8;
+ while((I2C1->SR1 & I2C_SR1_TXE)==0);
+ I2C1->DR=0x1F;
+ while((I2C1->SR1 & I2C_SR1_TXE)==0);
+
+ I2C1->CR1|=I2C_CR1_STOP;
 
  printf("sds%d",jk);
 
