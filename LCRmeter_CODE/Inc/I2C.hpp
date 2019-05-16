@@ -15,7 +15,7 @@
 // TODO Send byte receive dma continous send enable disable
 //TODO make i2c derived of dma class
 
-class I2C : DMA
+class I2C
 {
 public:
   I2C ()

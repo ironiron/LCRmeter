@@ -61,6 +61,7 @@
 #include "main.h"
 #include "usb_device.h"
 #include "Pwm.hpp"
+#include "DMA.hpp"
 ///aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 /* Private includes ----------------------------------------------------------*/
@@ -281,7 +282,54 @@ TIM1->CCR2=30;
  ///////////////////////////////////////////////////////////////////////////
  __HAL_RCC_I2C1_CLK_ENABLE();
  __HAL_RCC_I2C2_CLK_ENABLE();
+ __HAL_RCC_DMA1_CLK_ENABLE();
+#if 1
+ uint8_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
 
+ DMA dd(DMA1_Channel6);
+ dd.Set_Direction(1);
+ dd.Set_Minc(1);
+ dd.Set_Data_Count(5);
+ dd.Set_Peripheral_Addr((uint32_t)(&I2C1->DR));
+ dd.Set_Memory_Addr((uint32_t)(&data));
+
+ //DMA1_Channel6->CCR|=DMA_CCR_MINC|DMA_CCR_DIR;
+ //    DMA1_Channel6->CNDTR=5;
+ ///DMA1_Channel6->CPAR=(uint32_t)(&I2C1->DR);
+ //DMA1_Channel6->CMAR=(uint32_t)(&data);
+
+
+ I2C1->CR1|= I2C_CR1_SWRST;
+ HAL_Delay(50);
+ I2C1->CR1&=~ I2C_CR1_SWRST;
+I2C1->CR2|=36|I2C_CR2_DMAEN;
+//CCR = 50ns
+I2C1->CCR|=I2C_CCR_FS| I2C_CCR_DUTY | 6;
+I2C1->TRISE|=9;
+I2C1->CR1|= I2C_CR1_PE;
+I2C1->CR1|=I2C_CR1_START;
+
+//DMA1_Channel6->CCR|=DMA_CCR_EN;
+dd.Enable();
+
+volatile uint32_t jk=I2C1->SR1;
+printf("\n\r sds kjhui%d",jk);
+
+I2C1->DR=0x78;
+
+while((I2C1->SR1 & I2C_SR1_ADDR)==0);
+
+
+jk=I2C1->SR1;
+ printf("\n\rsds%d",jk);
+ jk=I2C1->SR2;
+  printf("\n\rsds%d",jk);
+
+  //DMA1_Channel6->CNDTR=5;
+
+dd.baba();
+
+#else
  /*Initialize in full speed 400kHz
   * freq=36MHz=>TPCLK1=28ns
   * Thigh = 9 * CCR * TPCLK1
@@ -294,7 +342,6 @@ TIM1->CCR2=30;
   * tlow = tr(SCL) + tw(SCLH)=0,9us
   * CCR~4
   */
-
 if (1)
 {
     I2C1->CR1|= I2C_CR1_SWRST;
@@ -302,8 +349,8 @@ if (1)
     I2C1->CR1&=~ I2C_CR1_SWRST;
   I2C1->CR2|=36;
   //CCR = 50ns
-  I2C1->CCR|=0xb4;//I2C_CCR_FS| I2C_CCR_DUTY | 8;
-  I2C1->TRISE|=0x25;//7;
+  I2C1->CCR|=I2C_CCR_FS| I2C_CCR_DUTY | 6;
+  I2C1->TRISE|=9;
   I2C1->CR1|= I2C_CR1_PE;
   I2C1->CR1|=I2C_CR1_START;
 }
@@ -338,8 +385,7 @@ if (1)
  while((I2C1->SR1 & I2C_SR1_TXE)==0);
 
  I2C1->CR1|=I2C_CR1_STOP;
-
- printf("sds%d",jk);
+#endif
 
  ///////////////////////////////////////////////////////////////////////////
   /* USER CODE END 2 */
