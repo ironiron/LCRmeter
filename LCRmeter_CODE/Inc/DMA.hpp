@@ -7,6 +7,7 @@
 
 #ifndef DMA_HPP_
 #define DMA_HPP_
+
 #include "stm32f1xx.h"
 
 class DMA
@@ -61,5 +62,4 @@ public:
     dma->CCR &=~ DMA_CCR_EN;
   }
 };
-
 #endif /* DMA_HPP_ */

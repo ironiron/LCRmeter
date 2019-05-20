@@ -13,9 +13,6 @@
 #define PWM_HPP_
 #include <stdint.h>
 
-
-#define deb
-
 /*! @class Pwm
  *  @brief This class is intended to generate waveform on desired Timer channel.
  *  @tparam T timer structure
@@ -118,12 +115,12 @@ public:
     */
    uint32_t Get_Clock (void);
 
-private:
-  T* _timer;///< pointer to template timer struct
-  const uint8_t channel=chn;///<channel of timer on which PWM will be generated
-  uint8_t duty;///<duty of the PWM
-  const int cnt_initialvalue;///<initial value of counter register used for calculating frequency
-  int cnt=cnt_initialvalue;///<shadow variable of timers counter register
+  private:
+    T* _timer; ///< pointer to template timer struct
+    const uint8_t channel = chn; ///<channel of timer on which PWM will be generated
+    uint8_t duty; ///<duty of the PWM
+    const int cnt_initialvalue; ///<initial value of counter register used for calculating frequency
+    int cnt = cnt_initialvalue; ///<shadow variable of timers counter register
 };
 #include <Pwm_hardware.hpp>
 #endif /* PWM_HPP_ */

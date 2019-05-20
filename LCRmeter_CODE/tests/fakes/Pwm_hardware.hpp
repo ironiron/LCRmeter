@@ -17,26 +17,26 @@ namespace testing
   extern int clockfreq;
 }
 
-template <class T, typename width>
-void Pwm<T,width>::Set_Prescaler (width psc)
+template <class T, typename width,uint8_t chn>
+void Pwm<T,width,chn>::Set_Prescaler (width psc)
 {
   testing::prescaler=psc;
 }
 
-template <class T, typename width>
-void Pwm<T,width>::Set_Compare (width comp)
+template <class T, typename width,uint8_t chn>
+void Pwm<T,width,chn>::Set_Compare (width comp)
 {
   testing::compare=comp;
 }
 
-template <class T, typename width>
-void Pwm<T,width>::Set_Counter (width cnt)
+template <class T, typename width,uint8_t chn>
+void Pwm<T,width,chn>::Set_Counter (width cnt)
 {
   testing::counter=cnt;
 }
 
-template <class T, typename width>
-uint32_t Pwm<T,width>::Get_Clock (void)
+template <class T, typename width,uint8_t chn>
+uint32_t Pwm<T,width,chn>::Get_Clock (void)
 {
   return testing::clockfreq;
 }

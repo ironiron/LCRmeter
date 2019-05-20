@@ -8,9 +8,10 @@
 #ifndef I2C_HPP_
 #define I2C_HPP_
 
-#include <stdio.h>
-#include "DMA.hpp"
+//#include <stdint.h>
+
 #include "stm32f1xx.h"
+#include "DMA.hpp"
 
 // TODO Send byte receive dma continous send enable disable
 //TODO make i2c derived of dma class
@@ -29,11 +30,13 @@ public:
   void Enable(void);
   void Disable(void);
 
+  void Set_Frequency(const uint32_t);
+  void Reset(void);
+
+
   void Initialise(void);
 private:
   I2C_TypeDef *i2c;
-
-
 
 };
 

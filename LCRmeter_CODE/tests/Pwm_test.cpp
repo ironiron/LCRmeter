@@ -42,13 +42,13 @@ TEST_CASE( "Set PWM frequency out-of-bounds") {
 
 TEST_CASE( "Set PWM duty") {
     PWM.Set_Duty(40);
-    REQUIRE( (testing::compare2)== 40 );
+    REQUIRE( (testing::compare)== 40 );
     PWM.Set_Duty(70);
-    REQUIRE( (testing::compare2)== 70 );
+    REQUIRE( (testing::compare)== 70 );
 }
 
 TEST_CASE( "Set PWM duty out-of-bounds") {
     PWM.Set_Duty(101);
-    REQUIRE( (testing::compare2)== 100 );
+    REQUIRE( (testing::compare)== 100 );
 }
 

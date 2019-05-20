@@ -327,7 +327,7 @@ jk=I2C1->SR1;
 
   //DMA1_Channel6->CNDTR=5;
 
-dd.baba();
+
 
 #else
  /*Initialize in full speed 400kHz
@@ -398,7 +398,7 @@ if (1)
     /* USER CODE EN
      * D WHILE */
       GPIOC->ODR^=(1<<13);
-      printf("sdshm  mj",jk);
+      printf("sdshm  mj");
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
