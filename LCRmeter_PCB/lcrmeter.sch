@@ -1716,24 +1716,8 @@ F 3 "~" H 8980 2735 50  0001 C CNN
 	1    8980 2735
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R20
-U 1 1 5C89377D
-P 8980 3090
-F 0 "R20" H 9050 3136 50  0000 L CNN
-F 1 "10k" H 9050 3045 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 8910 3090 50  0001 C CNN
-F 3 "~" H 8980 3090 50  0001 C CNN
-	1    8980 3090
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8980 2940 8980 2920
 Wire Wire Line
 	8010 2920 8980 2920
-Connection ~ 8980 2920
-Wire Wire Line
-	8980 2920 8980 2885
 $Comp
 L power:GND #PWR09
 U 1 1 5C8B821C
@@ -1911,4 +1895,20 @@ OSCILLOSCOPE_IN
 Wire Wire Line
 	7835 4975 7835 5195
 Connection ~ 7835 5195
+$Comp
+L Device:D_Zener D1
+U 1 1 5CFAB46B
+P 8980 3090
+F 0 "D1" V 8934 3169 50  0000 L CNN
+F 1 "2V" V 9025 3169 50  0000 L CNN
+F 2 "Diode_SMD:D_MiniMELF" H 8980 3090 50  0001 C CNN
+F 3 "~" H 8980 3090 50  0001 C CNN
+	1    8980 3090
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8980 2885 8980 2920
+Connection ~ 8980 2920
+Wire Wire Line
+	8980 2920 8980 2940
 $EndSCHEMATC
