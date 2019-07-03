@@ -6,45 +6,458 @@
  */
 
 #include <I2C.hpp>
+#include "I2C_hardware.hpp"
+#include <vector>
+#include "fakes/DMA.hpp"
 
-void I2C::Send_Byte (uint8_t addr, uint8_t byte)
+#include <iostream>
+using namespace std;
+
+I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte)
 {
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+ Send_Byte (byte);
+ error=Check_Errors_After_Data();
+ if(error!=ErrorCode::OK)
+   {
+     return error;
+   }
+
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
 }
 
-void I2C::Send_Byte_Cont (uint8_t addr, uint8_t* byte, uint32_t size)
+I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint16_t byte)
 {
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  Send_Byte (byte>>8);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  Send_Byte (byte & 0xff);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
 }
 
-void
-I2C::Enable (void)
+I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte, uint8_t mem_addr)
 {
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  Send_Byte (mem_addr);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+ Send_Byte (byte);
+ error=Check_Errors_After_Data();
+ if(error!=ErrorCode::OK)
+   {
+     return error;
+   }
+
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
 }
 
-void
-I2C::Disable (void)
+I2C::ErrorCode I2C::Send_Data(uint8_t addr, uint16_t byte,uint8_t mem_addr)
 {
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  Send_Byte (mem_addr);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  Send_Byte (byte >> 8);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  Send_Byte (byte & 0xff);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
 }
 
 
-void
-I2C::Initialise (void)
+I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint8_t* bytes, uint32_t size)
 {
-  /*Initialise in full speed 400kHz
-   * freq=20MHz=>TPCLK1=50ns
-   * Thigh = 9 * CCR * TPCLK1
-   * Tlow = 16 * CCR * TPCLK1
-   * tr(SCL)=300ns
-   * tw(SCLH)=1,3us
-   * thigh = tr(SCL) + tw(SCLH)=1,6us
-   * tf(SCL)=300ns
-   * tw(SCLL)=0,6us
-   * tlow = tr(SCL) + tw(SCLH)=0,9us
-   * CCR~4
-   */
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
 
-/*  i2c->CR2|=36;
-  //CCR = 50ns
-  i2c->CCR|=I2C_CCR_F/S| I2C_CCR_DUTY | 4;
-  i2c->TRISE|=7;
-  i2c->CR1|=I2C_CR1_ACK |I2C_CR1_START| I2C_CR1_PE;*/
+  for (uint32_t i=0;i<size*2;i++)
+    {
+      Send_Byte (bytes[i]);
+      error=Check_Errors_After_Data();
+      if(error!=ErrorCode::OK)
+        {
+          return error;
+        }
+    }
+
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
 }
+//not recommended - uses memory allocation under the hood (16 bit)
+I2C::ErrorCode I2C::Send_Data_Cont(uint8_t addr, const uint16_t* bytes,uint32_t size)
+{
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  uint8_t *array = new (std::nothrow)uint8_t[size*2];
+  if (array==NULL)//TODO Test for fail in real hardware
+    {
+      return I2C::ErrorCode::GENERAL_ERROR;
+    }
+  for(uint32_t i=0,j=0;i<size;i++)
+    {
+      array[j++]=(bytes[i]>>8);
+    array[j++]=(bytes[i]&0xff);
+    }
+  for (uint32_t i=0;i<size*2;i++)
+    {
+      Send_Byte (array[i]);
+      error=Check_Errors_After_Data();
+      if(error!=ErrorCode::OK)
+        {
+          return error;
+        }
+    }
+
+  delete array;
+  Generate_Stop();
+  return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint8_t* bytes, uint32_t size,
+			  uint8_t mem_addr)
+{
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+      {
+        reset ();
+      }
+    Generate_Start();
+    Send_Address (addr);
+    error=Check_Errors_After_Addr();
+    if(error!=ErrorCode::OK)
+      {
+        return error;
+      }
+    //uint32_t t;
+    //procedure required by hardware to clear Addr bit.
+    Get_Status1_Reg();
+    Get_Status2_Reg();
+
+
+    Send_Byte (mem_addr);
+    error=Check_Errors_After_Data();
+    if(error!=ErrorCode::OK)
+      {
+        return error;
+      }
+
+    for (uint32_t i=0;i<size*2;i++)
+      {
+        Send_Byte (bytes[i]);
+        error=Check_Errors_After_Data();
+        if(error!=ErrorCode::OK)
+          {
+            return error;
+          }
+      }
+    return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes, uint32_t size,
+			  uint8_t mem_addr)
+{
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+  Generate_Start();
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+  //uint32_t t;
+  //procedure required by hardware to clear Addr bit.
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+
+  Send_Byte (mem_addr);
+  error=Check_Errors_After_Data();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+
+  uint8_t *array = new (std::nothrow)uint8_t[size*2];
+  if (array==NULL)//TODO Test for fail in real hardware
+    {
+      return I2C::ErrorCode::GENERAL_ERROR;
+    }
+  for(uint32_t i=0,j=0;i<size;i++)
+    {
+      array[j++]=(bytes[i]>>8);
+    array[j++]=(bytes[i]&0xff);
+    }
+  for (uint32_t i=0;i<size*2;i++)
+    {
+      Send_Byte (array[i]);
+      error=Check_Errors_After_Data();
+      if(error!=ErrorCode::OK)
+        {
+          return error;
+        }
+    }
+
+  delete array;
+  return I2C::ErrorCode::OK;
+}
+
+
+I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte, uint32_t size)
+{
+  if(dma==0)
+    {
+      return I2C::ErrorCode::DMA_DISABLED;
+    }
+  Send_Bytes_DMA(byte,size,true);//TODO fix name
+
+
+  Generate_Start();
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size)
+{
+  if(dma==0)
+    {
+      return I2C::ErrorCode::DMA_DISABLED;
+    }
+
+  uint8_t *array = new (std::nothrow)uint8_t[size*2];
+    if (array==NULL)//TODO Test for fail in real hardware
+      {
+        return I2C::ErrorCode::GENERAL_ERROR;
+      }
+    for(uint32_t i=0,j=0;i<size;i++)
+      {
+        array[j++]=(byte[i]>>8);
+      array[j++]=(byte[i]&0xff);
+      }
+  Send_Bytes_DMA(array,size*2,true);//TODO fix name
+  delete array;
+
+
+  Generate_Start();
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte, uint32_t size,uint8_t mem_addr)
+{
+  if(dma==0)
+    {
+      return I2C::ErrorCode::DMA_DISABLED;
+    }
+
+
+  Send_Bytes_DMA(byte,size,true);//TODO fix name
+
+  Generate_Start();
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+  Send_Byte (mem_addr);//not sure
+
+  return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size,uint8_t mem_addr)
+{
+  if(dma==0)
+    {
+      return I2C::ErrorCode::DMA_DISABLED;
+    }
+
+  uint8_t *array = new (std::nothrow)uint8_t[size*2+1];
+    if (array==NULL)//TODO Test for fail in real hardware
+      {
+        return I2C::ErrorCode::GENERAL_ERROR;
+      }
+    array[0]=mem_addr;
+    for(uint32_t i=0,j=1;i<size;i++)
+      {
+        array[j++]=(byte[i]>>8);
+      array[j++]=(byte[i]&0xff);
+      }
+  Send_Bytes_DMA(array,size*2+1,true);//TODO fix name
+  delete array;
+
+
+  Generate_Start();
+  if (Get_Status1_Reg() != 0)//Reset bus in case of errors.
+    {
+      reset ();
+    }
+
+  Send_Address (addr);
+  error=Check_Errors_After_Addr();
+  if(error!=ErrorCode::OK)
+    {
+      return error;
+    }
+
+  Get_Status1_Reg();
+  Get_Status2_Reg();
+
+  return I2C::ErrorCode::OK;
+}
+
+
+//inline void I2C::delay_us (uint32_t unsignedInt)
+//{
+//}

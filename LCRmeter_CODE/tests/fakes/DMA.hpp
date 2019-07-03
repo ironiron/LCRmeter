@@ -8,55 +8,60 @@
 #ifndef DMA_HPP_
 #define DMA_HPP_
 
-#include "stm32f1xx.h"
-//TODO fix this baba
+
+
 class DMA
 {
 public:
-  DMA (DMA_Channel_TypeDef *d): dma(d)
+  DMA ()//: dma(d)
   {
     // TODO Auto-generated constructor stub
   }
+  // DMA_Channel_TypeDef *dma;
+  enum Size{BYTE, HALF_WORD_WORD};
+
   void Set_Data_Count(uint32_t data)
   {
-    dma->CNDTR=data;
   }
 
   void Set_Peripheral_Addr(uint32_t data)
   {
-    dma->CPAR=data;
   }
 
   void Set_Memory_Addr(uint32_t data)
   {
-    dma->CMAR=data;
   }
 
   void Set_Minc(bool enabled)
   {
-    dma->CCR|=(enabled<<DMA_CCR_MINC_Pos);
   }
 
   void Set_Pinc(bool enabled)
   {
-    dma->CCR|=(enabled<<DMA_CCR_PINC_Pos);
   }
 
   void Set_Direction(bool toperipheral)
   {
-    dma->CCR|=(toperipheral<<DMA_CCR_DIR_Pos);
+  }
+
+  void Circular_Enable(bool enable)
+  {
+
   }
 
   void Enable(void)
   {
-    dma->CCR|=DMA_CCR_EN;
+
   }
 
   void Disable(void)
   {
-    dma->CCR &=~ DMA_CCR_EN;
+
   }
-private:
-  DMA_Channel_TypeDef *dma;
+
+  void Set_Size_Tx(Size S)
+  {
+
+  }
 };
 #endif /* DMA_HPP_ */
