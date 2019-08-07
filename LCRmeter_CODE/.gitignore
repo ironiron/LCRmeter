@@ -1,5 +1,1 @@
-bin/
-tmp/
-Debug/
-Release/
-Test/
+/Debug/

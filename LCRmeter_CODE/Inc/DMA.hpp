@@ -17,6 +17,8 @@ public:
   {
     // TODO Auto-generated constructor stub
   }
+  enum Size{BYTE, HALF_WORD_WORD};
+
   void Set_Data_Count(uint32_t data)
   {
     dma->CNDTR=data;
@@ -55,6 +57,21 @@ public:
   void Disable(void)
   {
     dma->CCR &=~ DMA_CCR_EN;
+  }
+
+  void Set_Size_Tx(Size S)
+  {
+
+  }
+
+  void Set_Size_Rx(Size S)
+  {
+
+  }
+
+  void Circular_Enable(bool enable)
+  {
+
   }
 private:
   DMA_Channel_TypeDef *dma;
