@@ -1,8 +1,0 @@
-  Dma configured by registers
-   text	   data	    bss	    dec	    hex	filename
-  23068	   1668	   1640	  26376	   6708	LCRmeter.elf
-  
-  dma in separate class
-   text	   data	    bss	    dec	    hex	filename
-  23068	   1668	   1640	  26376	   6708	LCRmeter.elf
-  

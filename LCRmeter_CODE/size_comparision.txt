@@ -1,0 +1,6 @@
+C
+   text	   data	    bss	    dec	    hex	filename
+  12396	    268	   4376	  17040	   4290	LCRmeter.elf
+C++ set clocks in USB func.
+   text	   data	    bss	    dec	    hex	filename
+  12392	    268	   4376	  17036	   428c	LCRmeter.elf

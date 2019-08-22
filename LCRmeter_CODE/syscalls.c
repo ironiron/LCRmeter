@@ -52,8 +52,8 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/times.h>
-#include "stm32f1xx.h"
 
+#include "stm32f1xx.h"
 
 /* Variables */
 //#undef errno
@@ -107,8 +107,8 @@ int _write(int file, char *ptr, int len)
 
 	for (DataIdx = 0; DataIdx < len; DataIdx++)
 	{
+	    ITM_SendChar((*ptr++));
 		//__io_putchar(*ptr++);
-		ITM_SendChar((*ptr++));
 	}
 	return len;
 }
