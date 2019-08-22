@@ -1,0 +1,4 @@
+# Ignore everything except doxygen file
+*
+!.gitignore
+!*.doxyfile
