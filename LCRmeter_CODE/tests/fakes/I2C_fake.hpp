@@ -26,30 +26,34 @@ public:
     // TODO Auto-generated constructor stub
 
   }
-  void Send_Data(uint8_t addr, uint8_t byte);
-  void Send_Data(uint8_t addr, uint16_t byte)
+
+  enum ErrorCode{OK,TIMEOUT,NACK,BUS_ERROR,ARBITION_LOST,BUS_BUSY,
+      GENERAL_ERROR,DMA_DISABLED};//TODO consider this
+
+  I2C::ErrorCode Send_Data(uint8_t addr, uint8_t byte);
+  I2C::ErrorCode Send_Data(uint8_t addr, uint16_t byte)
   {
     index++;
     data.push_back(byte);
     adress.push_back(addr);
   }
-  void Send_Data(uint8_t addr, uint8_t byte,uint8_t mem_addr);
-  void Send_Data(uint8_t addr, uint16_t byte,uint8_t mem_addr)
+  I2C::ErrorCode Send_Data(uint8_t addr, uint8_t byte,uint8_t mem_addr);
+  I2C::ErrorCode Send_Data(uint8_t addr, uint16_t byte,uint8_t mem_addr)
   {
     index++;
     data.push_back(byte);
     adress.push_back(addr);
     memoryaddress.push_back(mem_addr);
   }
-  void Send_Data(uint8_t addr, uint16_t byte,uint16_t mem_addr)
+  I2C::ErrorCode Send_Data(uint8_t addr, uint16_t byte,uint16_t mem_addr)
   {
     index++;
     data.push_back(byte);
     adress.push_back(addr);
     memoryaddress.push_back(mem_addr);
   }
-  void Send_Data_Cont(uint8_t addr, const uint8_t *byte,uint32_t size);
-  void Send_Data_Cont(uint8_t addr, const uint16_t *byte,uint32_t size)
+  I2C::ErrorCode Send_Data_Cont(uint8_t addr, const uint8_t *byte,uint32_t size);
+  I2C::ErrorCode Send_Data_Cont(uint8_t addr, const uint16_t *byte,uint32_t size)
   {
     for (uint32_t in = 0; in < size; ++in)
       {
@@ -58,8 +62,8 @@ public:
 	adress.push_back (addr);
       }
   }
-  void Send_Data_Cont(uint8_t addr, const uint8_t *byte,uint32_t size,uint8_t mem_addr);
-  void Send_Data_Cont(uint8_t addr, const uint16_t *byte,uint32_t size,uint16_t mem_addr)
+  I2C::ErrorCode Send_Data_Cont(uint8_t addr, const uint8_t *byte,uint32_t size,uint8_t mem_addr);
+  I2C::ErrorCode Send_Data_Cont(uint8_t addr, const uint16_t *byte,uint32_t size,uint16_t mem_addr)
   {
     for (uint32_t in = 0; in < size; ++in)
       {
@@ -70,9 +74,9 @@ public:
       }
   }
 
-  void Send_Data_Circular(uint8_t addr, const uint8_t *byte,uint32_t size);
+  I2C::ErrorCode Send_Data_Circular(uint8_t addr, const uint8_t *byte,uint32_t size);
 
-  void Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size)
+  I2C::ErrorCode Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size)
   {
     for (uint32_t in = 0; in < size; ++in)
       {
@@ -81,8 +85,8 @@ public:
 	adress.push_back (addr);
       }
   }
-  void Send_Data_Circular(uint8_t addr, const uint8_t *byte,uint32_t size,uint8_t mem_addr);
-  void Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size,uint8_t mem_addr)
+  I2C::ErrorCode Send_Data_Circular(uint8_t addr, const uint8_t *byte,uint32_t size,uint8_t mem_addr);
+  I2C::ErrorCode Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size,uint8_t mem_addr)
   {
     for (uint32_t in = 0; in < size; ++in)
       {
@@ -92,7 +96,7 @@ public:
 	memoryaddress.push_back (mem_addr);
       }
   }
-  void Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size,uint16_t mem_addr)
+  I2C::ErrorCode Send_Data_Circular(uint8_t addr, const uint16_t *byte,uint32_t size,uint16_t mem_addr)
   {
     for (uint32_t in = 0; in < size; ++in)
       {

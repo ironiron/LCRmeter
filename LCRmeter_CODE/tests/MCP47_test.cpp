@@ -5,16 +5,18 @@
  *      Author: Rafa³
  */
 
+#include <I2C_fake.hpp>
 #include <MCP47.hpp>
 #include "catch.hpp"
-#include "fakes/I2C.hpp"
 #include <iostream>
 #include <string>
 #include "sine.hpp"
 
-I2C i2c;//fake
+static I2C i2c;//fake
 MCP47<1> dac4725(i2c);
 MCP47<0> dac47feb(i2c);
+
+//TODO adjust tests for real hardware
 
 void Reset_Data(void)
 {

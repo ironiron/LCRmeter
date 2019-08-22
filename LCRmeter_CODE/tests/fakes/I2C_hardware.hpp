@@ -7,8 +7,8 @@
 
 #ifndef FAKES_I2C_HARDWARE_HPP_
 #define FAKES_I2C_HARDWARE_HPP_
+
 #include "I2C.hpp"
-//#include "../Inc/I2C.hpp"
 
 #include <stdint.h>
 #include <vector>
@@ -28,7 +28,7 @@ inline void I2C::reset (void)
 {
 }
 
-inline void I2C::delay_us (uint32_t)
+inline void I2C::delay (uint32_t)
 {
 
 }
@@ -99,7 +99,7 @@ inline I2C::ErrorCode I2C::Check_Errors_After_Data (void)
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      delay_us(1);
+      delay(1);
     }
   return I2C::ErrorCode::OK;
 }
@@ -130,9 +130,12 @@ inline I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      delay_us(1);
+      delay(1);
     }
   return I2C::ErrorCode::OK;
 }
+
+//TODO clean inline etc.
+
 
 #endif /* FAKES_I2C_HARDWARE_HPP_ */

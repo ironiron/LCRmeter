@@ -1,7 +1,8 @@
 /**
   ******************************************************************************
-  * @file    Pwm.h
+  * @file    Pwm.hpp
   * @author  Rafa³ Mazurkiewicz
+  * @date    14.05.2019
   * @brief   Class file header for PWM signal generation
   ******************************************************************************
   * @attention
@@ -101,24 +102,23 @@ public:
    void Set_Prescaler (width);
 
    /**@brief Sets timer's counter register
-    * @param width : prescaler to set
+    * @param width : counter value to set
     */
    void Set_Counter (width);
 
    /**@brief Sets timer's compare register
-    * @param width : prescaler to set
+    * @param width : set desired compare register value
     */
-   void Set_Compare  (width) ;
+   void Set_Compare  (width);
 
+  private:
    /**@brief Gets base frequency of timer clock
     * @return  clock value in integer
     */
    uint32_t Get_Clock (void);
-
-  private:
-    T* _timer; ///< pointer to template timer struct
+    T* _timer; 			///< pointer to template timer struct
     const uint8_t channel = chn; ///<channel of timer on which PWM will be generated
-    uint8_t duty; ///<duty of the PWM
+    uint8_t duty; 		///<duty of the PWM
     const int cnt_initialvalue; ///<initial value of counter register used for calculating frequency
     int cnt = cnt_initialvalue; ///<shadow variable of timers counter register
 };

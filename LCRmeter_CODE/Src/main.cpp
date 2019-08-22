@@ -6,41 +6,41 @@
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
-  * Copyright (c) 2019 STMicroelectronics International N.V. 
+  * Copyright (c) 2019 STMicroelectronics International N.V.
   * All rights reserved.
   *
-  * Redistribution and use in source and binary forms, with or without 
+  * Redistribution and use in source and binary forms, with or without
   * modification, are permitted, provided that the following conditions are met:
   *
-  * 1. Redistribution of source code must retain the above copyright notice, 
+  * 1. Redistribution of source code must retain the above copyright notice,
   *    this list of conditions and the following disclaimer.
   * 2. Redistributions in binary form must reproduce the above copyright notice,
   *    this list of conditions and the following disclaimer in the documentation
   *    and/or other materials provided with the distribution.
-  * 3. Neither the name of STMicroelectronics nor the names of other 
-  *    contributors to this software may be used to endorse or promote products 
+  * 3. Neither the name of STMicroelectronics nor the names of other
+  *    contributors to this software may be used to endorse or promote products
   *    derived from this software without specific written permission.
-  * 4. This software, including modifications and/or derivative works of this 
+  * 4. This software, including modifications and/or derivative works of this
   *    software, must execute solely and exclusively on microcontroller or
   *    microprocessor devices manufactured by or for STMicroelectronics.
-  * 5. Redistribution and use of this software other than as permitted under 
-  *    this license is void and will automatically terminate your rights under 
-  *    this license. 
+  * 5. Redistribution and use of this software other than as permitted under
+  *    this license is void and will automatically terminate your rights under
+  *    this license.
   *
-  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS" 
-  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT 
-  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+  * THIS SOFTWARE IS PROVIDED BY STMICROELECTRONICS AND CONTRIBUTORS "AS IS"
+  * AND ANY EXPRESS, IMPLIED OR STATUTORY WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
   * PARTICULAR PURPOSE AND NON-INFRINGEMENT OF THIRD PARTY INTELLECTUAL PROPERTY
-  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT 
+  * RIGHTS ARE DISCLAIMED TO THE FULLEST EXTENT PERMITTED BY LAW. IN NO EVENT
   * SHALL STMICROELECTRONICS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
   * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
-  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+  * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
   * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
   * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
@@ -57,11 +57,19 @@
 
 /* USER CODE END Header */
 
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"
 #include "Pwm.hpp"
+#include "stm32f1xx.h"
 #include "DMA.hpp"
+#include "MCP47.hpp"
+#include "I2C.hpp"
+#include "delay.h"
+#include <stdio.h>
+#include "sine.hpp"
 ///aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 /* Private includes ----------------------------------------------------------*/
@@ -170,120 +178,67 @@ int main(void)
  // MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
   __HAL_RCC_TIM1_CLK_ENABLE();
-
+  printf("asdczx");
 GPIOC->ODR^=(1<<13);
 HAL_Delay(40);
 GPIOC->ODR^=(1<<13);
-#if 0
-#if 1
 
+// Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
+// pwm.Initialise();//one timer-two channels->thus only one initialization TODO fix typo
+// pwm.Set_Frequency(5000);
+// pwm.Set_Duty(0);
+// pwm.Enable();
 
-int psc=0;
-psc=72000000/100/2000-1;
-
-
-
-TIM1->PSC=psc;
-
-TIM1->CCR2=30;
-
-  TIM1->ARR=99;
-  TIM1->EGR|=TIM_EGR_UG;
-
-
-
-  TIM1->SR=0;
-  TIM1->CR1|=TIM_CR1_ARPE;
-  TIM1->BDTR |= TIM_BDTR_MOE;
-  TIM1->CCMR1|=TIM_CCMR1_OC2M_2|TIM_CCMR1_OC2M_1| TIM_CCMR1_OC2PE| TIM_CCMR1_OC2FE;
-  TIM1->CCER=TIM_CCER_CC2E;
-  TIM1->EGR|=TIM_EGR_UG;
-
-  TIM1->CR1|=TIM_CR1_CEN;
-
-
-#else
-  TIM_HandleTypeDef htim1;
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-   /* USER CODE END TIM1_Init 0 */
-
-   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-   TIM_MasterConfigTypeDef sMasterConfig = {0};
-   TIM_OC_InitTypeDef sConfigOC = {0};
-   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
-
-   /* USER CODE BEGIN TIM1_Init 1 */
-
-   /* USER CODE END TIM1_Init 1 */
-   htim1.Instance = TIM1;
-   htim1.Init.Prescaler = 72000;
-   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-   htim1.Init.Period = 1000;
-   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-   htim1.Init.RepetitionCounter = 0;
-   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-   if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-   {
-     Error_Handler();
-   }
-   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-   if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-   {
-     Error_Handler();
-   }
-   if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
-   {
-     Error_Handler();
-   }
-   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-   {
-     Error_Handler();
-   }
-   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-   sConfigOC.Pulse = 500;
-   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-   sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
-   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-   {
-     Error_Handler();
-   }
-   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-   sBreakDeadTimeConfig.DeadTime = 0;
-   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
-   {
-    // Error_Handler();
-   }
-   /* USER CODE BEGIN TIM1_Init 2 */
-
-   /* USER CODE END TIM1_Init 2 */
-  // HAL_TIM_MspPostInit(&htim1);
-#endif
-#else
-
- Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
- pwm.Initialise();//one timer-two channels->thus only one initialisation
- pwm.Set_Frequency(5000);
- pwm.Set_Duty(0);
- pwm.Enable();
-
-#endif
  GPIOC->ODR^=(1<<13);
  ///////////////////////////////////////////////////////////////////////////
  __HAL_RCC_I2C1_CLK_ENABLE();
  __HAL_RCC_I2C2_CLK_ENABLE();
  __HAL_RCC_DMA1_CLK_ENABLE();
-#if 1
+
+
+ volatile I2C::ErrorCode er;
+
+ DMA dma(DMA1_Channel6);
+
+ dma.Set_Size_Memory(DMA::Size::HALF_WORD);
+ delay_ms(100);
+ dma.Set_Minc(1);
+
+ dma.Set_Minc(0);
+
+ I2C i2c_dma(I2C1,&dma);
+ i2c_dma.Initialise();
+ i2c_dma.Enable();
+ i2c_dma.Enable_DMA();
+
+ MCP47<1> dac_dma(i2c_dma);
+// uint16_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
+ dac_dma.Set_Continuous(sine_table,sine_table_lenght);
+
+ while(1);
+
+#if 0
+ I2C i2c(I2C1);
+ i2c.Initialise();
+ i2c.Enable();
+ //volatile I2C::ErrorCode jkl=i2c.Send_Data((uint8_t)0xc0,(uint8_t)0x34);
+ printf("asdczx");
+
+ //while(1);
+delay_ms(13);
+ MCP47<1> dac(i2c);
+ dac.Set_Output(200);
+ delay_ms(1000);
+ dac.Set_Output(2000);
+
+ while(1)
+   {
+     printf("asdczx");
+     delay_ms(500);
+   }
+#endif
+
+#if 0
  uint8_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
 
  DMA dd(DMA1_Channel6);
@@ -364,25 +319,26 @@ if (1)
  volatile uint32_t jk=I2C1->SR1;
  printf("\n\r sds kjhui%d",jk);
 
- I2C1->DR=0x78;
+ I2C1->DR=0xc0;//bylo 78
+
 
  while((I2C1->SR1 & I2C_SR1_ADDR)==0);
 
  jk=I2C1->SR1;
-  printf("\n\rsds%d",jk);
+  //printf("\n\rsds%d",jk);
   jk=I2C1->SR2;
-   printf("\n\rsds%d",jk);
+  // printf("\n\rsds%d",jk);
 
- I2C1->DR=0xAE;
+ I2C1->DR=0x07;//ae
  while((I2C1->SR1 & I2C_SR1_TXE)==0);
- I2C1->DR=0xd5;
+ I2C1->DR=0xd0;//d5
  while((I2C1->SR1 & I2C_SR1_TXE)==0);
- I2C1->DR=0x80;
- while((I2C1->SR1 & I2C_SR1_TXE)==0);
- I2C1->DR=0xA8;
- while((I2C1->SR1 & I2C_SR1_TXE)==0);
- I2C1->DR=0x1F;
- while((I2C1->SR1 & I2C_SR1_TXE)==0);
+// I2C1->DR=0x80;
+// while((I2C1->SR1 & I2C_SR1_TXE)==0);
+// I2C1->DR=0xA8;
+// while((I2C1->SR1 & I2C_SR1_TXE)==0);
+// I2C1->DR=0x1F;
+// while((I2C1->SR1 & I2C_SR1_TXE)==0);
 
  I2C1->CR1|=I2C_CR1_STOP;
 #endif
@@ -394,7 +350,7 @@ if (1)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      HAL_Delay(100);
+      delay_ms(200);
     /* USER CODE EN
      * D WHILE */
       GPIOC->ODR^=(1<<13);
@@ -414,7 +370,7 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-  /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -427,7 +383,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -447,7 +403,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
-  /**Enables the Clock Security System 
+  /**Enables the Clock Security System
   */
  HAL_RCC_EnableCSS();
 
@@ -518,7 +474,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */

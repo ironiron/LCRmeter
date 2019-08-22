@@ -164,3 +164,21 @@ TEST_CASE( "Send data circular thru DMA")
   REQUIRE(testing::send_data[5]==0x55);
   REQUIRE(testing::send_data[6]==0x89);
 }
+
+TEST_CASE( "handle errors while sending thru DMA")
+{
+  uint8_t addr=0x24;
+  uint16_t data[3]={0x3256,0x0404,0x5589};
+  uint8_t mem_addr=0x44;
+  testing::send_data.clear();
+  testing::status_nack_bit=1;
+
+  I2C::ErrorCode er=i2c_dma.Send_Data_Circular(addr,data,uint32_t(3),mem_addr);
+
+  REQUIRE(er==I2C::ErrorCode::OK);
+
+  I2C::Check_Errors_ISR(i2c_dma);
+
+  REQUIRE(i2c_dma.Get_Last_Error()==I2C::ErrorCode::NACK);
+
+}

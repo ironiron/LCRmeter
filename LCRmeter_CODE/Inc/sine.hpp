@@ -8,7 +8,7 @@
 #ifndef SINE_HPP_
 #define SINE_HPP_
 
-#include <array>
+//#include <array>
 
 static const uint16_t sine_table[]=
 {
