@@ -70,6 +70,7 @@
 #include "delay.h"
 #include <stdio.h>
 #include "sine.hpp"
+#include "SSD1306.hpp"
 ///aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 /* Private includes ----------------------------------------------------------*/
@@ -195,25 +196,54 @@ GPIOC->ODR^=(1<<13);
  __HAL_RCC_I2C2_CLK_ENABLE();
  __HAL_RCC_DMA1_CLK_ENABLE();
 
-
+ uint8_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
  volatile I2C::ErrorCode er;
+delay_ms(50);
+ I2C i2c(I2C1);
+ i2c.Initialise();
+ i2c.Disable_DMA();
+ i2c.Enable();
 
- DMA dma(DMA1_Channel6);
+ SSD1306 oled(32,i2c);
 
- dma.Set_Size_Memory(DMA::Size::HALF_WORD);
- delay_ms(100);
- dma.Set_Minc(1);
+ oled.Initialize();
+ oled.Fill(SSD1306::WHITE);
+ oled.Update_Screen();
+ delay_ms(200);
+ oled.Fill(SSD1306::BLACK);
+ oled.Update_Screen();
+ delay_ms(50);
 
- dma.Set_Minc(0);
+ oled.Draw_Pixel(0,0,SSD1306::WHITE);
+ oled.Draw_Pixel(10,0,SSD1306::WHITE);
+ oled.Draw_Pixel(20,20,SSD1306::WHITE);
+ oled.Draw_Pixel(10,1,SSD1306::WHITE);
+ oled.Update_Screen();
+ delay_ms(800);
+ oled.Set_Cursor(0,0);
+ oled.Write_String("lorem ipsum set dolorem ipsum xDDD, ho lo no wo");
+ oled.Update_Screen();
+ //oled.Mirror_Screen(false);
+ //oled.Update_Screen();
+ //oled.Flip_Screen(true);
 
- I2C i2c_dma(I2C1,&dma);
- i2c_dma.Initialise();
- i2c_dma.Enable();
- i2c_dma.Enable_DMA();
 
- MCP47<1> dac_dma(i2c_dma);
-// uint16_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
- dac_dma.Set_Continuous(sine_table,sine_table_lenght);
+// DMA dma(DMA1_Channel6);
+//
+// dma.Set_Size_Memory(DMA::Size::HALF_WORD);
+// delay_ms(100);
+// dma.Set_Minc(1);
+//
+// dma.Set_Minc(0);
+//
+// I2C i2c_dma(I2C1,&dma);
+// i2c_dma.Initialise();
+// i2c_dma.Enable();
+// i2c_dma.Enable_DMA();
+//
+// MCP47<1> dac_dma(i2c_dma);
+//// uint16_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
+// dac_dma.Set_Continuous(sine_table,sine_table_lenght);
 
  while(1);
 

@@ -6,6 +6,7 @@
  */
 
 #include <SSD1306.hpp>
+#include "fonts.h"
 
 void SSD1306::Initialize (void)
 {
@@ -22,7 +23,7 @@ void SSD1306::Initialize (void)
 	Write_Command(0x14); //	enable charge pump
 
 	//Write_Command(0xA1); //--set segment re-map 0 to 127********************here put rotate screen
-	Mirror_Screen(true);
+	Mirror_Screen(false);
 
 	//Write_Command(0xC8); //Set COM Output Scan Direction // flipping screen C8-C0
 	Flip_Screen(false);
@@ -88,6 +89,8 @@ void SSD1306::Initialize (void)
 //	Write_Command(0xAF); //--turn on SSD1306 panel
 
 	Display_On();
+	Fill(BLACK);
+	Update_Screen();
 	// Clear screen
 	//ssd1306_Fill(Black);
 
@@ -133,9 +136,93 @@ void SSD1306::Fill (Color c)
 
 
 }
-
+#define ver2
 void SSD1306::Write_String (const std::string& str)
 {
+#ifndef ver2
+	// Write until null-byte
+  int i=0;
+	while (str[i])
+	{
+	    Write_Char(str[i]);
+//		if (Write_Char(str[i]) != str[i])
+//		{
+//			// Char could not be written
+//			//return str;
+//		}
+		i++;
+	}
+	//return 0;
+#else
+  // Write until null-byte
+  int k = 0;
+  uint32_t i, b, j;
+  while (str[k])
+    {
+
+      FontDef Font = Font_7x10;
+      // Use the font to write
+      for (i = 0; i < Font.FontHeight; i++)
+	{
+	  b = Font.data[(str[k] - 32) * Font.FontHeight + i];
+	  for (j = 0; j < Font.FontWidth; j++)
+	    {
+	      if ((b << j) & 0x8000)
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), WHITE);
+		}
+	      else
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), BLACK);
+		}
+	    }
+	}
+
+      Coordinates.X += Font.FontWidth;
+      k++;
+    }
+
+#endif
+}
+
+void SSD1306::Write_Char (char str)
+{
+#ifndef ver2
+  uint32_t i, b, j;
+  FontDef Font=Font_7x10;
+  // Use the font to write
+  for (i = 0; i < Font.FontHeight; i++)
+    {
+      b = Font.data[(str - 32) * Font.FontHeight + i];
+      for (j = 0; j < Font.FontWidth; j++)
+	{
+		if ((b << j) & 0x8000)
+		{
+		    Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i),WHITE);
+		}
+		else
+		{
+		    Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i),BLACK);
+		}
+	}
+    }
+  // The current space is now taken
+//  if(Coordinates.X+Font.FontWidth >=width)
+//    {
+//      Coordinates.X=0;
+//      Coordinates.Y++;
+//    }
+//  else
+//    {
+//      Coordinates.X += Font.FontWidth;
+//    }
+  Coordinates.X += Font.FontWidth;
+
+  // Return written char for validation
+//  return ch;
+#else
+
+#endif
 }
 
 void SSD1306::Write_String_Inverted (const std::string& str)
@@ -150,11 +237,25 @@ void SSD1306::Set_Brightness (uint8_t brightness)
 
 void SSD1306::Draw_Pixel (uint8_t x, uint8_t y, Color c)
 {
+	if (x >= width || y >= height)
+	{
+		// Don't write outside the buffer
+		return;
+	}
+
+	if (c == WHITE)
+	{
+	    buffer[x+width*(y/8)] |= (1 << (y % 8));
+	}
+	else
+	{
+	    buffer[x+width*(y/8)] &=~ (1 << (y % 8));
+	}
 }
 
 void SSD1306::Display_Off (void)
 {
-  Write_Command(0xAE);
+  Write_Command (0xAE);
 }
 
 void SSD1306::Display_On (void)
@@ -164,13 +265,13 @@ void SSD1306::Display_On (void)
 
 void SSD1306::Flip_Screen (bool flipped)
 {
-  if(flipped !=0)
+  if (flipped == 0)
     {
-	Write_Command(0xC8); //Set COM Output Scan Direction // flipping screen C8-C0
+      Write_Command (0xC8); //Set COM Output Scan Direction // flipping screen C8-C0
     }
   else
     {
-      Write_Command(0xC0); //Set COM Output Scan Direction // flipping screen C8-C0
+      Write_Command (0xC0); //Set COM Output Scan Direction // flipping screen C8-C0
     }
 }
 
@@ -188,9 +289,23 @@ void SSD1306::Draw_Image (uint8_t image)
 {
 }
 
+void SSD1306::Set_Cursor(uint8_t x, uint8_t y)
+{
+  if(x>=width)
+    {
+      x=width;
+    }
+  if(y>=height)
+    {
+      y=height;
+    }
+Coordinates.X=x;
+Coordinates.Y=y;
+}
+
 void SSD1306::Mirror_Screen (bool mirrored)
 {
-  if(mirrored!=0)
+  if(mirrored == 0)
     {
   Write_Command(0xA1); //--set segment re-map 0 to 127********************here put rotate screen
     }
@@ -200,7 +315,5 @@ void SSD1306::Mirror_Screen (bool mirrored)
     }
 }
 
-void SSD1306::Write_Char (char c)
-{
-}
+
 

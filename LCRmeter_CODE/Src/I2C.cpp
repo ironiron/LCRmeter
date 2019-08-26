@@ -295,7 +295,7 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint8_t* bytes, uint32_t
         return error;
       }
 
-    for (uint32_t i=0;i<size*2;i++)
+    for (uint32_t i=0;i<size;i++)
       {
         Send_Byte (bytes[i]);
         error=Check_Errors_After_Data();
@@ -304,6 +304,7 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint8_t* bytes, uint32_t
             return error;
           }
       }
+    Generate_Stop();
     return I2C::ErrorCode::OK;
 }
 
@@ -361,6 +362,7 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes, uint32_
     }
 
   delete array;
+  Generate_Stop();
   return I2C::ErrorCode::OK;
 }
 
@@ -394,6 +396,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte, uint3
 
   Get_Status1_Reg();
   Get_Status2_Reg();
+
 
   return I2C::ErrorCode::OK;
 }

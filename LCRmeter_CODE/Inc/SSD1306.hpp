@@ -8,25 +8,26 @@
 #ifndef SSD1306_HPP_
 #define SSD1306_HPP_
 
-//TODO send char, draw pixel, set contrast, initialize, sleep, fill screen, set cursor, rotate screen, invert colors,
+//TODO send char,  sleep, rotate screen, invert colors,
 //inverted string colors, support for 2 addresses, scroll if supported by chip itself, image
-//read data from display??
+
 //TODO diacritic signs
 
 #include <string>
 #include <array>
+#include "I2C.hpp"
 
 
 class SSD1306
 {
 public:
-  template<typename T>
-  SSD1306 (uint8_t screen_height,T c):height(screen_height), con(c)
+  SSD1306 (const uint8_t screen_height,I2C &connection_port,uint8_t device_address=0x78):
+    height(screen_height),  conn(connection_port),address(device_address)
   {
     //TODO sanity check
 
   }
-  enum Color {WHITE=0, BLACK=0xff};
+  enum Color {BLACK=0, WHITE=0xff};
 
   void Initialize(void);
   void Fill(Color);
@@ -42,6 +43,7 @@ public:
   void Flip_Screen (bool flipped);
   void Mirror_Screen(bool mirrored);
   void Update_Screen(void);
+  void Set_Cursor(uint8_t x, uint8_t y);
 //  void Invert_Colors(void);
   void Draw_Image(uint8_t image);
   //void Rotate_screen()
@@ -53,12 +55,21 @@ private:
   void Write_Command(uint8_t com);
 
   void Reset(void);
-  void Write_Char(char c);
+  void Write_Char(char str);
   const uint8_t height;
-  const static uint32_t buffer_size=64/8*128;
+  const uint8_t width=127;
+  const static uint32_t buffer_size=32/8*128;
   std::array<uint8_t, buffer_size> buffer;
-  template<typename T>
-  T con;
+  I2C &conn;
+  const uint8_t address;
+  const uint8_t control_b_command=0x00;
+  const uint8_t control_b_data=0x40;
+
+  struct
+  {
+    uint8_t X;
+    uint8_t Y;
+  }Coordinates;
 
   void Write_Data(std::array<uint8_t, buffer_size>  &data);
   //uint8_t buffer[64/8*128];//TODO consider using dynamic allocation
