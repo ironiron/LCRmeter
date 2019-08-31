@@ -204,14 +204,37 @@ delay_ms(50);
  i2c.Disable_DMA();
  i2c.Enable();
 
- SSD1306 oled(32,i2c);
+ I2C i2c2(I2C2);
+ i2c2.Initialise();
+ i2c2.Disable_DMA();
+ i2c2.Enable();
+
+ //i2c2.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
+ GPIOC->ODR^=(1<<13);
+ //delay_ms(10);
+ GPIOC->ODR^=(1<<13);
+
+ //i2c.Send_Data(uint8_t(0x78),uint8_t(0x56));
+ i2c.Send_Data(uint8_t(0x78),uint16_t(0x3449));
+
+ GPIOC->ODR^=(1<<13);
+ //while(1);
+
+ SSD1306 oled(64,i2c);
+ SSD1306 led(32,i2c2,0x78,SSD1306::HardwareConf::SEQ_NOREMAP);
 
  oled.Initialize();
+ led.Initialize();
+
  oled.Fill(SSD1306::WHITE);
  oled.Update_Screen();
+ led.Fill(SSD1306::WHITE);
+ led.Update_Screen();
  delay_ms(200);
  oled.Fill(SSD1306::BLACK);
  oled.Update_Screen();
+ led.Fill(SSD1306::BLACK);
+ led.Update_Screen();
  delay_ms(50);
 
  oled.Draw_Pixel(0,0,SSD1306::WHITE);
@@ -219,10 +242,63 @@ delay_ms(50);
  oled.Draw_Pixel(20,20,SSD1306::WHITE);
  oled.Draw_Pixel(10,1,SSD1306::WHITE);
  oled.Update_Screen();
- delay_ms(800);
+ delay_ms(500);
  oled.Set_Cursor(0,0);
- oled.Write_String("lorem ipsum set dolorem ipsum xDDD, ho lo no wo");
+ oled.Write_String("lorem");
  oled.Update_Screen();
+ delay_ms(200);
+ oled.Set_Cursor(50,16);
+ oled.Write_String_Inverted("ipsum");
+ oled.Update_Screen();
+
+ led.Draw_Pixel(0,0,SSD1306::WHITE);
+ led.Draw_Pixel(10,0,SSD1306::WHITE);
+ led.Draw_Pixel(20,20,SSD1306::WHITE);
+ led.Draw_Pixel(10,1,SSD1306::WHITE);
+ led.Update_Screen();
+ delay_ms(800);
+ led.Set_Cursor(0,0);
+ led.Write_String("lorem");
+ led.Update_Screen();
+ delay_ms(200);
+ led.Set_Cursor(50,16);
+ led.Write_String_Inverted("ipsum");
+ led.Update_Screen();
+
+while(1)
+ {
+// oled.Clean();
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(0);
+// oled.Write_String("b=0");
+// oled.Update_Screen();
+// delay_ms(500);
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(50);
+// oled.Write_String("b=50");
+// oled.Update_Screen();
+// delay_ms(500);
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(100);
+// oled.Write_String("b=100");
+// oled.Update_Screen();
+// delay_ms(500);
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(150);
+// oled.Write_String("b=150");
+// oled.Update_Screen();
+// delay_ms(500);
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(200);
+// oled.Write_String("b=200");
+// oled.Update_Screen();
+// delay_ms(500);
+// oled.Set_Cursor(0,0);
+// oled.Set_Brightness(0xff);
+// oled.Write_String("b=0xff");
+// oled.Update_Screen();
+// delay_ms(500);
+ }
  //oled.Mirror_Screen(false);
  //oled.Update_Screen();
  //oled.Flip_Screen(true);

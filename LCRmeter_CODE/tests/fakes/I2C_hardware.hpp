@@ -136,6 +136,9 @@ inline I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
 }
 
 //TODO clean inline etc.
-
+inline bool Get_Status_Start_Bit(void)
+{
+  return 0;
+}
 
 #endif /* FAKES_I2C_HARDWARE_HPP_ */

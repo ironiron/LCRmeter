@@ -80,6 +80,9 @@ inline I2C::ErrorCode I2C::Check_Errors_After_Data (void)//TODO move this to I2C
       if(Get_Status_Bus_Busy_Bit() !=0 )
     	{
     	  return I2C::ErrorCode::BUS_BUSY;
+	  i2c->CR1|= I2C_CR1_SWRST;
+	  HAL_Delay(50);
+	  i2c->CR1&=~ I2C_CR1_SWRST;
     	}
       if(Get_Status_Bus_Error_Bit() !=0 )
     	{
@@ -114,6 +117,13 @@ inline I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
       if (Get_Status_Bus_Busy_Bit () != 0)
 	{
 	  return I2C::ErrorCode::BUS_BUSY;
+	  /////////////////////////////////////TEST//////////////////////
+	  /////////////////////////////////
+	  i2c->CR1|= I2C_CR1_SWRST;
+	  HAL_Delay(50);
+	  i2c->CR1&=~ I2C_CR1_SWRST;
+	  //////////////////////////////
+	  /////////////////////////////////////////////////////////////////
 	}
       if (Get_Status_Bus_Error_Bit () != 0)
 	{

@@ -6,7 +6,7 @@
  */
 
 #include <SSD1306.hpp>
-#include "fonts.h"
+
 
 void SSD1306::Initialize (void)
 {
@@ -29,7 +29,7 @@ void SSD1306::Initialize (void)
 	Flip_Screen(false);
 
 	Write_Command(0xDA); //--set com pins hardware configuration
-	Write_Command(0x02);	//*
+	Write_Command(hard_conf);
 
 //	Write_Command(0x81); //--set contrast control register
 //	Write_Command(0x8F);	//*
@@ -89,19 +89,15 @@ void SSD1306::Initialize (void)
 //	Write_Command(0xAF); //--turn on SSD1306 panel
 
 	Display_On();
-	Fill(BLACK);
+	Clean();
 	Update_Screen();
-	// Clear screen
-	//ssd1306_Fill(Black);
 
-	// Flush buffer to screen
-	//ssd1306_UpdateScreen();
 
-	// Set default values for screen object
-	//SSD1306.CurrentX = 0;
-	//SSD1306.CurrentY = 0;
+}
 
-	//SSD1306.Initialized = 1;
+void SSD1306::Clean(void)
+{
+  Fill(BLACK);
 }
 
 void SSD1306::Update_Screen(void)
@@ -117,7 +113,7 @@ void SSD1306::Update_Screen(void)
 	Write_Data(buffer);
 }
 
-void SSD1306::Fill (Color c)
+void SSD1306::Fill (SSD1306::Color c)
 {
   if(c==Color::BLACK)
     {
@@ -136,7 +132,7 @@ void SSD1306::Fill (Color c)
 
 
 }
-#define ver2
+//#define ver2
 void SSD1306::Write_String (const std::string& str)
 {
 #ifndef ver2
@@ -144,7 +140,7 @@ void SSD1306::Write_String (const std::string& str)
   int i=0;
 	while (str[i])
 	{
-	    Write_Char(str[i]);
+	    Write_Char(str[i],Color::WHITE);
 //		if (Write_Char(str[i]) != str[i])
 //		{
 //			// Char could not be written
@@ -159,13 +155,11 @@ void SSD1306::Write_String (const std::string& str)
   uint32_t i, b, j;
   while (str[k])
     {
-
-      FontDef Font = Font_7x10;
       // Use the font to write
-      for (i = 0; i < Font.FontHeight; i++)
+      for (i = 0; i < font.FontHeight; i++)
 	{
-	  b = Font.data[(str[k] - 32) * Font.FontHeight + i];
-	  for (j = 0; j < Font.FontWidth; j++)
+	  b = font.data[(str[k] - 32) * font.FontHeight + i];
+	  for (j = 0; j < font.FontWidth; j++)
 	    {
 	      if ((b << j) & 0x8000)
 		{
@@ -178,16 +172,23 @@ void SSD1306::Write_String (const std::string& str)
 	    }
 	}
 
-      Coordinates.X += Font.FontWidth;
+      Coordinates.X += font.FontWidth;
       k++;
     }
 
 #endif
 }
 
-void SSD1306::Write_Char (char str)
+void SSD1306::Set_Font_size (Fonts::FontDef font)
+{
+  this->font=font;
+}
+
+void SSD1306::Write_Char (char str,SSD1306::Color color)
 {
 #ifndef ver2
+
+#if 0
   uint32_t i, b, j;
   FontDef Font=Font_7x10;
   // Use the font to write
@@ -221,12 +222,59 @@ void SSD1306::Write_Char (char str)
   // Return written char for validation
 //  return ch;
 #else
+  if (color==Color::BLACK)
+    {
+     // str = ~str;
+    }
+  // Write until null-byte
+  uint32_t i, b, j;
+  while (str)
+    {
+      // Use the font to write
+      for (i = 0; i < font.FontHeight; i++)
+	{
+	  b = font.data[(str - 32) * font.FontHeight + i];
+	  for (j = 0; j < font.FontWidth; j++)
+	    {
+	      if ((b << j) & 0x8000)
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), WHITE);
+		}
+	      else
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), BLACK);
+		}
+	    }
+	}
+      Coordinates.X += font.FontWidth;
+    }
+
+
+#endif
+
+
+#else
+
 
 #endif
 }
 
 void SSD1306::Write_String_Inverted (const std::string& str)
 {
+
+	// Write until null-byte
+int i=0;
+	while (str[i])
+	{
+	    Write_Char(str[i],Color::BLACK);
+//		if (Write_Char(str[i]) != str[i])
+//		{
+//			// Char could not be written
+//			//return str;
+//		}
+		i++;
+	}
+	//return 0;
 }
 
 void SSD1306::Set_Brightness (uint8_t brightness)
@@ -235,7 +283,7 @@ void SSD1306::Set_Brightness (uint8_t brightness)
 	Write_Command(brightness);
 }
 
-void SSD1306::Draw_Pixel (uint8_t x, uint8_t y, Color c)
+void SSD1306::Draw_Pixel (uint8_t x, uint8_t y, SSD1306::Color c)
 {
 	if (x >= width || y >= height)
 	{
@@ -267,11 +315,11 @@ void SSD1306::Flip_Screen (bool flipped)
 {
   if (flipped == 0)
     {
-      Write_Command (0xC8); //Set COM Output Scan Direction // flipping screen C8-C0
+      Write_Command (0xC8); //Set COM Output Scan Direction
     }
   else
     {
-      Write_Command (0xC0); //Set COM Output Scan Direction // flipping screen C8-C0
+      Write_Command (0xC0);
     }
 }
 

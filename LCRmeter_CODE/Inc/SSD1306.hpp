@@ -16,13 +16,17 @@
 #include <string>
 #include <array>
 #include "I2C.hpp"
+#include "fonts.h"
 
-
+//TODO CLEAN!!!
 class SSD1306
 {
 public:
-  SSD1306 (const uint8_t screen_height,I2C &connection_port,uint8_t device_address=0x78):
-    height(screen_height),  conn(connection_port),address(device_address)
+  enum HardwareConf: uint8_t {SEQ_NOREMAP=0x02, SEQ_REMAP=0x22, ALT_NOREMAP=0x12, ALT_REMAP=0x32};
+//todo exchange order of address and hardware config
+  SSD1306 (const uint8_t screen_height, I2C &connection_port,
+	   uint8_t device_address=0x78, HardwareConf hardware_configuration=ALT_NOREMAP):
+    height(screen_height),  conn(connection_port),address(device_address),hard_conf(hardware_configuration)
   {
     //TODO sanity check
 
@@ -30,12 +34,13 @@ public:
   enum Color {BLACK=0, WHITE=0xff};
 
   void Initialize(void);
-  void Fill(Color);
+  void Clean(void);
+  void Fill(SSD1306::Color);
   void Write_String(const std::string &str);//TODO consider making another function for c-style strings
   void Write_String_Inverted(const std::string &str);
   //TODO read about string_view (C++17)
   void Set_Brightness(uint8_t brightness);
-  void Draw_Pixel(uint8_t x,uint8_t y, Color c);
+  void Draw_Pixel(uint8_t x,uint8_t y, SSD1306::Color c);
   void Display_Off(void);
   void Display_On(void);
   void Set_Invert_Colors (void);//TODO change this, so the rest of functions are similar
@@ -46,8 +51,7 @@ public:
   void Set_Cursor(uint8_t x, uint8_t y);
 //  void Invert_Colors(void);
   void Draw_Image(uint8_t image);
-  //void Rotate_screen()
-  //invert screen or just rotate + degree?
+  void Set_Font_size(Fonts::FontDef font);
 
 
 private:
@@ -55,15 +59,21 @@ private:
   void Write_Command(uint8_t com);
 
   void Reset(void);
-  void Write_Char(char str);
+  void Write_Char(char str,SSD1306::Color color);
   const uint8_t height;
   const uint8_t width=127;
-  const static uint32_t buffer_size=32/8*128;
+
+  const static uint32_t buffer_size=64/8*128;
   std::array<uint8_t, buffer_size> buffer;
   I2C &conn;
   const uint8_t address;
+  const uint8_t hard_conf;
   const uint8_t control_b_command=0x00;
   const uint8_t control_b_data=0x40;
+  Fonts::FontDef font=Fonts::Font_7x10;
+
+  int last_error=0;
+  int temp=0;
 
   struct
   {

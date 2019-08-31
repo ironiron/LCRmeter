@@ -7,7 +7,8 @@
 #include "I2C_hardware.hpp"
 #include "I2C.hpp"
 
-using namespace std;
+#include <vector>
+
 
 void I2C::Send_Address (uint8_t addr, bool rw)
 {
@@ -20,9 +21,86 @@ void I2C::Send_Byte (uint8_t byte)
   i2c->DR=byte;
 }
 
-void I2C::Send_Bytes (uint8_t *byte, uint32_t size)
+I2C::ErrorCode I2C::Send_Bytes (uint8_t address,const uint8_t *data,int size)
 {
-  i2c->DR=0x77;
+  int i;
+  i=0;
+    Generate_Start();
+    while (Get_Status_Start_Bit () == 0)
+      {
+        i++;
+        if (i > timeout * 1000)
+  	{
+  	  return I2C::ErrorCode::TIMEOUT;
+  	}
+        I2C::delay (1);
+      }
+
+     Send_Address (address);
+    error=Check_Errors_After_Addr();
+    if(error!=ErrorCode::OK)
+      {
+        return error;
+      }
+    Get_Status1_Reg();
+    Get_Status2_Reg();
+
+    for (i=0;i<size;i++)
+      {
+	   Send_Byte (data[i]);
+	   error=Check_Errors_After_Data();
+	   if(error!=ErrorCode::OK)
+	     {
+	       return error;
+	     }
+      }
+
+    Generate_Stop();
+    return I2C::ErrorCode::OK;
+}
+
+I2C::ErrorCode I2C::Send_Bytes (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size)
+{
+  int i;
+  i=0;
+    Generate_Start();
+    while (Get_Status_Start_Bit () == 0)
+      {
+        i++;
+        if (i > timeout * 1000)
+  	{
+  	  return I2C::ErrorCode::TIMEOUT;
+  	}
+        I2C::delay (1);
+      }
+     Send_Address (address);
+    error=Check_Errors_After_Addr();
+    if(error!=ErrorCode::OK)
+      {
+        return error;
+      }
+    Get_Status1_Reg();
+    Get_Status2_Reg();
+    for (i=0;i<mem_size;i++)
+      {
+	   Send_Byte (mem_bytes[i]);
+	   error=Check_Errors_After_Data();
+	   if(error!=ErrorCode::OK)
+	     {
+	       return error;
+	     }
+      }
+    for (i=0;i<size;i++)
+      {
+	   Send_Byte (data[i]);
+	   error=Check_Errors_After_Data();
+	   if(error!=ErrorCode::OK)
+	     {
+	       return error;
+	     }
+      }
+    Generate_Stop();
+    return I2C::ErrorCode::OK;
 }
 
 void I2C::Generate_Start (void)

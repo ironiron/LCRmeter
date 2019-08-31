@@ -1,11 +1,13 @@
 
-#include "stm32f1xx_hal.h"
+#include <stdint.h>
 
-#ifndef Fonts
-#define Fonts
+#ifndef _Fonts_HPP
+#define _Fonts_HPP
+
+namespace Fonts {
 
 typedef struct {
-	const uint8_t FontWidth;    /*!< Font width in pixels */
+	uint8_t FontWidth;    /*!< Font width in pixels */
 	uint8_t FontHeight;   /*!< Font height in pixels */
 	const uint16_t *data; /*!< Pointer to data font data array */
 } FontDef;
@@ -305,10 +307,10 @@ static const uint16_t Font16x26 [] = {
 };
 
 
-FontDef Font_7x10 = {7,10,Font7x10};
-FontDef Font_11x18 = {11,18,Font11x18};
-FontDef Font_16x26 = {16,26,Font16x26};
+const FontDef Font_7x10 = {7,10,Font7x10};
+const FontDef Font_11x18 = {11,18,Font11x18};
+const FontDef Font_16x26 = {16,26,Font16x26};
 
-
+}
 #endif
 

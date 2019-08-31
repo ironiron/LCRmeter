@@ -16,6 +16,7 @@
 
 #include <stdint.h>
 #include "I2C_hardware_conf.hpp"
+#include <vector>
 
 // TODO Send byte receive dma continous send enable disable
 
@@ -88,7 +89,8 @@ private:
 
   void Send_Address(uint8_t addr,bool rw=0);
   void Send_Byte(uint8_t byte);
-  void Send_Bytes(uint8_t *byte,uint32_t size);
+  I2C::ErrorCode Send_Bytes(uint8_t address,const uint8_t *data,int size);
+  I2C::ErrorCode Send_Bytes (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size);
   inline bool Get_Status_Addr_Bit(void);
   inline bool Get_Status_NACK_Bit(void);
   inline bool Get_Status_Bus_Busy_Bit (void);
