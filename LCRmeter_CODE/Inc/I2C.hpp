@@ -18,6 +18,8 @@
 #include "I2C_hardware_conf.hpp"
 #include <vector>
 
+//TODO Memory fault
+
 // TODO Send byte receive dma continous send enable disable
 
 //TODO organize this so just one function is for sending bytes- send bytes(byte,number)?
@@ -76,7 +78,7 @@ public:
   void Initialise(void);
   void Set_Timeout(uint32_t timeout){this->timeout=timeout;}
 
-  inline static void Check_Errors_ISR(I2C &);
+   static void Check_Errors_ISR(I2C &);
 
   I2C::ErrorCode Get_Last_Error(void){return this->lasterror;}//TODO naming convention- define here or in hpp?
 
@@ -88,24 +90,25 @@ private:
   //rw not supported yet
 
   void Send_Address(uint8_t addr,bool rw=0);
-  void Send_Byte(uint8_t byte);
+  void Send_Byte(const uint8_t byte);
   I2C::ErrorCode Send_Bytes(uint8_t address,const uint8_t *data,int size);
   I2C::ErrorCode Send_Bytes (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size);
-  inline bool Get_Status_Addr_Bit(void);
-  inline bool Get_Status_NACK_Bit(void);
-  inline bool Get_Status_Bus_Busy_Bit (void);
-  inline bool Get_Status_Bus_Error_Bit (void);
-  inline bool Get_Status_Start_Bit (void);
-  inline bool Get_Status_Arbitration_Lost_Bit (void);
-  inline bool Get_Status_TxE_Bit (void);
-  inline uint32_t Get_Status1_Reg(void);
-  inline uint32_t Get_Status2_Reg(void);
+  I2C::ErrorCode Send_Bytes_DMA (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size);
+   bool Get_Status_Addr_Bit(void);
+   bool Get_Status_NACK_Bit(void);
+   bool Get_Status_Bus_Busy_Bit (void);
+   bool Get_Status_Bus_Error_Bit (void);
+   bool Get_Status_Start_Bit (void);
+   bool Get_Status_Arbitration_Lost_Bit (void);
+   bool Get_Status_TxE_Bit (void);
+   uint32_t Get_Status1_Reg(void);
+   uint32_t Get_Status2_Reg(void);
   void Generate_Start(void);
   void Generate_Stop(void);
-  inline void delay(uint32_t);
-  inline void reset(void);
-  inline I2C::ErrorCode Check_Errors_After_Data (void);
-  inline I2C::ErrorCode Check_Errors_After_Addr (void);
+   void delay(uint32_t);
+   void reset(void);
+   I2C::ErrorCode Check_Errors_After_Data (void);
+   I2C::ErrorCode Check_Errors_After_Addr (void);
   void Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular=true);
   ErrorCode lasterror=ErrorCode::OK;
   ErrorCode error=ErrorCode::OK;

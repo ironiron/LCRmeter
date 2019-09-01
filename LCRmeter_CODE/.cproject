@@ -355,6 +355,8 @@
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1517235604" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TEST"/>
 								</option>
+								<option id="gnu.c.compiler.option.warnings.pedantic.341463166" superClass="gnu.c.compiler.option.warnings.pedantic" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.optimization.level.2107640394" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.c.optimization.level.most" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1847350290" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.688594514" name="C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>

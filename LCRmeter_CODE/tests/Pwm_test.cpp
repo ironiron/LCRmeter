@@ -8,47 +8,44 @@
 #include <Pwm_hardware.hpp>
 #include <Pwm.hpp>
 #include "catch.hpp"
-#include "fakeit.hpp"
 
-//using namespace fakeit;
-
-int* kak;
-Pwm <int,uint16_t,2>PWM(kak,100);
+int* k;//just random pointer
+Pwm <int,uint16_t,2>PWM(k,100);
 
 TEST_CASE( "Set PWM frequency") {
 
     PWM.Set_Frequency(20000);
-    int result=(testing::clockfreq)/((testing::prescaler+1)*(testing::counter+1));
+    int result=(testing::pwm::clockfreq)/((testing::pwm::prescaler+1)*(testing::pwm::counter+1));
     REQUIRE( result== 20000 );
 
     PWM.Set_Frequency(500);
-    result=(testing::clockfreq)/((testing::prescaler+1)*(testing::counter+1));
+    result=(testing::pwm::clockfreq)/((testing::pwm::prescaler+1)*(testing::pwm::counter+1));
     REQUIRE( result== 500 );
 
     PWM.Set_Frequency(1);
-    result=(testing::clockfreq)/((testing::prescaler+1)*(testing::counter+1));
+    result=(testing::pwm::clockfreq)/((testing::pwm::prescaler+1)*(testing::pwm::counter+1));
     REQUIRE( result== 1 );
 
     PWM.Set_Frequency(700000);
-    result=(testing::clockfreq)/((testing::prescaler+1)*(testing::counter+1));
+    result=(testing::pwm::clockfreq)/((testing::pwm::prescaler+1)*(testing::pwm::counter+1));
     REQUIRE( result== 700000 );
 }
 
 TEST_CASE( "Set PWM frequency out-of-bounds") {
     PWM.Set_Frequency(730000);
-    REQUIRE( (testing::counter)== 99 );
-    REQUIRE( (testing::prescaler)== 0 );
+    REQUIRE( (testing::pwm::counter)== 99 );
+    REQUIRE( (testing::pwm::prescaler)== 0 );
 }
 
 TEST_CASE( "Set PWM duty") {
     PWM.Set_Duty(40);
-    REQUIRE( (testing::compare)== 40 );
+    REQUIRE( (testing::pwm::compare)== 40 );
     PWM.Set_Duty(70);
-    REQUIRE( (testing::compare)== 70 );
+    REQUIRE( (testing::pwm::compare)== 70 );
 }
 
 TEST_CASE( "Set PWM duty out-of-bounds") {
     PWM.Set_Duty(101);
-    REQUIRE( (testing::compare)== 100 );
+    REQUIRE( (testing::pwm::compare)== 100 );
 }
 

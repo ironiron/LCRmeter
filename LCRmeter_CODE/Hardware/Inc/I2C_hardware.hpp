@@ -13,7 +13,7 @@
 
 #include "delay.h"
 #include <stdint.h>
-
+#error
 
 inline void I2C::reset (void)
 {
