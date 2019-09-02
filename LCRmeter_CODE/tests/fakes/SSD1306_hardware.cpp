@@ -7,6 +7,7 @@
 
 #include <SSD1306.hpp>
 #include <vector>
+#include "testing.hpp"
 
 namespace testing {
   std::vector<int>  data;
@@ -20,11 +21,12 @@ void SSD1306::delay (uint32_t miliseconds)
 
 void SSD1306::Write_Command (uint8_t com)
 {
+  testing::ssd1306::data.push_back(com);
 }
 
 void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
 {
-  testing::data.insert(testing::data.end(), data.begin(), data.end());
+  testing::ssd1306::data.insert(testing::ssd1306::data.end(), data.begin(), data.end());
 }
 
 void SSD1306::Reset (void)

@@ -35,6 +35,12 @@ namespace testing
   {
 
   }
+
+
+  namespace ssd1306
+  {
+    extern std::vector<uint8_t>  data;
+  }
 }
 
 
