@@ -14,7 +14,6 @@ using namespace std;
 
 void I2C::Send_Address (uint8_t addr, bool rw)
 {
-
   testing::i2c::send_data.push_back (addr);
 }
 
@@ -25,7 +24,6 @@ void I2C::Send_Byte (const uint8_t byte)
 
 void I2C::Generate_Start (void)
 {
-
 }
 
 void I2C::Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular)
@@ -35,42 +33,26 @@ void I2C::Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular)
 
 void I2C::Generate_Stop (void)
 {
-
-  //TODO paste this to production code
-  /*
-   *     I2C1->CR1|= I2C_CR1_SWRST;
-   HAL_Delay(50);
-   I2C1->CR1&=~ I2C_CR1_SWRST;
-   */
 }
 
 void I2C::Enable (void)
 {
-
 }
 
 void I2C::Disable (void)
 {
-
 }
 
 void I2C::Initialise (void)
 {
-
 }
 
-void I2C::Set_Frequency (const uint32_t constUnsignedInt)
+void I2C::Reset_Bus (void)
 {
 }
 
-void I2C::reset (void)
+void I2C::Delay (uint32_t)
 {
-
-}
-
-void I2C::delay (uint32_t)
-{
-
 }
 
 bool I2C::Get_Status_Addr_Bit (void)

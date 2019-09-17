@@ -9,8 +9,6 @@
 #include "testing.hpp"
 #include "I2C_fake.hpp"//included just
 #include "catch.hpp"
-#include <iostream>
-#include <string>
 
 static I2C i2c;
 
@@ -49,7 +47,50 @@ TEST_CASE( "draws pixels")
 
   REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
 
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
   REQUIRE(testing::ssd1306::data[6]==0x01);//data
   REQUIRE(testing::ssd1306::data[7]==0x08);
   REQUIRE(testing::ssd1306::data[8]==0);
+}
+
+TEST_CASE( "writes character")
+{
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Set_Font_size(Fonts::Font_7x10);
+  oled64.Write_String("8");
+  oled64.Update_Screen();
+
+  //This is from font.hpp file
+  //0x3800, 0x4400, 0x4400, 0x3800, 0x4400, 0x4400, 0x4400, 0x3800, 0x0000, 0x0000,
+  //which is displayed on oled as:
+  //	0011100
+  //	0100010
+  //	0100010
+  //	0011100
+  //	0100010
+  //	0100010
+  //	0100010
+  //	0011100
+  //	0000000
+  //	0000000
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+  REQUIRE(testing::ssd1306::data[6]==0b0);//data
+  REQUIRE(testing::ssd1306::data[7]==0b01110110);
+  REQUIRE(testing::ssd1306::data[8]==0b10001001);
+  REQUIRE(testing::ssd1306::data[9]==0b10001001);
+  REQUIRE(testing::ssd1306::data[10]==0b10001001);
+  REQUIRE(testing::ssd1306::data[11]==0b01110110);
+  REQUIRE(testing::ssd1306::data[12]==0b0);
+  REQUIRE(testing::ssd1306::data[6+128]==0b0);//next line (2 bits evalate on next row)
+  REQUIRE(testing::ssd1306::data[7 + 128] == 0b0);
+  REQUIRE(testing::ssd1306::data[8 + 128] == 0b0);
+  REQUIRE(testing::ssd1306::data[9 + 128] == 0b0);
+  REQUIRE(testing::ssd1306::data[10 + 128] == 0b0);
+  REQUIRE(testing::ssd1306::data[11 + 128] == 0b0);
+  REQUIRE(testing::ssd1306::data[12 + 128] == 0b0);
 }

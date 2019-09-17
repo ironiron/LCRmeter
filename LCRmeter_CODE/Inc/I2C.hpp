@@ -41,18 +41,11 @@ public:
    */
   I2C (I2C_TYPE_DEF * i2c_com=0,DMA_TYPE_DEF  *d=0): i2c(i2c_com),dma(d)
   {
-    // TODO Auto-generated constructor stub
   }
 
   /// This enum holds error cases available by drivers.
   enum ErrorCode{OK,TIMEOUT,NACK,BUS_ERROR,ARBITION_LOST,BUS_BUSY,
     GENERAL_ERROR,DMA_DISABLED};
-
- // void Send_Byte(uint8_t addr, uint8_t byte);//TODO this ought to be dma and non-dma as well
-  //void Send_Byte_Cont(uint8_t addr, uint8_t *byte,uint32_t size);
-
-  //////////////////////////////////////////
-
 
   I2C::ErrorCode Send_Data(uint8_t addr, uint8_t byte);
   I2C::ErrorCode Send_Data(uint8_t addr, uint16_t byte);
@@ -71,29 +64,31 @@ public:
   void Disable(void);
   void Enable_DMA(void);
   void Disable_DMA(void);
-
-  void Set_Frequency(const uint32_t);
+  void Set_Frequency(const uint32_t frequency);
   void Reset(void);
-
   void Initialise(void);
   void Set_Timeout(uint32_t timeout){this->timeout=timeout;}
 
    static void Check_Errors_ISR(I2C &);
-
   I2C::ErrorCode Get_Last_Error(void){return this->lasterror;}//TODO naming convention- define here or in hpp?
 
 private:
   I2C_TYPE_DEF * i2c;
   DMA_TYPE_DEF *dma;
-  uint32_t timeout=200;
+  uint32_t timeout=20000;
   bool circular=0;
-  //rw not supported yet
+  ErrorCode lasterror=ErrorCode::OK;
+  ErrorCode error=ErrorCode::OK;
 
-  void Send_Address(uint8_t addr,bool rw=0);
-  void Send_Byte(const uint8_t byte);
+
   I2C::ErrorCode Send_Bytes(uint8_t address,const uint8_t *data,int size);
   I2C::ErrorCode Send_Bytes (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size);
   I2C::ErrorCode Send_Bytes_DMA (uint8_t address,const uint8_t *data,int size,uint8_t *mem_bytes,int mem_size);
+  I2C::ErrorCode Check_Errors_After_Data (void);
+  I2C::ErrorCode Check_Errors_After_Addr (void);
+ void Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular=true);
+  void Send_Address(uint8_t addr,bool rw=0);
+  void Send_Byte(const uint8_t byte);
    bool Get_Status_Addr_Bit(void);
    bool Get_Status_NACK_Bit(void);
    bool Get_Status_Bus_Busy_Bit (void);
@@ -105,13 +100,8 @@ private:
    uint32_t Get_Status2_Reg(void);
   void Generate_Start(void);
   void Generate_Stop(void);
-   void delay(uint32_t);
-   void reset(void);
-   I2C::ErrorCode Check_Errors_After_Data (void);
-   I2C::ErrorCode Check_Errors_After_Addr (void);
-  void Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular=true);
-  ErrorCode lasterror=ErrorCode::OK;
-  ErrorCode error=ErrorCode::OK;
+   void Delay(uint32_t);
+   void Reset_Bus(void);
 };
 
 #endif /* I2C_HPP_ */

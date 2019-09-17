@@ -1,3 +1,7 @@
+File for comparing code size in various moments of development.
+
+Not cleanest comments, don't read if you can't.
+
 C
    text	   data	    bss	    dec	    hex	filename
   12396	    268	   4376	  17040	   4290	LCRmeter.elf
@@ -30,11 +34,14 @@ after refractor
 oled initialise after refractor
    text	   data	    bss	    dec	    hex	filename
   12700	    136	   1752	  14588	   38fc	LCRmeter.elf
+oled initialise after refractor v2
+   text	   data	    bss	    dec	    hex	filename
+  13072	    136	   1752	  14960	   3a70	LCRmeter.elf
   
 control test
    text	   data	    bss	    dec	    hex	filename
   12748	    136	   1752	  14636	   392c	LCRmeter.elf
-  after ading 2nd function for sening bytes
+  after ading 2nd function for sending bytes
    text	   data	    bss	    dec	    hex	filename   
   12656	    136	   1752	  14544	   38d0	LCRmeter.elf
   

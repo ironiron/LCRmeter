@@ -88,9 +88,19 @@ void SSD1306::Initialize (void)
 
 //	Write_Command(0xAF); //--turn on SSD1306 panel
 
+
 	Display_On();
 	Clean();
 	Update_Screen();
+
+	if(last_error==0)
+	  {
+	    isinitialized=true;
+	  }
+	else
+	  {
+	    isinitialized=false;
+	  }
 
 
 }
@@ -222,19 +232,31 @@ void SSD1306::Write_Char (char str,SSD1306::Color color)
   // Return written char for validation
 //  return ch;
 #else
-  if (color==Color::BLACK)
+  if (color == Color::BLACK)
     {
-     // str = ~str;
+      //str = ~str;
     }
   // Write until null-byte
   uint32_t i, b, j;
-  while (str)
+
+  // Use the font to write
+  for (i = 0; i < font.FontHeight; i++)
     {
-      // Use the font to write
-      for (i = 0; i < font.FontHeight; i++)
+      b = font.data[(str - 32) * font.FontHeight + i];
+      for (j = 0; j < font.FontWidth; j++)
 	{
-	  b = font.data[(str - 32) * font.FontHeight + i];
-	  for (j = 0; j < font.FontWidth; j++)
+	  if (color == Color::BLACK)
+	    {
+	      if ((b << j) & 0x8000)
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), BLACK);
+		}
+	      else
+		{
+		  Draw_Pixel (Coordinates.X + j, (Coordinates.Y + i), WHITE);
+		}
+	    }
+	  else
 	    {
 	      if ((b << j) & 0x8000)
 		{
@@ -246,8 +268,9 @@ void SSD1306::Write_Char (char str,SSD1306::Color color)
 		}
 	    }
 	}
-      Coordinates.X += font.FontWidth;
     }
+  Coordinates.X += font.FontWidth;
+
 
 
 #endif
@@ -364,4 +387,7 @@ void SSD1306::Mirror_Screen (bool mirrored)
 }
 
 
-
+bool SSD1306::IsInitialized (void)
+{
+  return isinitialized;
+}

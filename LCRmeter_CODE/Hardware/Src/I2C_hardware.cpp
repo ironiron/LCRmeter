@@ -4,15 +4,13 @@
  *  Created on: 22.05.2019
  *      Author: Rafa³ Mazurkiewicz
  */
-#include "I2C_hardware.hpp"
 #include "I2C.hpp"
-
+#include "delay.h"
 #include <vector>
 
-#error
+
 void I2C::Send_Address (uint8_t addr, bool rw)
 {
-
   i2c->DR=addr;
 }
 
@@ -63,11 +61,9 @@ void I2C::Disable (void)
 
 void I2C::Initialise (void)
 {
+  Reset_Bus();
 
-  i2c->CR1|= I2C_CR1_SWRST;
-  HAL_Delay(50);
-  i2c->CR1&=~ I2C_CR1_SWRST;
-  i2c->CR2|=36;//TODO implement method for this<< dma.
+  i2c->CR2|=36;
 //CCR = 50ns
   i2c->CCR|=I2C_CCR_FS| I2C_CCR_DUTY | 6;
   i2c->TRISE|=9;
@@ -93,10 +89,7 @@ void I2C::Initialise (void)
    i2c->CR1|=I2C_CR1_ACK |I2C_CR1_START| I2C_CR1_PE;*/
 }
 //TODO finish this function \/
-void I2C::Set_Frequency (const uint32_t constUnsignedInt)
-{
 
-}
 
 void I2C::Enable_DMA(void)
 {
@@ -108,3 +101,59 @@ void I2C::Disable_DMA(void)
   i2c->CR2 &=~ I2C_CR2_DMAEN;
 }
 
+ void I2C::Reset_Bus (void)
+{
+   i2c->CR1|= I2C_CR1_SWRST;
+  HAL_Delay(50);
+  i2c->CR1&=~ I2C_CR1_SWRST;
+}
+
+ void I2C::Delay (uint32_t microseconds)
+{
+  delay_us(microseconds);
+}
+
+ bool I2C::Get_Status_Addr_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_ADDR;
+}
+
+ bool I2C::Get_Status_NACK_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_AF;
+}
+
+ uint32_t I2C::Get_Status1_Reg (void)
+{
+  return *(volatile uint32_t *)i2c->SR1;
+}
+
+ uint32_t I2C::Get_Status2_Reg (void)
+{
+  return *(volatile uint32_t *)i2c->SR2;
+}
+
+ bool I2C::Get_Status_Bus_Busy_Bit (void)
+{
+  return i2c->SR1 & I2C_SR2_BUSY;
+}
+
+ bool I2C::Get_Status_Start_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_SB;
+}
+
+ bool I2C::Get_Status_Bus_Error_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_BERR;
+}
+
+ bool I2C::Get_Status_Arbitration_Lost_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_ARLO;
+}
+
+ bool I2C::Get_Status_TxE_Bit (void)
+{
+  return i2c->SR1 & I2C_SR1_TXE;
+}

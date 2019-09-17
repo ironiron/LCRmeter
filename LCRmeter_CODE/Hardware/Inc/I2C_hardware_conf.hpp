@@ -7,7 +7,7 @@
 
 /// typedef for I2C structure. Use Hal structure by default.
 typedef I2C_TypeDef I2C_TYPE_DEF ;//from CMSIS
-/// typedef for DMA structure. Use Hal structure by default.
+/// typedef for DMA structure. Use custom DMA class by default.
 typedef DMA DMA_TYPE_DEF ;
 
 #endif /* I2C_HARDWARE_CONF_HPP_ */

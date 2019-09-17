@@ -49,10 +49,10 @@ public:
   void Mirror_Screen(bool mirrored);
   void Update_Screen(void);
   void Set_Cursor(uint8_t x, uint8_t y);
-//  void Invert_Colors(void);
   void Draw_Image(uint8_t image);
   void Set_Font_size(Fonts::FontDef font);
-
+  bool IsInitialized(void);
+  int last_error=0;
 
 private:
   void delay(uint32_t miliseconds);
@@ -72,7 +72,7 @@ private:
   const uint8_t control_b_data=0x40;
   Fonts::FontDef font=Fonts::Font_7x10;
 
-  int last_error=0;
+bool isinitialized=false;
   int temp=0;
 
   struct

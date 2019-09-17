@@ -169,7 +169,10 @@ TEST_CASE( "Send data circular thru DMA")
   REQUIRE(testing::i2c::send_data[7]==0x89);
 }
 
+TEST_CASE( "Sets frequency of I2C")
+{
 
+}
 
 
 

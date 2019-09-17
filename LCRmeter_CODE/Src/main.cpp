@@ -190,7 +190,6 @@ GPIOC->ODR^=(1<<13);
 // pwm.Set_Duty(0);
 // pwm.Enable();
 
- GPIOC->ODR^=(1<<13);
  ///////////////////////////////////////////////////////////////////////////
  __HAL_RCC_I2C1_CLK_ENABLE();
  __HAL_RCC_I2C2_CLK_ENABLE();
@@ -198,7 +197,7 @@ GPIOC->ODR^=(1<<13);
 
  uint8_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
  volatile I2C::ErrorCode er;
-delay_ms(50);
+
  I2C i2c(I2C1);
  i2c.Initialise();
  i2c.Disable_DMA();
@@ -208,46 +207,52 @@ delay_ms(50);
  i2c2.Initialise();
  i2c2.Disable_DMA();
  i2c2.Enable();
+ I2C_HandleTypeDef hi2c1;
+// HAL_I2C_Master_Transmit(&hi2c1,0x44,&u,1,200);
 
- //i2c2.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
- GPIOC->ODR^=(1<<13);
- //delay_ms(10);
- GPIOC->ODR^=(1<<13);
+// i2c2.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
+// i2c.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
+// i2c.Send_Data(uint8_t(0x78),uint8_t(0x56));
+// i2c.Send_Data(uint8_t(0x78),uint16_t(0x3449));
+/////////////////////////////////////////////////////////////
+int err;
 
- //i2c.Send_Data(uint8_t(0x78),uint8_t(0x56));
- i2c.Send_Data(uint8_t(0x78),uint16_t(0x3449));
+ SSD1306 oled(64,i2c2);
+ SSD1306 led(32,i2c,0x78,SSD1306::HardwareConf::SEQ_NOREMAP);
 
- GPIOC->ODR^=(1<<13);
- //while(1);
-
- SSD1306 oled(64,i2c);
- SSD1306 led(32,i2c2,0x78,SSD1306::HardwareConf::SEQ_NOREMAP);
-
+ //printf("asdczx");
  oled.Initialize();
+ err=oled.last_error;
  led.Initialize();
+ err=led.last_error;
 
+ err=oled.IsInitialized();
+ err=led.IsInitialized();
+// printf("asdczx");
  oled.Fill(SSD1306::WHITE);
  oled.Update_Screen();
  led.Fill(SSD1306::WHITE);
  led.Update_Screen();
+ err=oled.last_error;
+ err=led.last_error;
  delay_ms(200);
  oled.Fill(SSD1306::BLACK);
  oled.Update_Screen();
  led.Fill(SSD1306::BLACK);
  led.Update_Screen();
  delay_ms(50);
-
+// printf("asdczx");
  oled.Draw_Pixel(0,0,SSD1306::WHITE);
  oled.Draw_Pixel(10,0,SSD1306::WHITE);
  oled.Draw_Pixel(20,20,SSD1306::WHITE);
  oled.Draw_Pixel(10,1,SSD1306::WHITE);
  oled.Update_Screen();
  delay_ms(500);
- oled.Set_Cursor(0,0);
+ oled.Set_Cursor(10,0);
  oled.Write_String("lorem");
  oled.Update_Screen();
  delay_ms(200);
- oled.Set_Cursor(50,16);
+ //oled.Set_Cursor(16,50);
  oled.Write_String_Inverted("ipsum");
  oled.Update_Screen();
 
@@ -257,11 +262,11 @@ delay_ms(50);
  led.Draw_Pixel(10,1,SSD1306::WHITE);
  led.Update_Screen();
  delay_ms(800);
- led.Set_Cursor(0,0);
+ led.Set_Cursor(10,0);
  led.Write_String("lorem");
  led.Update_Screen();
  delay_ms(200);
- led.Set_Cursor(50,16);
+ //led.Set_Cursor(0,16);
  led.Write_String_Inverted("ipsum");
  led.Update_Screen();
 

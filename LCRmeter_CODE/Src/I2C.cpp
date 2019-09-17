@@ -157,11 +157,11 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
     while (Get_Status_Start_Bit () == 0)
       {
         i++;
-        if (i > timeout * 1000)
+        if (i > timeout )
   	{
   	  return I2C::ErrorCode::TIMEOUT;
   	}
-        I2C::delay (1);
+        I2C::Delay (1);
       }
 
   Send_Address (address);
@@ -197,11 +197,11 @@ I2C::ErrorCode I2C::Send_Bytes_DMA(uint8_t address, const uint8_t *data, int siz
   while (Get_Status_Start_Bit () == 0)
     {
       i++;
-      if (i > timeout * 1000)
+      if (i > timeout )
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      I2C::delay (1);
+      I2C::Delay (1);
     }
   Send_Address (address);
   error = Check_Errors_After_Addr ();
@@ -235,11 +235,11 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
   while (Get_Status_Start_Bit () == 0)
     {
       i++;
-      if (i > timeout * 1000)
+      if (i > timeout)
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      I2C::delay (1);
+      I2C::Delay (1);
     }
   Send_Address (address);
   error = Check_Errors_After_Addr ();
@@ -278,7 +278,7 @@ I2C::ErrorCode I2C::Check_Errors_After_Data (void)
     {
       if (Get_Status_Bus_Busy_Bit () != 0)
 	{
-	  return I2C::ErrorCode::BUS_BUSY;
+	//  return I2C::ErrorCode::BUS_BUSY;
 	}
       if (Get_Status_Bus_Error_Bit () != 0)
 	{
@@ -290,14 +290,15 @@ I2C::ErrorCode I2C::Check_Errors_After_Data (void)
 	}
       if (Get_Status_NACK_Bit () != 0)
 	{
+	  Generate_Stop ();
 	  return I2C::ErrorCode::NACK;
 	}
       i++;
-      if (i > timeout * 1000)
+      if (i > timeout )
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      delay (1);
+      Delay (1);
     }
   return I2C::ErrorCode::OK;
 }
@@ -309,7 +310,7 @@ I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
     {
       if (Get_Status_Bus_Busy_Bit () != 0)
 	{
-	  return I2C::ErrorCode::BUS_BUSY;
+	//  return I2C::ErrorCode::BUS_BUSY;
 	}
       if (Get_Status_Bus_Error_Bit () != 0)
 	{
@@ -321,14 +322,15 @@ I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
 	}
       if (Get_Status_NACK_Bit () != 0)
 	{
+	  Generate_Stop ();
 	  return I2C::ErrorCode::NACK;
 	}
       i++;
-      if (i > timeout * 1000)
+      if (i > timeout )
 	{
 	  return I2C::ErrorCode::TIMEOUT;
 	}
-      delay (1);
+      Delay (1);
     }
   return I2C::ErrorCode::OK;
 }
@@ -356,4 +358,9 @@ inline void I2C::Check_Errors_ISR (I2C& i2c)
 //    {
 //
 //    }
+}
+
+void I2C::Set_Frequency (const uint32_t frequency)
+{
+
 }

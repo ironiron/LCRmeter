@@ -21,11 +21,7 @@
 class I2C
 {
 public:
-  I2C ()
-  {
-    // TODO Auto-generated constructor stub
-
-  }
+  I2C (){}
 
   enum ErrorCode{OK,TIMEOUT,NACK,BUS_ERROR,ARBITION_LOST,BUS_BUSY,
       GENERAL_ERROR,DMA_DISABLED};//TODO consider this
@@ -106,19 +102,9 @@ public:
 	memoryaddress.push_back (mem_addr);
       }
   }
-
-  void Enable(void);
-  void Disable(void);
-  void Set_Frequency(const uint32_t);
-  void Reset(void);
-  void Initialise(void);
-
   int index=0;
   std::vector<uint16_t> data={0};
   std::vector<uint16_t> adress={0};
   std::vector<uint16_t> memoryaddress={0};
-
-private:
-
 };
 #endif /* I2C_HPP_ */

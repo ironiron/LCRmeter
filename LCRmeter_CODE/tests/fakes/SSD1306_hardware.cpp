@@ -9,12 +9,6 @@
 #include <vector>
 #include "testing.hpp"
 
-namespace testing {
-  std::vector<int>  data;
-}
-
-//TODO handle return values
-
 void SSD1306::delay (uint32_t miliseconds)
 {
 }
