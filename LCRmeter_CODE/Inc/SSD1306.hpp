@@ -49,7 +49,7 @@ public:
   void Mirror_Screen(bool mirrored);
   void Update_Screen(void);
   void Set_Cursor(uint8_t x, uint8_t y);
-  void Draw_Image(uint8_t image);
+  void Draw_Image(const uint8_t *image);
   void Set_Font_size(Fonts::FontDef font);
   bool IsInitialized(void);
   int last_error=0;

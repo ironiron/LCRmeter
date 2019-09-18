@@ -5,10 +5,11 @@
  *      Author: Rafa³
  */
 
+#include <catch.hpp>
+#include <image.hpp>
 #include <SSD1306.hpp>
-#include "testing.hpp"
-#include "I2C_fake.hpp"//included just
-#include "catch.hpp"
+#include <testing.hpp>
+#include <vector>
 
 static I2C i2c;
 
@@ -56,7 +57,7 @@ TEST_CASE( "draws pixels")
   REQUIRE(testing::ssd1306::data[6+128]==0x01);
   REQUIRE(testing::ssd1306::data[6+127]==0);
   REQUIRE(testing::ssd1306::data[6+129]==0);
-  REQUIRE(testing::ssd1306::data[1029]==0x01);//last data
+  REQUIRE(testing::ssd1306::data[1029]==0x80);//last data
 
 }
 
@@ -100,4 +101,22 @@ TEST_CASE( "writes character")
   REQUIRE(testing::ssd1306::data[10 + 128] == 0b0);
   REQUIRE(testing::ssd1306::data[11 + 128] == 0b0);
   REQUIRE(testing::ssd1306::data[12 + 128] == 0b0);
+}
+
+TEST_CASE( "Draw Image")
+{
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Draw_Image(Tables::sandals);
+  oled64.Update_Screen();
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+
+  for (uint32_t i=0;i<1023;i++)
+    {
+      REQUIRE(testing::ssd1306::data[6+i]==Tables::sandals[i]);
+    }
 }

@@ -356,8 +356,12 @@ void SSD1306::Set_Normal_Colors (void)
   Write_Command(0xA6);//normal colours
 }
 
-void SSD1306::Draw_Image (uint8_t image)
+void SSD1306::Draw_Image (const uint8_t *image)
 {
+      for (int i=0;i<buffer_size;i++)
+      {
+          buffer[i]=image[i];
+      }
 }
 
 void SSD1306::Set_Cursor(uint8_t x, uint8_t y)
