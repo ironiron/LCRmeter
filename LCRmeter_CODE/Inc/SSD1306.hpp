@@ -61,7 +61,7 @@ private:
   void Reset(void);
   void Write_Char(char str,SSD1306::Color color);
   const uint8_t height;
-  const uint8_t width=127;
+  const uint8_t width=128;
 
   const static uint32_t buffer_size=64/8*128;
   std::array<uint8_t, buffer_size> buffer;

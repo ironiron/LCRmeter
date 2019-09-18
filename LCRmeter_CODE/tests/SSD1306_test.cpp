@@ -43,6 +43,8 @@ TEST_CASE( "draws pixels")
   oled64.Clean();
   oled64.Draw_Pixel(0,0,SSD1306::Color::WHITE);
   oled64.Draw_Pixel(1,3,SSD1306::Color::WHITE);
+  oled64.Draw_Pixel(0,8,SSD1306::Color::WHITE);
+  oled64.Draw_Pixel(127,63,SSD1306::Color::WHITE);
   oled64.Update_Screen();
 
   REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
@@ -51,6 +53,11 @@ TEST_CASE( "draws pixels")
   REQUIRE(testing::ssd1306::data[6]==0x01);//data
   REQUIRE(testing::ssd1306::data[7]==0x08);
   REQUIRE(testing::ssd1306::data[8]==0);
+  REQUIRE(testing::ssd1306::data[6+128]==0x01);
+  REQUIRE(testing::ssd1306::data[6+127]==0);
+  REQUIRE(testing::ssd1306::data[6+129]==0);
+  REQUIRE(testing::ssd1306::data[1029]==0x01);//last data
+
 }
 
 TEST_CASE( "writes character")
