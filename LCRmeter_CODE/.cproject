@@ -172,6 +172,7 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1274347818" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
+					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.177369565" name="SSD1306.hpp" rcbsApplicability="disable" resourcePath="Inc/SSD1306.hpp" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="Hardware|Drivers|Inc|Src|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
