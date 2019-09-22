@@ -2,7 +2,7 @@
  * I2C.cpp
  *
  *  Created on: 12.05.2019
- *      Author: Rafa³
+ *      Author: Rafaï¿½
  */
 
 #include <I2C.hpp>
@@ -10,7 +10,7 @@
 #include <array>
 
 //TODO add stop DMA transfer function
-//TODO manual allocation of arrays for DMA automatic for non dma
+//TODO manual allocation of arrays for DMA and automatic for non dma
 
 
 I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte)
@@ -159,6 +159,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
         i++;
         if (i > timeout )
   	{
+            Generate_Stop ();
   	  return I2C::ErrorCode::TIMEOUT;
   	}
         I2C::Delay (1);
@@ -168,6 +169,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
   error = Check_Errors_After_Addr ();
   if (error != ErrorCode::OK)
     {
+      Generate_Stop ();
       return error;
     }
 
@@ -180,6 +182,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
       error = Check_Errors_After_Data ();
       if (error != ErrorCode::OK)
 	{
+	  Generate_Stop ();
 	  return error;
 	}
     }
@@ -237,6 +240,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
       i++;
       if (i > timeout)
 	{
+	  Generate_Stop ();
 	  return I2C::ErrorCode::TIMEOUT;
 	}
       I2C::Delay (1);
@@ -245,6 +249,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
   error = Check_Errors_After_Addr ();
   if (error != ErrorCode::OK)
     {
+      Generate_Stop ();
       return error;
     }
   Get_Status1_Reg ();
@@ -255,6 +260,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
       error = Check_Errors_After_Data ();
       if (error != ErrorCode::OK)
 	{
+	  Generate_Stop ();
 	  return error;
 	}
     }
@@ -264,6 +270,7 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
       error = Check_Errors_After_Data ();
       if (error != ErrorCode::OK)
 	{
+	  Generate_Stop ();
 	  return error;
 	}
     }
@@ -276,21 +283,12 @@ I2C::ErrorCode I2C::Check_Errors_After_Data (void)
   uint32_t i = 0;
   while (Get_Status_TxE_Bit () == 0)
     {
-      if (Get_Status_Bus_Busy_Bit () != 0)
-	{
-	//  return I2C::ErrorCode::BUS_BUSY;
-	}
-      if (Get_Status_Bus_Error_Bit () != 0)
-	{
-	  return I2C::ErrorCode::BUS_ERROR;
-	}
       if (Get_Status_Arbitration_Lost_Bit () != 0)
 	{
 	  return I2C::ErrorCode::ARBITION_LOST;
 	}
       if (Get_Status_NACK_Bit () != 0)
 	{
-	  Generate_Stop ();
 	  return I2C::ErrorCode::NACK;
 	}
       i++;
@@ -308,21 +306,12 @@ I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
   uint32_t i = 0;
   while (Get_Status_Addr_Bit () == 0) //Timeout routine
     {
-      if (Get_Status_Bus_Busy_Bit () != 0)
-	{
-	//  return I2C::ErrorCode::BUS_BUSY;
-	}
-      if (Get_Status_Bus_Error_Bit () != 0)
-	{
-	  return I2C::ErrorCode::BUS_ERROR;
-	}
       if (Get_Status_Arbitration_Lost_Bit () != 0)
 	{
 	  return I2C::ErrorCode::ARBITION_LOST;
 	}
       if (Get_Status_NACK_Bit () != 0)
 	{
-	  Generate_Stop ();
 	  return I2C::ErrorCode::NACK;
 	}
       i++;
@@ -337,7 +326,6 @@ I2C::ErrorCode I2C::Check_Errors_After_Addr (void)
 
 inline void I2C::Check_Errors_ISR (I2C& i2c)
 {
-//TODO maybe write some more solutions for errors to handle them without external code?
   if (i2c.Get_Status_Bus_Busy_Bit () != 0)
     {
       i2c.lasterror = ErrorCode::BUS_BUSY;

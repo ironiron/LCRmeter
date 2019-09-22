@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * @file    DMA.hpp
-  * @author  Rafa≥ Mazurkiewicz
+  * @author  Rafa≈Ç Mazurkiewicz
   * @date    13.05.2019
-  * @brief   Class single header file to configure STM32's DMA
+  * @brief   Class header to configure STM32's I2C
   ******************************************************************************
   * @attention
-  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≥ Mazurkiewicz</center></h2>
+  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≈Ç Mazurkiewicz</center></h2>
   ******************************************************************************
   */
 
@@ -19,14 +19,9 @@
 #include <vector>
 
 //TODO Memory fault
-
-// TODO Send byte receive dma continous send enable disable
-
-//TODO organize this so just one function is for sending bytes- send bytes(byte,number)?
-//or send bytes(byte1,byt2...)?
-
 //TODO add case to Errorcode enum for blocked interface and add function to stop DMA.
 //TODO add case for allocation problem
+
 
 /**
  * @brief This class is configuring I2C

@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * @file    DMA.hpp
-  * @author  Rafa≥ Mazurkiewicz
+  * @author  Rafa≈Ç Mazurkiewicz
   * @date    13.05.2019
   * @brief   Class single header file to configure STM32's DMA
   ******************************************************************************
   * @attention
-  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≥ Mazurkiewicz</center></h2>
+  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≈Ç Mazurkiewicz</center></h2>
   ******************************************************************************
   */
 
