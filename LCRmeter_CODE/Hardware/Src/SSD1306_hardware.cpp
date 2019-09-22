@@ -1,12 +1,12 @@
 /**
  ******************************************************************************
  * @file    SSD1306_hardware.cpp
- * @author  Rafa≥ Mazurkiewicz
+ * @author  Rafa≈Ç Mazurkiewicz
  * @date    13.08.2019
  * @brief   This file contains hardware related functions
  ******************************************************************************
  * @attention
- * <h2><center>&copy; COPYRIGHT(c) 2019 Rafa≥ Mazurkiewicz </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Rafa≈Ç Mazurkiewicz </center></h2>
  *
  *Permission is hereby granted, free of charge,
  *to any person obtaining a copy of this software and associated documentation files

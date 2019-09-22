@@ -1,14 +1,13 @@
 /**
  ******************************************************************************
- * @file    SSD1306_test.cpp.hpp
- * @author  Rafa≥ Mazurkiewicz
+ * @file    SSD1306.hpp
+ * @author  Rafa≈Ç Mazurkiewicz
  * @date    13.08.2019
- * @brief   Library for OLED display
+ * @brief   Unit test for oled display driver
  ******************************************************************************
- * @attention
- * <h2><center>&copy; COPYRIGHT(c) </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Rafa≈Ç Mazurkiewicz
+ * </center></h2>
  *
- * COPYRIGHT(c) 2019 Rafa≥ Mazurkiewicz
  *Permission is hereby granted, free of charge,
  *to any person obtaining a copy of this software and associated documentation files
  *(the "Software"), to deal in the Software without restriction,
