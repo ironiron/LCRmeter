@@ -56,9 +56,15 @@
  */
 
 /* USER CODE END Header */
-
-
-
+/*TODO list
+Buttons
+osciloscope
+menu
+lcr calculations
+dac sine generation
+dac latch/HW pins
+display waweforms
+*/
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"
@@ -71,45 +77,10 @@
 #include <stdio.h>
 #include "sine.hpp"
 #include "SSD1306.hpp"
-///aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 #if 0
 template<typename port_type,
@@ -219,32 +190,15 @@ const static uint8_t sandals[1024] = {
 int main(void)
 {
 
-
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
   MX_GPIO_Init();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-
- // MX_USB_DEVICE_Init();
-  /* USER CODE BEGIN 2 */
   __HAL_RCC_TIM1_CLK_ENABLE();
   printf("asdczx");
 GPIOC->ODR^=(1<<13);
@@ -265,16 +219,33 @@ GPIOC->ODR^=(1<<13);
  uint8_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
  volatile I2C::ErrorCode er;
 
- I2C i2c(I2C1);
- i2c.Initialise();
- i2c.Disable_DMA();
- i2c.Enable();
+ I2C i2c1(I2C1);
+ i2c1.Initialise();
+ i2c1.Disable_DMA();
+ i2c1.Enable();
 
  I2C i2c2(I2C2);
- i2c2.Initialise();
- i2c2.Disable_DMA();
- i2c2.Enable();
- I2C_HandleTypeDef hi2c1;
+// i2c2.Initialise();
+// i2c2.Disable_DMA();
+// i2c2.Enable();
+
+// I2C_InitTypeDef hi2c2;
+//
+// hi2c2.ClockSpeed=300000;
+// hi2c2.
+ I2C_HandleTypeDef i2c;
+
+  i2c.Instance             = I2C2;
+  i2c.Init.ClockSpeed      = 240000;
+  i2c.Init.DutyCycle       = I2C_DUTYCYCLE_2;
+  i2c.Init.OwnAddress1     = 0xff;
+  i2c.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
+  i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  i2c.Init.OwnAddress2     = 0xff;
+  i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  i2c.Init.NoStretchMode   = I2C_NOSTRETCH_DISABLE;
+
+  HAL_I2C_Init(&i2c);
 // HAL_I2C_Master_Transmit(&hi2c1,0x44,&u,1,200);
 
 // i2c2.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
@@ -282,16 +253,21 @@ GPIOC->ODR^=(1<<13);
 // i2c.Send_Data(uint8_t(0x78),uint8_t(0x56));
 // i2c.Send_Data(uint8_t(0x78),uint16_t(0x3449));
 /////////////////////////////////////////////////////////////
-int err;
+volatile int err;
 
- SSD1306 oled(64,i2c2);
- SSD1306 led(32,i2c,0x78,SSD1306::HardwareConf::SEQ_NOREMAP);
+ SSD1306 oled(i2c2,64);
+ SSD1306 led(i2c1,32,SSD1306::HardwareConf::SEQ_NOREMAP);
 
  //printf("asdczx");
  oled.Initialize();
- err=oled.last_error;
+ err=oled.Get_Last_Error();
+ if(err)
+   {
+     er=I2C::ErrorCode::BUS_BUSY;
+   }
+
  led.Initialize();
- err=led.last_error;
+ err=led.Get_Last_Error();
 
  //oled.Set_Font_size(Fonts::Font_16x26);
  err=oled.IsInitialized();
@@ -301,8 +277,8 @@ int err;
  oled.Update_Screen();
  led.Fill(SSD1306::WHITE);
  led.Update_Screen();
- err=oled.last_error;
- err=led.last_error;
+ err=oled.Get_Last_Error();
+ err=led.Get_Last_Error();
  delay_ms(200);
  oled.Fill(SSD1306::BLACK);
  oled.Update_Screen();
@@ -355,42 +331,38 @@ int err;
 
 while(1)
  {
-// oled.Clean();
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(0);
-// oled.Write_String("b=0");
-// oled.Update_Screen();
-// delay_ms(500);
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(50);
-// oled.Write_String("b=50");
-// oled.Update_Screen();
-// delay_ms(500);
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(100);
-// oled.Write_String("b=100");
-// oled.Update_Screen();
-// delay_ms(500);
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(150);
-// oled.Write_String("b=150");
-// oled.Update_Screen();
-// delay_ms(500);
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(200);
-// oled.Write_String("b=200");
-// oled.Update_Screen();
-// delay_ms(500);
-// oled.Set_Cursor(0,0);
-// oled.Set_Brightness(0xff);
-// oled.Write_String("b=0xff");
-// oled.Update_Screen();
-// delay_ms(500);
+ oled.Clean();
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(0);
+ oled.Write_String("b=0");
+ oled.Update_Screen();
+ delay_ms(500);
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(50);
+ oled.Write_String("b=50");
+ oled.Update_Screen();
+ delay_ms(500);
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(100);
+ oled.Write_String("b=100");
+ oled.Update_Screen();
+ delay_ms(500);
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(150);
+ oled.Write_String("b=150");
+ oled.Update_Screen();
+ delay_ms(500);
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(200);
+ oled.Write_String("b=200");
+ oled.Update_Screen();
+ delay_ms(500);
+ oled.Set_Cursor(0,0);
+ oled.Set_Brightness(0xff);
+ oled.Write_String("b=0xff");
+ oled.Update_Screen();
+ delay_ms(500);
  }
- //oled.Mirror_Screen(false);
- //oled.Update_Screen();
- //oled.Flip_Screen(true);
-
 
 // DMA dma(DMA1_Channel6);
 //
@@ -406,7 +378,7 @@ while(1)
 // i2c_dma.Enable_DMA();
 //
 // MCP47<1> dac_dma(i2c_dma);
-//// uint16_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
+// uint16_t data[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
 // dac_dma.Set_Continuous(sine_table,sine_table_lenght);
 
  while(1);
