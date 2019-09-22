@@ -1,50 +1,52 @@
-/*
- * SSD1306_hardware.cpp
+/**
+ ******************************************************************************
+ * @file    SSD1306_hardware.cpp
+ * @author  Rafa³ Mazurkiewicz
+ * @date    13.08.2019
+ * @brief   This file contains hardware related functions
+ ******************************************************************************
+ * @attention
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Rafa³ Mazurkiewicz </center></h2>
  *
- *  Created on: 25.08.2019
- *      Author: Rafa³
+ *Permission is hereby granted, free of charge,
+ *to any person obtaining a copy of this software and associated documentation files
+ *(the "Software"), to deal in the Software without restriction,
+ *including without limitation the rights to use, copy, modify,
+ *merge, publish, distribute, sublicense, and/or sell copies of
+ *the Software, and to permit persons to whom the Software is furnished to do so,
+ *subject to the following conditions:
+ *
+ *The above copyright notice and this permission notice shall be included in
+ *all copies or substantial portions of the Software.
+ *
+ *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ *INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ *FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ *OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ *OTHER DEALINGS IN THE SOFTWARE.
+ *******************************************************************************
  */
 
+
+
+
 #include <SSD1306.hpp>
-#include "delay.h"
-#include "stdio.h"
-#include "stm32f1xx.h"
 
-//TODO handle return values
-
-void SSD1306::delay (uint32_t miliseconds)
+void SSD1306::Write_Command (uint8_t command)
 {
-  delay_ms(miliseconds);
-}
-
-void SSD1306::Write_Command (uint8_t com)
-{
-//  HAL_I2C_Mem_Write(&hi2c2,address,control_b_command,1,&com,1,10);
-
-  temp=conn.Send_Data(address,com,control_b_command);
+  temp=conn.Send_Data(address,command,control_b_command);
   if(temp !=0)
     {
       last_error=temp;
-      printf("error=%d",last_error);
     }
 }
 
 void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
 {
-
   temp=conn.Send_Data_Cont(address,data.begin(),height*(width)/8,control_b_data);
   if(temp !=0)
     {
       last_error=temp;
-      printf("error=%d",last_error);
     }
-
-
-}
-
-void SSD1306::Reset (void)
-{
-  //in I2C-empty instruction.
-  //in SPI use:
-  //TODO finish it
 }
