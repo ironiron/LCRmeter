@@ -2,7 +2,7 @@
  * I2C_test.cpp
  *
  *  Created on: 22.05.2019
- *      Author: Rafa³ Mazurkiewicz
+ *      Author: Rafaï¿½ Mazurkiewicz
  */
 #include "I2C.hpp"
 #include "delay.h"
@@ -42,6 +42,14 @@ void I2C::Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular)
   dma->Set_Peripheral_Addr((uint32_t)(&i2c->DR));
   dma->Set_Memory_Addr((uint32_t)(bytes));
   dma->Enable();
+}
+
+void I2C::Stop_DMA(void)
+{
+  dma->Disable();
+  dma->Set_Data_Count(0);
+  dma->Set_Peripheral_Addr(0);
+  dma->Set_Memory_Addr(0);
 }
 
 void I2C::Generate_Stop (void)

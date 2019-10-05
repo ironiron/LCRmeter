@@ -6,11 +6,7 @@
  */
 
 #include <I2C.hpp>
-#include <vector>
 #include <array>
-
-//TODO add stop DMA transfer function
-//TODO manual allocation of arrays for DMA and automatic for non dma
 
 
 I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte)
@@ -20,7 +16,7 @@ I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte)
 
 I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint16_t byte)
 {
-  std::vector<uint8_t>arr={uint8_t(byte>>8),uint8_t(byte&0xff)};//TODO test for memory leak
+  uint8_t arr[2]={uint8_t(byte>>8),uint8_t(byte&0xff)};
   return Send_Bytes (addr, &arr[0], 2);
 }
 
@@ -31,7 +27,7 @@ I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint8_t byte, uint8_t mem_addr)
 
 I2C::ErrorCode I2C::Send_Data (uint8_t addr, uint16_t byte, uint8_t mem_addr)
 {
-  std::vector<uint8_t>arr={uint8_t(byte>>8),uint8_t(byte&0xff)};
+  uint8_t arr[2]={uint8_t(byte>>8),uint8_t(byte&0xff)};
   return Send_Bytes (addr, &arr[0], 2, &mem_addr, 1);
 }
 
@@ -46,7 +42,7 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes,
 				    uint32_t size)
 {
   uint8_t *array = new (std::nothrow) uint8_t[size * 2];
-  if (array == 0) //TODO Test for fail in real hardware
+  if (array == 0)
     {
       return I2C::ErrorCode::GENERAL_ERROR;
     }
@@ -55,9 +51,10 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes,
       array[j++] = (bytes[i] >> 8);
       array[j++] = (bytes[i] & 0xff);
     }
-  ErrorCode e=Send_Bytes (addr, array, size * 2);
+  ErrorCode error=Send_Bytes (addr, array, size * 2);
   delete array;
-  return e;
+
+  return error;
 }
 
 I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint8_t* bytes,
@@ -70,7 +67,7 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes,
 				    uint32_t size, uint8_t mem_addr)
 {
   uint8_t *array = new (std::nothrow) uint8_t[size * 2];
-  if (array == 0)   //TODO Test for fail in real hardware
+  if (array == 0)
     {
       return I2C::ErrorCode::GENERAL_ERROR;
     }
@@ -79,10 +76,10 @@ I2C::ErrorCode I2C::Send_Data_Cont (uint8_t addr, const uint16_t* bytes,
       array[j++] = (bytes[i] >> 8);
       array[j++] = (bytes[i] & 0xff);
     }
-  ErrorCode e=Send_Bytes (addr, array, size * 2,&mem_addr,1);
+  ErrorCode error=Send_Bytes (addr, array, size * 2,&mem_addr,1);
   delete array;
-  return e;
 
+  return error;
 }
 
 I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte,
@@ -103,16 +100,18 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
       return I2C::ErrorCode::DMA_DISABLED;
     }
   uint8_t *array = new (std::nothrow) uint8_t[size * 2];
-  if (array == 0) //TODO Test for fail in real hardware
+  if (array == 0)
     {
       return I2C::ErrorCode::GENERAL_ERROR;
     }
+  ptr_to_bytes=array;
+  size_of_data=size * 2;
   for (uint32_t i = 0, j = 0; i < size; i++)
     {
       array[j++] = (byte[i] >> 8);
       array[j++] = (byte[i] & 0xff);
     }
-  return Send_Bytes (addr, array, size * 2);
+  return Send_Bytes_DMA (addr, array, size * 2);
 
 }
 
@@ -123,7 +122,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte,
     {
       return I2C::ErrorCode::DMA_DISABLED;
     }
-  return Send_Bytes (addr, byte, size, &mem_addr, 1); //TODO add array deallocation
+  return Send_Bytes (addr, byte, size, &mem_addr, 1);
 }
 
 I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
@@ -133,11 +132,13 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
       {
         return I2C::ErrorCode::DMA_DISABLED;
       }
-    uint8_t *array = new (std::nothrow) uint8_t[size * 2]; //TODO assign pointer to this so it can be deleted outside scope
-  if (array == 0) //TODO Test for fail in real hardware
+    uint8_t *array = new (std::nothrow) uint8_t[size * 2];
+  if (array == 0)
     {
       return I2C::ErrorCode::GENERAL_ERROR;
     }
+  ptr_to_bytes=array;
+  size_of_data=size * 2;
   for (uint32_t i = 0, j = 0; i < size; i++)
     {
       array[j++] = (byte[i] >> 8);
@@ -151,7 +152,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
 
 I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
 {
-  int i;
+  uint32_t i;
   i = 0;
   Generate_Start ();
     while (Get_Status_Start_Bit () == 0)
@@ -191,17 +192,18 @@ I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size)
   return I2C::ErrorCode::OK;
 }
 
-I2C::ErrorCode I2C::Send_Bytes_DMA(uint8_t address, const uint8_t *data, int size,
-				uint8_t *mem_bytes, int mem_size)
+I2C::ErrorCode I2C::Send_Bytes_DMA (uint8_t address, const uint8_t *data,
+				    int size, uint8_t *mem_bytes, int mem_size)
 {
-  int i;
+  uint32_t i;
   i = 0;
   Generate_Start ();
   while (Get_Status_Start_Bit () == 0)
     {
       i++;
-      if (i > timeout )
+      if (i > timeout)
 	{
+	  Generate_Stop ();
 	  return I2C::ErrorCode::TIMEOUT;
 	}
       I2C::Delay (1);
@@ -210,6 +212,7 @@ I2C::ErrorCode I2C::Send_Bytes_DMA(uint8_t address, const uint8_t *data, int siz
   error = Check_Errors_After_Addr ();
   if (error != ErrorCode::OK)
     {
+      Generate_Stop ();
       return error;
     }
   Get_Status1_Reg ();
@@ -220,10 +223,11 @@ I2C::ErrorCode I2C::Send_Bytes_DMA(uint8_t address, const uint8_t *data, int siz
       error = Check_Errors_After_Data ();
       if (error != ErrorCode::OK)
 	{
+	  Generate_Stop ();
 	  return error;
 	}
     }
-  Allocate_Bytes_DMA(data,size);
+  Allocate_Bytes_DMA (data, size);
 
   return I2C::ErrorCode::OK;
 }
@@ -232,7 +236,7 @@ I2C::ErrorCode I2C::Send_Bytes_DMA(uint8_t address, const uint8_t *data, int siz
 I2C::ErrorCode I2C::Send_Bytes (uint8_t address, const uint8_t *data, int size,
 				uint8_t *mem_bytes, int mem_size)
 {
-  int i;
+  uint32_t i;
   i = 0;
   Generate_Start ();
   while (Get_Status_Start_Bit () == 0)
@@ -346,6 +350,13 @@ inline void I2C::Check_Errors_ISR (I2C& i2c)
 //    {
 //
 //    }
+}
+
+void I2C::Stop_Transfer (void)
+{
+  Stop_DMA();
+  delete[] ptr_to_bytes;
+  Generate_Stop ();
 }
 
 void I2C::Set_Frequency (const uint32_t frequency)

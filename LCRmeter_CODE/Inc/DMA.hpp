@@ -32,6 +32,7 @@ public:
 
   /// This enum is for setting size of data to be transmitted or received.
   enum Size : uint8_t{BYTE, HALF_WORD, WORD};
+  enum Priority: uint8_t {LOW,MEDIUM,HIGH,VERY_HIGH};
 
   /**@brief Sets data size to be send
    * @param data number of bytes, words, etc. to transmit
@@ -132,6 +133,15 @@ public:
   {
     dma->CCR &=~(3<<DMA_CCR_PSIZE_Pos);//clean register
     dma->CCR |=(S<<DMA_CCR_PSIZE_Pos);
+  }
+
+  /**@brief Sets priority level
+   * @param priority Can be a value of Priority enum.
+   */
+  void Set_Priority(Priority priority)
+  {
+    dma->CCR &=~(3<<DMA_CCR_PL_Pos);//clean register
+    dma->CCR |=(priority<<DMA_CCR_PL_Pos);
   }
 
   /**@brief Enables circular mode
