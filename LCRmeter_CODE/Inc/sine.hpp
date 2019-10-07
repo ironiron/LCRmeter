@@ -2,7 +2,7 @@
  * sine.hpp
  *
  *  Created on: 18.05.2019
- *      Author: Rafa≥
+ *      Author: Rafa≈Ç
  */
 
 #ifndef SINE_HPP_

@@ -119,7 +119,7 @@ void SSD1306::Fill (SSD1306::Color color)
     }
 }
 
-void SSD1306::Write_String (const std::string& str)
+void SSD1306::Write_String (char const * str)
 {
   int i = 0;
   while (str[i])
@@ -129,7 +129,7 @@ void SSD1306::Write_String (const std::string& str)
     }
 }
 
-void SSD1306::Write_String_Inverted (const std::string& str)
+void SSD1306::Write_String_Inverted (char const * str)
 {
   int i = 0;
   while (str[i])

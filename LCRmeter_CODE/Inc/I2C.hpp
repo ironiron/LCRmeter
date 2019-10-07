@@ -96,8 +96,8 @@ private:
   bool circular = 0;
   ErrorCode lasterror = ErrorCode::OK;
   ErrorCode error = ErrorCode::OK;
-  uint8_t *ptr_to_bytes;
-  uint16_t size_of_data;
+  uint8_t *ptr_to_bytes=0;
+  uint16_t size_of_data=0;
 
   I2C::ErrorCode Send_Bytes (uint8_t address, const uint8_t *data, int size);
   I2C::ErrorCode Send_Bytes (uint8_t address, const uint8_t *data, int size,

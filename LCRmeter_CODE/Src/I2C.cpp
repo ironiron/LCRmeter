@@ -89,7 +89,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte,
     {
       return I2C::ErrorCode::DMA_DISABLED;
     }
-  return Send_Bytes (addr, byte, size);
+  return Send_Bytes_DMA (addr, byte, size);
 }
 
 I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
@@ -122,7 +122,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte,
     {
       return I2C::ErrorCode::DMA_DISABLED;
     }
-  return Send_Bytes (addr, byte, size, &mem_addr, 1);
+  return Send_Bytes_DMA (addr, byte, size, &mem_addr, 1);
 }
 
 I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
@@ -144,7 +144,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
       array[j++] = (byte[i] >> 8);
       array[j++] = (byte[i] & 0xff);
     }
-  return Send_Bytes (addr, array, size * 2, &mem_addr, 1);
+  return Send_Bytes_DMA (addr, array, size * 2, &mem_addr, 1);
 
 }
 
@@ -354,9 +354,12 @@ inline void I2C::Check_Errors_ISR (I2C& i2c)
 
 void I2C::Stop_Transfer (void)
 {
-  Stop_DMA();
-  delete[] ptr_to_bytes;
-  Generate_Stop ();
+  Stop_DMA ();
+  if (ptr_to_bytes != 0)
+    {
+      delete[] ptr_to_bytes;
+      Generate_Stop ();
+    }
 }
 
 void I2C::Set_Frequency (const uint32_t frequency)

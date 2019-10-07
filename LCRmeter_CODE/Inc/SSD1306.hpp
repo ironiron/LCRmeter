@@ -48,6 +48,8 @@
 #include "I2C.hpp"
 #include "fonts.h"
 
+//TODO add lines delimeters to write string, functions.
+
 /*! @class SSD1306
  *  @brief This class is controlling display.
  */
@@ -76,7 +78,7 @@ public:
    * @param hardware_configuration: Can be a value of SSD1306::HardwareConf.
    * @param device_address: address of device on I2C line. usually 0x78 is OK.
    */
-  SSD1306 (I2C &connection_port, const uint8_t screen_height,
+  SSD1306 (I2C *connection_port, const uint8_t screen_height,
 	   HardwareConf hardware_configuration = ALT_NOREMAP,
 	   uint8_t device_address = 0x78) :
       conn (connection_port), height (screen_height), hard_conf (
@@ -116,12 +118,12 @@ public:
   /**@brief Writes normal string at coordinates set in SSD1306::Set_Cursor.
    * @param str: string to be written
    */
-  void Write_String (const std::string &str);
+  void Write_String (char const * str);
 
   /**@brief Similar function to Write_String but fills the background with color.
    * @param str: string to be written
    */
-  void Write_String_Inverted (const std::string &str);
+  void Write_String_Inverted (char const *str);
 
   /**@brief Turns ON single pixel at given coordinate.
    * @param x: X Coordinate
@@ -183,7 +185,7 @@ public:
   void Clean_Errors (void);
 
 private:
-  I2C &conn;
+  I2C *conn;
   const uint8_t height;
   const uint8_t width = 128;
   const uint8_t hard_conf;

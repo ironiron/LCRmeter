@@ -80,6 +80,7 @@ display waweforms
 #include "sine.hpp"
 #include "SSD1306.hpp"
 #include <string>
+#include <vector>
 //#include <adc.h>
 //#include <dma.h>
 //#include "i2c.h"
@@ -372,37 +373,93 @@ GPIOC->ODR^=(1<<13);
 
  //////////////////////////////////////////////////////////////////////////////////////////////
  /////DAC
+
+ __HAL_RCC_DMA1_CLK_ENABLE();
   DMA dma(DMA1_Channel6);
 
   dma.Set_Size_Memory(DMA::Size::HALF_WORD);
   dma.Set_Minc(0);
+  dma.Set_Priority(DMA::Priority::HIGH);
+
 
   I2C i2c_dma(I2C1,&dma);
   i2c_dma.Initialise();
   i2c_dma.Enable_DMA();
   i2c_dma.Enable();
 
+  uint32_t h=0;
+
 
  MCP4725 dac_dma(i2c_dma);
  MCP47FEB dac(i2c_dma);
-// uint16_t data2[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
- //dac_dma.Set_Continuous(sine_table,sine_table_lenght);
- ////////////////////////////////////////////////////////////////////////////////////////////
- //uint32_t h=dac_dma.Set_Output(2000);
- uint32_t h=dac.Set_Output(50);
- sprintf(buf,"E = %d", h);
-              oled.Set_Cursor(0,0),
-              oled.Write_String(buf);
-              oled.Update_Screen();
-              HAL_Delay(600);
-              //dac_dma.Reset();
-              //dac_dma.Set_Power_mode(MCP4725::PowerMode::GND_1K);
-              //dac_dma.Set_Output(1000);
 
-              //latch pin
-              GPIOB->ODR |=(1<<5);
-              HAL_Delay(50);
-              GPIOB->ODR &=~(1<<5);
+// GPIOB->ODR |= (1 << 5);
+  // HAL_Delay (100);
+
+// uint16_t data2[]={ 0xAE,0xd5,0x80,0xA8,0x1F};
+// h =dac_dma.Set_Output(500);
+// sprintf (buf, "AAA = %d", h);
+// oled.Set_Cursor (0, 20); oled.Write_String (buf);
+// oled.Update_Screen ();
+// HAL_Delay (600);
+
+//  h =dac_dma.Set_Continuous(sine_table,sine_table_lenght);
+//  sprintf (buf, "vref = %d", h);
+//  oled.Set_Cursor (0, 20); oled.Write_String (buf);
+//  oled.Update_Screen ();
+//  HAL_Delay (600);
+//  dac_dma.Stop_DAC();
+
+//  HAL_Delay (300);
+//  h =dac_dma.Set_Continuous(sine_table,sine_table_lenght);
+//  sprintf (buf, "vref = %d", h);
+//  oled.Set_Cursor (0, 20); oled.Write_String (buf);
+//  oled.Update_Screen ();
+//  HAL_Delay (600);
+
+
+//  int *array = new (std::nothrow) int[990000];
+//  if (array == 0) //TODO Test for fail in real hardware
+//    {
+//      oled.Set_Cursor (0, 40); oled.Write_String ("bbbbbbbb");
+//      oled.Update_Screen ();
+//      HAL_Delay (600);
+//    }
+
+ // std::vector<int>arr(990000,4);
+  oled.Set_Cursor (0, 40); oled.Write_String ("aaxD");
+ // sprintf (buf, "vv=%d", arr[60]);
+   // oled.Set_Cursor (70, 20); oled.Write_String (buf);
+  oled.Update_Screen ();
+  HAL_Delay (600);
+// h = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
+// sprintf (buf, "vref = %d", h);
+// oled.Set_Cursor (0, 20), oled.Write_String (buf);
+// oled.Update_Screen ();
+// HAL_Delay (600);
+
+// h=dac.Set_Output(125);
+//  //h = dac.Set_Continuous(sine_table,sine_table_lenght);
+//  sprintf (buf, "E = %d", h);
+//  oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//  oled.Update_Screen ();
+//  HAL_Delay (600);
+//
+//  dac.Stop_DAC();
+
+  h=dac.Set_Continuous(sine_table,sine_table_lenght);
+   //h = dac.Set_Continuous(sine_table,sine_table_lenght);
+   sprintf (buf, "E = %d", h);
+   oled.Set_Cursor (0, 0), oled.Write_String (buf);
+   oled.Update_Screen ();
+   HAL_Delay (600);
+
+  //dac_dma.Reset();
+  //dac_dma.Set_Power_mode(MCP4725::PowerMode::GND_1K);
+  //dac_dma.Set_Output(1000);
+
+
+dac.Enable_Output();
  ///////////////////////////////////////////////////////////////////////////////////
  //ADC
  //////////////////////////////////////////////////////
@@ -700,6 +757,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   //I2C
 

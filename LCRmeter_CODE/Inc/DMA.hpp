@@ -6,7 +6,7 @@
   * @brief   Class single header file to configure STM32's DMA
   ******************************************************************************
   * @attention
-  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafał Mazurkiewicz</center></h2>
+  * &copy; standard MIT License COPYRIGHT(c) 2019 Rafał Mazurkiewicz
   ******************************************************************************
   */
 
@@ -16,6 +16,11 @@
 
 //Include proper header files and modify implementation. Preferable use #ifdef.
 #include "stm32f1xx.h"
+
+/** \defgroup  DMA_group DMA library
+ * This is a single header library for stm32's DMA
+ *  @{
+ */
 
 /*! @class DMA
  *  @brief This class is configuring DMA
@@ -32,6 +37,7 @@ public:
 
   /// This enum is for setting size of data to be transmitted or received.
   enum Size : uint8_t{BYTE, HALF_WORD, WORD};
+  /// This enum is for setting priorrity.
   enum Priority: uint8_t {LOW,MEDIUM,HIGH,VERY_HIGH};
 
   /**@brief Sets data size to be send
@@ -162,4 +168,6 @@ public:
 private:
   DMA_Channel_TypeDef *dma;
 };
+
+/** @}*/
 #endif /* DMA_HPP_ */

@@ -31,11 +31,14 @@
 
 
 
+#include <I2C.hpp>
+#include <sys/_stdint.h>
 #include <SSD1306.hpp>
+#include <array>
 
 void SSD1306::Write_Command (uint8_t command)
 {
-  temp=conn.Send_Data(address,command,control_b_command);
+  temp=conn->Send_Data(address,command,control_b_command);
   if(temp !=0)
     {
       last_error=temp;
@@ -44,7 +47,7 @@ void SSD1306::Write_Command (uint8_t command)
 
 void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
 {
-  temp=conn.Send_Data_Cont(address,data.begin(),height*(width)/8,control_b_data);
+  temp=conn->Send_Data_Cont(address,data.begin(),height*(width)/8,control_b_data);
   if(temp !=0)
     {
       last_error=temp;
