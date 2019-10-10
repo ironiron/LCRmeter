@@ -19,7 +19,7 @@
 							<option id="com.atollic.truestudio.toolchain_options.mcu.1736594068" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F103C8" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.337962874" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.2054752829" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/LCRmeter}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\ARMTools\\bin|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1">
+							<builder buildPath="${workspace_loc:/LCRmeter}/Debug" customBuilderProperties="toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\ARMTools\\bin|toolChainpathType=1|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
 								</outputEntries>
@@ -342,7 +342,7 @@
 					<folderInfo id="com.atollic.truestudio.exe.debug.1518366166.309067830." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.base.1068774440" name="Atollic PC Tools" superClass="cdt.managedbuild.toolchain.gnu.mingw.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.PE" id="cdt.managedbuild.target.gnu.platform.mingw.base.468251254" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.mingw.base"/>
-							<builder buildPath="${workspace_loc:/LCRmeter}/Test" customBuilderProperties="toolChainpathType=1|toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\PCTools\\bin|" id="org.eclipse.cdt.build.core.internal.builder.1507439462" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" superClass="org.eclipse.cdt.build.core.internal.builder"/>
+							<builder buildPath="${workspace_loc:/LCRmeter}/Test" customBuilderProperties="toolChainpathType=1|toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\PCTools\\bin|" id="org.eclipse.cdt.build.core.internal.builder.1507439462" keepEnvironmentInBuildfile="false" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.build.core.internal.builder"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.2015123790" name="Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<option id="gnu.both.asm.option.include.paths.1232114218" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/tests}&quot;"/>
@@ -419,7 +419,7 @@
 						</tool>
 					</fileInfo>
 					<sourceEntries>
-						<entry excluding="Src/usbd_storage_if.c|Src/usbd_desc.c|Src/usbd_conf.c|Src/usb_device.c|Src/system_stm32f1xx.c|Src/stm32f1xx_it.c|Src/stm32f1xx_hal_msp.c|Src/main.cpp|Src/DMA.cpp|Src/delay.c|Hardware|Drivers|Drivers/CMSIS|syscalls.c|USB_DEVICE|Middlewares|Inc|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="Src/adc.cpp|Src/usbd_storage_if.c|Src/usbd_desc.c|Src/usbd_conf.c|Src/usb_device.c|Src/system_stm32f1xx.c|Src/stm32f1xx_it.c|Src/stm32f1xx_hal_msp.c|Src/main.cpp|Src/DMA.cpp|Src/delay.c|Hardware|Drivers|Drivers/CMSIS|syscalls.c|USB_DEVICE|Middlewares|Inc|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="tests"/>
 					</sourceEntries>

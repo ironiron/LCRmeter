@@ -2,7 +2,7 @@
  * I2C_test.cpp
  *
  *  Created on: 22.05.2019
- *      Author: Rafa³ Mazurkiewicz
+ *      Author: Rafaï¿½ Mazurkiewicz
  */
 
 #include "I2C.hpp"
@@ -11,6 +11,7 @@
 #include <iostream>
 using namespace std;
 
+void I2C::Stop_DMA(void){}
 
 void I2C::Send_Address (uint8_t addr, bool rw)
 {

@@ -13,10 +13,12 @@
 #ifndef ADC_HPP_
 #define ADC_HPP_
 
-#include "stm32f1xx_hal.h"
+#include "stdint.h"
 
-//TODO return values, dma, variable frequency
+//TODO return values, dma, variable frequency,dma interrupts.
 //TODO
+//ADC conversion time: 12.5cycles + specified conversion time cycles
+
 #define SIZE_OF_ADC_BUFFER 1024
 
 extern uint32_t adc_value[SIZE_OF_ADC_BUFFER];

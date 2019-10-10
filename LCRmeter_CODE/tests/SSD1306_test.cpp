@@ -36,7 +36,7 @@
 
 static I2C i2c;
 
-SSD1306 oled64(64,i2c);
+SSD1306 oled64(&i2c,64);
 
 TEST_CASE( "fills screen buffer within bounds")
 {
@@ -89,7 +89,7 @@ TEST_CASE( "writes character")
   testing::ssd1306::data.clear();
 
   oled64.Clean();
-  oled64.Set_Font_size(Fonts::Font_7x10);
+  oled64.Set_Font_size(Fonts::font_7x10);
   oled64.Write_String("8");
   oled64.Update_Screen();
 
@@ -142,4 +142,71 @@ TEST_CASE( "Draw Image")
     {
       REQUIRE(testing::ssd1306::data[6+i]==Tables::sandals[i]);
     }
+}
+
+TEST_CASE( "Draw horizontal line")
+{
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Draw_Line_H(2,3,10,SSD1306::Color::WHITE);
+  oled64.Update_Screen();
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+  REQUIRE(testing::ssd1306::data[6]==0);
+  REQUIRE(testing::ssd1306::data[7]==0);
+  REQUIRE(int(testing::ssd1306::data[8])==0x08);
+  REQUIRE(testing::ssd1306::data[9]==0x08);
+  REQUIRE(testing::ssd1306::data[10]==0x08);
+  REQUIRE(testing::ssd1306::data[11]==0x08);
+  REQUIRE(testing::ssd1306::data[12]==0x08);
+  REQUIRE(testing::ssd1306::data[13]==0x08);
+  REQUIRE(testing::ssd1306::data[14]==0x08);
+  REQUIRE(testing::ssd1306::data[15]==0x08);
+  REQUIRE(testing::ssd1306::data[16]==0x08);
+  REQUIRE(testing::ssd1306::data[17]==0x08);
+  REQUIRE(testing::ssd1306::data[18]==0);
+
+}
+
+TEST_CASE( "Draw Vertical line")
+{
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Draw_Line_V(1,1,5,SSD1306::Color::WHITE);
+  oled64.Update_Screen();
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+  REQUIRE(testing::ssd1306::data[6]==0);
+  REQUIRE(testing::ssd1306::data[7]==0b00111110);
+  REQUIRE(testing::ssd1306::data[8]==0);
+
+
+}
+
+TEST_CASE( "Draw Square")
+{
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Draw_Square(1,1,4,5,SSD1306::Color::WHITE);
+  oled64.Draw_Square(6,0,6,0,SSD1306::Color::WHITE);//should draw one pixel
+  oled64.Update_Screen();
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+  REQUIRE(testing::ssd1306::data[6]==0);
+  REQUIRE(testing::ssd1306::data[7]==0b00111110);
+  REQUIRE(testing::ssd1306::data[8]==0b00100010);
+  REQUIRE(testing::ssd1306::data[9]==0b00100010);
+  REQUIRE(testing::ssd1306::data[10]==0b00111110);
+  REQUIRE(testing::ssd1306::data[11]==0);
+  REQUIRE(testing::ssd1306::data[12]==0x01);
+  REQUIRE(testing::ssd1306::data[13]==0);
 }

@@ -216,6 +216,31 @@ void SSD1306::Draw_Pixel (uint8_t x, uint8_t y, SSD1306::Color c)
     }
 }
 
+void SSD1306::Draw_Line_H (uint8_t x, uint8_t y, uint8_t width, SSD1306::Color c)
+{
+  for (uint32_t i=0;i<width;i++)
+    {
+      Draw_Pixel(x+i,y,c);
+    }
+}
+
+void SSD1306::Draw_Line_V (uint8_t x, uint8_t y, uint8_t height, SSD1306::Color c)
+{
+  for (uint32_t i=0;i<height;i++)
+    {
+      Draw_Pixel(x,y+i,c);
+    }
+}
+
+void SSD1306::Draw_Square(uint8_t x, uint8_t y, uint8_t x2, uint8_t y2, SSD1306::Color c)
+{
+  Draw_Line_H(x,y,x2-x+1,c);
+  Draw_Line_H(x,y2,x2-x+1,c);
+
+  Draw_Line_V(x,y,y2-y+1,c);
+  Draw_Line_V(x2,y,y2-y+1,c);
+}
+
 void SSD1306::Display_Off (void)
 {
   Write_Command (0xAE);

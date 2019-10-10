@@ -137,6 +137,34 @@ public:
    */
   void Draw_Image (const uint8_t *image);
 
+  /**@brief Draws Horizontal line
+   * @param x: X Coordinate
+   * @param y: Y Coordinate
+   * @param width: width of line
+   * @param c: Color to draw
+   * @note Moves from left to right
+   */
+  void Draw_Line_H (uint8_t x, uint8_t y, uint8_t width, SSD1306::Color c);
+
+  /**@brief Draws Vertical line
+   * @param x: X Coordinate
+   * @param y: Y Coordinate
+   * @param height: height of line
+   * @param c: Color to draw
+   * @note Moves from up to bottom
+   */
+  void Draw_Line_V (uint8_t x, uint8_t y, uint8_t height, SSD1306::Color c);
+
+  /**@brief Draws Square
+   * @param x: X Coordinate
+   * @param y: Y Coordinate
+   * @param x2: end of square Y Coordinate
+   * @param y2: end of square Y Coordinate
+   * @param c: Color to draw
+   * @note Moves from up to bottom and left to right
+   */
+  void Draw_Square(uint8_t x, uint8_t y, uint8_t x2, uint8_t y2, SSD1306::Color c);
+
   /**@brief Put displays in Sleep mode.
    */
   void Display_Off (void);

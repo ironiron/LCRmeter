@@ -2,7 +2,7 @@
  * I2C.h
  *
  *  Created on: 12.05.2019
- *      Author: Rafa³
+ *      Author: Rafaï¿½
  */
 
 #ifndef I2C_HPP_
@@ -106,5 +106,7 @@ public:
   std::vector<uint16_t> data={0};
   std::vector<uint16_t> adress={0};
   std::vector<uint16_t> memoryaddress={0};
+
+  void Stop_Transfer (void);
 };
 #endif /* I2C_HPP_ */

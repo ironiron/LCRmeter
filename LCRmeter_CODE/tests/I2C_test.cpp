@@ -2,7 +2,7 @@
  * I2C_test.cpp
  *
  *  Created on: 12.05.2019
- *      Author: Rafa³
+ *      Author: Rafaï¿½
  */
 
 
@@ -121,20 +121,22 @@ TEST_CASE( "return error when NACK occur")
   testing::i2c::status_nack_bit=0;
 }
 
-TEST_CASE( "return error when bus is busy")
-{
-  testing::i2c::status_TxE_bit=0;//bus_busy bit set while Transfer buffer not empty
-  testing::i2c::status_bus_busy_bit=1;
-  uint8_t addr=0x24;
-  uint8_t data=0x45;
-  testing::i2c::send_data.clear();
+//no need anymore
 
-  I2C::ErrorCode er=i2c.Send_Data(addr,data);
-  REQUIRE(er==I2C::ErrorCode::BUS_BUSY);
-
-  testing::i2c::status_TxE_bit=1;//clean
-  testing::i2c::status_bus_busy_bit=0;
-}
+//TEST_CASE( "return error when bus is busy")
+//{
+//  testing::i2c::status_TxE_bit=0;//bus_busy bit set while Transfer buffer not empty
+//  testing::i2c::status_bus_busy_bit=1;
+//  uint8_t addr=0x24;
+//  uint8_t data=0x45;
+//  testing::i2c::send_data.clear();
+//
+//  I2C::ErrorCode er=i2c.Send_Data(addr,data);
+//  REQUIRE(er==I2C::ErrorCode::BUS_BUSY);
+//
+//  testing::i2c::status_TxE_bit=1;//clean
+//  testing::i2c::status_bus_busy_bit=0;
+//}
 
 TEST_CASE( "abort sending circular data without DMA")
 {

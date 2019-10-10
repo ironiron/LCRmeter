@@ -11,6 +11,7 @@
  */
 
 #include <adc.hpp>
+#include "stm32f1xx_hal.h"
 
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
@@ -64,7 +65,7 @@ uint32_t ADC_Set_Oscilloscope (void)
   dma_init.Init.MemInc = DMA_MINC_ENABLE;
   dma_init.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
   dma_init.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-  dma_init.Init.Mode = DMA_CIRCULAR;
+  dma_init.Init.Mode = DMA_NORMAL;//can't be circular-
   dma_init.Init.Priority = DMA_PRIORITY_HIGH;
   HAL_DMA_Init (&dma_init);
   __HAL_LINKDMA (&hadc1, DMA_Handle, dma_init);
