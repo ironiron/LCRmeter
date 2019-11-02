@@ -165,6 +165,18 @@ public:
    */
   void Draw_Square(uint8_t x, uint8_t y, uint8_t x2, uint8_t y2, SSD1306::Color c);
 
+  /**@brief Draws Square
+   * @param x: X Start Coordinate
+   * @param y: Y Start Coordinate
+   * @param buffer: pointer to buffer containing waveform data
+   * @param size: length of array
+   * @param c: Color to draw
+   * @note Moves from bottom to up and left to right (value of 0 in buffer data results in
+   *  drawing pixels in X coordinates)
+   * @warning It does not check inputs- User should ensure that buffer<y!
+   */
+  void Draw_Waveform(uint8_t x, uint8_t y, uint8_t *buffer, uint8_t size, SSD1306::Color c);
+
   /**@brief Put displays in Sleep mode.
    */
   void Display_Off (void);

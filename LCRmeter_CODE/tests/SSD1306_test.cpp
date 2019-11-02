@@ -210,3 +210,24 @@ TEST_CASE( "Draw Square")
   REQUIRE(testing::ssd1306::data[12]==0x01);
   REQUIRE(testing::ssd1306::data[13]==0);
 }
+
+TEST_CASE( "Draw Waveform")
+{
+  uint8_t waveform[]={1,3,4,0,7};
+  testing::ssd1306::data.clear();
+
+  oled64.Clean();
+  oled64.Draw_Waveform(1,7,waveform,5,SSD1306::Color::WHITE);
+  oled64.Update_Screen();
+
+  REQUIRE(testing::ssd1306::data.size()==1030);//1024 data+ 6 bytes of commands
+
+  REQUIRE(testing::ssd1306::data[5]==7);//last byte of commands
+  REQUIRE(testing::ssd1306::data[6]==0);
+  REQUIRE(testing::ssd1306::data[7]==0b01000000);
+  REQUIRE(testing::ssd1306::data[8]==0b00010000);
+  REQUIRE(testing::ssd1306::data[9]==0b00001000);
+  REQUIRE(testing::ssd1306::data[10]==0b10000000);
+  REQUIRE(testing::ssd1306::data[11]==0b00000001);
+  REQUIRE(testing::ssd1306::data[12]==0);
+}

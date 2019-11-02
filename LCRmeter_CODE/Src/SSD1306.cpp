@@ -241,6 +241,14 @@ void SSD1306::Draw_Square(uint8_t x, uint8_t y, uint8_t x2, uint8_t y2, SSD1306:
   Draw_Line_V(x2,y,y2-y+1,c);
 }
 
+void SSD1306::Draw_Waveform(uint8_t x, uint8_t y, uint8_t *buffer, uint8_t size, SSD1306::Color c)
+{
+  for(uint8_t i=0;i<size;i++)
+    {
+      Draw_Pixel(i+x,y-buffer[i],c);
+    }
+}
+
 void SSD1306::Display_Off (void)
 {
   Write_Command (0xAE);
