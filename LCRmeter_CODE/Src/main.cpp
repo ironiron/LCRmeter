@@ -62,9 +62,7 @@ osciloscope
 menu
 lcr calculations
 do hardware test (for buttons) and do not delete after pass!!!
-variable filters adc
 USB- mass storage of data
-check if waweform on ssd1306 is upside down.
 */
 /* Includes ------------------------------------------------------------------*/
 
