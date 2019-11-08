@@ -15,12 +15,12 @@
 #include <stdint.h>
 
 /** \defgroup  Waveform Waveform
- * This is a single header library for stm32's DMA
+ * @brief Signal conditioning for LCRmeter's ADC purposes
  *  @{
  */
 
 /**
- * @brief Signal conditioning for LCRmeter's ADC purposes
+ *
  *
  * This Class is made for conditioning signal from MCU ADC working in dual ADC
  * with 32bit data wide and data from ADCs stored in upper and lower 16bit.
@@ -44,7 +44,7 @@
 class Waveform_arythmetics
 {
 private:
-  //size of buffer used for condiotioning
+  //size of buffer used for conditioning
   static const uint32_t max_buffer_size=1024;
 public:
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,

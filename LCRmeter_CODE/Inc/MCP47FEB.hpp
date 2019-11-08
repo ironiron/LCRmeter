@@ -53,7 +53,7 @@ public:
 
   /**@brief Sets output voltage
    * @param value byte of values bits(4095 max. value)
-   * @param length size of array
+   * @param lenght size of array
    * @retval error code from underlaying I2C interface class.
    * @warning It does not test arguments for out-of-range.
    */
