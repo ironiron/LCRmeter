@@ -34,39 +34,39 @@ TEST_CASE( "calculating moving mean")
   Waveform_arythmetics::Calc_Moving_Average(buf,10,3);
 
   REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==5);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[1][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[2][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[3][0]==0);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==0);
 
-  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[1][0]==3);
   REQUIRE(Waveform_arythmetics::filtered_buffer[1][1]==3);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[2][1]==6);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[3][1]==0);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[1][2]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[1][3]==0);
 
   REQUIRE(Waveform_arythmetics::buffer_size==3);
 
   Waveform_arythmetics::Calc_Moving_Average(buf,10,1);
 
   REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==10);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[1][0]==5);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[2][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[3][0]==1);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[4][0]==3);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[5][0]==4);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[6][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[7][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[8][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[9][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][5]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][6]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][7]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][8]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][9]==1);
 
   REQUIRE(Waveform_arythmetics::buffer_size==10);
 
   Waveform_arythmetics::Calc_Moving_Average(buf,10,2);
 
   REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==7);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[1][0]==1);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[2][0]==3);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[3][0]==2);
-  REQUIRE(Waveform_arythmetics::filtered_buffer[4][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==1);
 
   REQUIRE(Waveform_arythmetics::buffer_size==5);
 }
@@ -77,26 +77,26 @@ TEST_CASE( "Finds peaks")
   Waveform_arythmetics::mid_voltage=5;
 
   Waveform_arythmetics::filtered_buffer[0][0]=0;
-  Waveform_arythmetics::filtered_buffer[1][0]=2;
-  Waveform_arythmetics::filtered_buffer[2][0]=8;//
-  Waveform_arythmetics::filtered_buffer[3][0]=2;
-  Waveform_arythmetics::filtered_buffer[4][0]=4;
-  Waveform_arythmetics::filtered_buffer[5][0]=5;
-  Waveform_arythmetics::filtered_buffer[6][0]=2;
-  Waveform_arythmetics::filtered_buffer[7][0]=1;
-  Waveform_arythmetics::filtered_buffer[8][0]=0;
-  Waveform_arythmetics::filtered_buffer[9][0]=1;
+  Waveform_arythmetics::filtered_buffer[0][1]=2;
+  Waveform_arythmetics::filtered_buffer[0][2]=8;//
+  Waveform_arythmetics::filtered_buffer[0][3]=2;
+  Waveform_arythmetics::filtered_buffer[0][4]=4;
+  Waveform_arythmetics::filtered_buffer[0][5]=5;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=1;
+  Waveform_arythmetics::filtered_buffer[0][8]=0;
+  Waveform_arythmetics::filtered_buffer[0][9]=1;
 
-  Waveform_arythmetics::filtered_buffer[0][1]=10;//
+  Waveform_arythmetics::filtered_buffer[1][0]=10;//
   Waveform_arythmetics::filtered_buffer[1][1]=2;
-  Waveform_arythmetics::filtered_buffer[2][1]=8;
-  Waveform_arythmetics::filtered_buffer[3][1]=2;
-  Waveform_arythmetics::filtered_buffer[4][1]=4;
-  Waveform_arythmetics::filtered_buffer[5][1]=5;
-  Waveform_arythmetics::filtered_buffer[6][1]=2;
-  Waveform_arythmetics::filtered_buffer[7][1]=1;
-  Waveform_arythmetics::filtered_buffer[8][1]=0;
-  Waveform_arythmetics::filtered_buffer[9][1]=1;
+  Waveform_arythmetics::filtered_buffer[1][2]=8;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=4;
+  Waveform_arythmetics::filtered_buffer[1][5]=5;
+  Waveform_arythmetics::filtered_buffer[1][6]=2;
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=0;
+  Waveform_arythmetics::filtered_buffer[1][9]=1;
 
   Waveform_arythmetics::Find_Peaks();
 
@@ -113,26 +113,26 @@ TEST_CASE( "Finds other peaks and decides which to choose; gets frequency")
 
 
   Waveform_arythmetics::filtered_buffer[0][0]=0;
-  Waveform_arythmetics::filtered_buffer[1][0]=2;
-  Waveform_arythmetics::filtered_buffer[2][0]=8;//
-  Waveform_arythmetics::filtered_buffer[3][0]=2;
-  Waveform_arythmetics::filtered_buffer[4][0]=4;
-  Waveform_arythmetics::filtered_buffer[5][0]=4;
-  Waveform_arythmetics::filtered_buffer[6][0]=2;
-  Waveform_arythmetics::filtered_buffer[7][0]=8;//
-  Waveform_arythmetics::filtered_buffer[8][0]=2;
-  Waveform_arythmetics::filtered_buffer[9][0]=4;
+  Waveform_arythmetics::filtered_buffer[0][1]=2;
+  Waveform_arythmetics::filtered_buffer[0][2]=8;//
+  Waveform_arythmetics::filtered_buffer[0][3]=2;
+  Waveform_arythmetics::filtered_buffer[0][4]=4;
+  Waveform_arythmetics::filtered_buffer[0][5]=4;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=8;//
+  Waveform_arythmetics::filtered_buffer[0][8]=2;
+  Waveform_arythmetics::filtered_buffer[0][9]=4;
 
-  Waveform_arythmetics::filtered_buffer[0][1]=1;
+  Waveform_arythmetics::filtered_buffer[1][0]=1;
   Waveform_arythmetics::filtered_buffer[1][1]=2;
-  Waveform_arythmetics::filtered_buffer[2][1]=4;
-  Waveform_arythmetics::filtered_buffer[3][1]=2;
-  Waveform_arythmetics::filtered_buffer[4][1]=6;
-  Waveform_arythmetics::filtered_buffer[5][1]=10;//
-  Waveform_arythmetics::filtered_buffer[6][1]=2;
-  Waveform_arythmetics::filtered_buffer[7][1]=1;
-  Waveform_arythmetics::filtered_buffer[8][1]=2;
-  Waveform_arythmetics::filtered_buffer[9][1]=0;
+  Waveform_arythmetics::filtered_buffer[1][2]=4;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=6;
+  Waveform_arythmetics::filtered_buffer[1][5]=10;//
+  Waveform_arythmetics::filtered_buffer[1][6]=2;
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=2;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
 
   Waveform_arythmetics::Find_Peaks();
 
@@ -151,26 +151,26 @@ TEST_CASE( "Finds several peaks with different amplitude")
 
 
   Waveform_arythmetics::filtered_buffer[0][0]=0;
-  Waveform_arythmetics::filtered_buffer[1][0]=2;
-  Waveform_arythmetics::filtered_buffer[2][0]=8;//
-  Waveform_arythmetics::filtered_buffer[3][0]=2;
-  Waveform_arythmetics::filtered_buffer[4][0]=4;
-  Waveform_arythmetics::filtered_buffer[5][0]=4;
-  Waveform_arythmetics::filtered_buffer[6][0]=2;
-  Waveform_arythmetics::filtered_buffer[7][0]=7;//
-  Waveform_arythmetics::filtered_buffer[8][0]=2;
-  Waveform_arythmetics::filtered_buffer[9][0]=4;
+  Waveform_arythmetics::filtered_buffer[0][1]=2;
+  Waveform_arythmetics::filtered_buffer[0][2]=8;//
+  Waveform_arythmetics::filtered_buffer[0][3]=2;
+  Waveform_arythmetics::filtered_buffer[0][4]=4;
+  Waveform_arythmetics::filtered_buffer[0][5]=4;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=7;//
+  Waveform_arythmetics::filtered_buffer[0][8]=2;
+  Waveform_arythmetics::filtered_buffer[0][9]=4;
 
-  Waveform_arythmetics::filtered_buffer[0][1]=0;
+  Waveform_arythmetics::filtered_buffer[1][0]=0;
   Waveform_arythmetics::filtered_buffer[1][1]=9;//
-  Waveform_arythmetics::filtered_buffer[2][1]=4;
-  Waveform_arythmetics::filtered_buffer[3][1]=2;
-  Waveform_arythmetics::filtered_buffer[4][1]=6;
-  Waveform_arythmetics::filtered_buffer[5][1]=7;
-  Waveform_arythmetics::filtered_buffer[6][1]=10;//
-  Waveform_arythmetics::filtered_buffer[7][1]=1;
-  Waveform_arythmetics::filtered_buffer[8][1]=2;
-  Waveform_arythmetics::filtered_buffer[9][1]=0;
+  Waveform_arythmetics::filtered_buffer[1][2]=4;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=6;
+  Waveform_arythmetics::filtered_buffer[1][5]=7;
+  Waveform_arythmetics::filtered_buffer[1][6]=10;//
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=2;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
 
   Waveform_arythmetics::Find_Peaks();
 
@@ -210,26 +210,26 @@ TEST_CASE( "Calculate Amplitude")
   Waveform_arythmetics::minor_peak2=6;
 
   Waveform_arythmetics::filtered_buffer[0][0]=0;
-  Waveform_arythmetics::filtered_buffer[1][0]=2;
-  Waveform_arythmetics::filtered_buffer[2][0]=8;//
-  Waveform_arythmetics::filtered_buffer[3][0]=2;
-  Waveform_arythmetics::filtered_buffer[4][0]=4;
-  Waveform_arythmetics::filtered_buffer[5][0]=4;
-  Waveform_arythmetics::filtered_buffer[6][0]=2;
-  Waveform_arythmetics::filtered_buffer[7][0]=8;//
-  Waveform_arythmetics::filtered_buffer[8][0]=2;
-  Waveform_arythmetics::filtered_buffer[9][0]=4;
+  Waveform_arythmetics::filtered_buffer[0][1]=2;
+  Waveform_arythmetics::filtered_buffer[0][2]=8;//
+  Waveform_arythmetics::filtered_buffer[0][3]=2;
+  Waveform_arythmetics::filtered_buffer[0][4]=4;
+  Waveform_arythmetics::filtered_buffer[0][5]=4;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=8;//
+  Waveform_arythmetics::filtered_buffer[0][8]=2;
+  Waveform_arythmetics::filtered_buffer[0][9]=4;
 
-  Waveform_arythmetics::filtered_buffer[0][1]=0;
+  Waveform_arythmetics::filtered_buffer[1][0]=0;
   Waveform_arythmetics::filtered_buffer[1][1]=10;//
-  Waveform_arythmetics::filtered_buffer[2][1]=4;
-  Waveform_arythmetics::filtered_buffer[3][1]=2;
-  Waveform_arythmetics::filtered_buffer[4][1]=6;
-  Waveform_arythmetics::filtered_buffer[5][1]=7;
-  Waveform_arythmetics::filtered_buffer[6][1]=10;//
-  Waveform_arythmetics::filtered_buffer[7][1]=1;
-  Waveform_arythmetics::filtered_buffer[8][1]=2;
-  Waveform_arythmetics::filtered_buffer[9][1]=0;
+  Waveform_arythmetics::filtered_buffer[1][2]=4;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=6;
+  Waveform_arythmetics::filtered_buffer[1][5]=7;
+  Waveform_arythmetics::filtered_buffer[1][6]=10;//
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=2;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
 
   Waveform_arythmetics::Calc_Amplitude();
 

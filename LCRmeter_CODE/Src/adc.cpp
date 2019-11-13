@@ -13,12 +13,25 @@
 #include <adc.hpp>
 #include "stm32f1xx_hal.h"
 
-ADC_HandleTypeDef hadc1;
-ADC_HandleTypeDef hadc2;
-DMA_HandleTypeDef hdma_adc1;
-DMA_HandleTypeDef dma_init;
+//TODO add battery voltage
+
+
+ADC_HandleTypeDef hadc1=
+    { 0 };
+ADC_HandleTypeDef hadc2=
+    { 0 };
+DMA_HandleTypeDef hdma_adc1=
+    { 0 };
+DMA_HandleTypeDef dma_init=
+    { 0 };
+
+ADC_ChannelConfTypeDef adc_ch =
+  { 0 };
+
+namespace Adc{
 int retval=0;
-uint32_t adc_value[SIZE_OF_ADC_BUFFER]={0};
+volatile uint32_t adc_value[SIZE_OF_ADC_BUFFER]={0};
+
 enum CurrentState {NOT_INITIALISED,LCR,OSCILLOSCOPE}state=NOT_INITIALISED;
 
 void Clean_Buffer(void)
@@ -29,7 +42,7 @@ void Clean_Buffer(void)
     }
 }
 
-uint32_t ADC_Set_Oscilloscope (void)
+uint32_t Set_Oscilloscope (void)
 {
   if (state==CurrentState::LCR)
     {
@@ -38,7 +51,9 @@ uint32_t ADC_Set_Oscilloscope (void)
   HAL_ADC_DeInit (&hadc2);
   Clean_Buffer();
     }
+
   state=OSCILLOSCOPE;
+
   hadc1.Instance = ADC1;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -51,13 +66,7 @@ uint32_t ADC_Set_Oscilloscope (void)
 
   HAL_ADCEx_Calibration_Start (&hadc1);
 
-  ADC_ChannelConfTypeDef adc_ch;
-  adc_ch.Channel = ADC_CHANNEL_7;
-  adc_ch.Rank = ADC_REGULAR_RANK_1;
-  adc_ch.SamplingTime = ADC_SAMPLETIME_28CYCLES_5;
-  HAL_ADC_ConfigChannel (&hadc1, &adc_ch);
-
-  HAL_ADCEx_Calibration_Start (&hadc1);
+  Set_Sampling_time(ADC_SAMPLETIME_71CYCLES_5);
 
   dma_init.Instance = DMA1_Channel1;
   dma_init.Init.Direction = DMA_PERIPH_TO_MEMORY;
@@ -65,7 +74,7 @@ uint32_t ADC_Set_Oscilloscope (void)
   dma_init.Init.MemInc = DMA_MINC_ENABLE;
   dma_init.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
   dma_init.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-  dma_init.Init.Mode = DMA_NORMAL;//can't be circular-
+  dma_init.Init.Mode = DMA_NORMAL;//TODO make the same for dual adc
   dma_init.Init.Priority = DMA_PRIORITY_HIGH;
   HAL_DMA_Init (&dma_init);
   __HAL_LINKDMA (&hadc1, DMA_Handle, dma_init);
@@ -75,7 +84,7 @@ uint32_t ADC_Set_Oscilloscope (void)
 
 }
 
-uint32_t ADC_Set_LCR (void)
+uint32_t Set_LCR (void)
 {
 //
   if (state==CurrentState::OSCILLOSCOPE)
@@ -87,8 +96,7 @@ uint32_t ADC_Set_LCR (void)
 state=LCR;
   ADC_MultiModeTypeDef multimode =
     { 0 };
-  ADC_ChannelConfTypeDef sConfig =
-    { 0 };
+
 
   hadc1.Instance = ADC1;
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
@@ -110,10 +118,10 @@ state=LCR;
     }
   /**Configure Regular Channel
    */
-  sConfig.Channel = ADC_CHANNEL_8;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel (&hadc1, &sConfig) != HAL_OK)
+  adc_ch.Channel = ADC_CHANNEL_8;
+  adc_ch.Rank = ADC_REGULAR_RANK_1;
+  adc_ch.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel (&hadc1, &adc_ch) != HAL_OK)
     {
       asm("bkpt 255");
     }
@@ -135,10 +143,10 @@ state=LCR;
     }
   /**Configure Regular Channel
    */
-  sConfig.Channel = ADC_CHANNEL_9;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel (&hadc2, &sConfig) != HAL_OK)
+  adc_ch.Channel = ADC_CHANNEL_9;
+  adc_ch.Rank = ADC_REGULAR_RANK_1;
+  adc_ch.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel (&hadc2, &adc_ch) != HAL_OK)
     {
       asm("bkpt 255");
     }
@@ -159,4 +167,32 @@ state=LCR;
       asm("bkpt 255");
     }
   return 0;
+}
+
+
+uint32_t Set_Sampling_time(uint32_t sampling_time)
+{
+  uint32_t retval=0;
+  if (state==CurrentState::OSCILLOSCOPE)
+    {
+      adc_ch.Channel = ADC_CHANNEL_8;
+      adc_ch.Rank = ADC_REGULAR_RANK_1;
+      adc_ch.SamplingTime = sampling_time;
+      retval= HAL_ADC_ConfigChannel (&hadc1, &adc_ch);
+    }
+  if (state==CurrentState::LCR)
+    {
+      adc_ch.Channel = ADC_CHANNEL_8;
+      adc_ch.Rank = ADC_REGULAR_RANK_1;
+      adc_ch.SamplingTime = sampling_time;
+      retval=HAL_ADC_ConfigChannel (&hadc1, &adc_ch);
+
+      adc_ch.Channel = ADC_CHANNEL_9;
+      adc_ch.Rank = ADC_REGULAR_RANK_1;
+      adc_ch.SamplingTime = sampling_time;
+      retval=HAL_ADC_ConfigChannel (&hadc2, &adc_ch);
+    }
+  return retval;
+}
+
 }

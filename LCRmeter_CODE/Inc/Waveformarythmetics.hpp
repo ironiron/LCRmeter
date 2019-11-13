@@ -48,7 +48,7 @@ private:
   static const uint32_t max_buffer_size=1024;
 public:
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,
-  static uint16_t filtered_buffer[max_buffer_size][2];
+  static uint16_t filtered_buffer[2][max_buffer_size];
   ///size of filtered buffer ( after averaging it is smaller than original one).
   static uint32_t buffer_size;
   ///max value in ADC1

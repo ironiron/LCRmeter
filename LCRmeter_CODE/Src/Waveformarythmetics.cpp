@@ -12,7 +12,7 @@
 
 #include <Waveformarythmetics.hpp>
 
-uint16_t Waveform_arythmetics::filtered_buffer[max_buffer_size][2] =
+uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
   { 0 };
 uint32_t Waveform_arythmetics::buffer_size = 0;
 uint32_t Waveform_arythmetics::peak1 = 0;
@@ -43,8 +43,8 @@ void Waveform_arythmetics::Calc_Moving_Average (uint32_t* buffer, uint32_t size,
 	  temp2 = temp2 + ((buffer[k + i] >> 16) & 0xffff); //ADC2 input
 	}
 
-      filtered_buffer[j][0] = temp1 / step;
-      filtered_buffer[j][1] = temp2 / step;
+      filtered_buffer[0][j] = temp1 / step;
+      filtered_buffer[1][j] = temp2 / step;
       temp1 = 0;
       temp2 = 0;
     }
@@ -59,7 +59,7 @@ void Waveform_arythmetics::Find_Peaks (void)
 
   while (1)
     {
-      if (filtered_buffer[i][0] > mid_voltage)
+      if (filtered_buffer[0][i] > mid_voltage)
 	{
 	  break;
 	}
@@ -73,11 +73,11 @@ void Waveform_arythmetics::Find_Peaks (void)
   for (; i < buffer_size; i++)
     {
 
-      if (filtered_buffer[i][0] > filtered_buffer[index][0])
+      if (filtered_buffer[0][i] > filtered_buffer[0][index])
 	{
 	  index = i;
 	}
-      if (filtered_buffer[i][0] < mid_voltage)
+      if (filtered_buffer[0][i] < mid_voltage)
 	{
 	  peak1 = index;
 	  break;
@@ -86,7 +86,7 @@ void Waveform_arythmetics::Find_Peaks (void)
   index = 0;
   while (1)
     {
-      if (filtered_buffer[i][0] > mid_voltage)
+      if (filtered_buffer[0][i] > mid_voltage)
 	{
 	  break;
 	}
@@ -100,11 +100,11 @@ void Waveform_arythmetics::Find_Peaks (void)
   for (; i < buffer_size; i++)
     {
 
-      if (filtered_buffer[i][0] > filtered_buffer[index][0])
+      if (filtered_buffer[0][i] > filtered_buffer[0][index])
 	{
 	  index = i;
 	}
-      if (filtered_buffer[i][0] < mid_voltage)
+      if (filtered_buffer[0][i] < mid_voltage)
 	{
 	  minor_peak1 = index;
 	  break;
@@ -125,7 +125,7 @@ void Waveform_arythmetics::Find_Peaks (void)
   index = 0;
   while (1)
     {
-      if (filtered_buffer[i][1] > mid_voltage)
+      if (filtered_buffer[1][i] > mid_voltage)
 	{
 	  break;
 	}
@@ -139,11 +139,11 @@ void Waveform_arythmetics::Find_Peaks (void)
   for (; i < buffer_size; i++)
     {
 
-      if (filtered_buffer[i][1] > filtered_buffer[index][1])
+      if (filtered_buffer[1][i] > filtered_buffer[1][index])
 	{
 	  index = i;
 	}
-      if (filtered_buffer[i][1] < mid_voltage)
+      if (filtered_buffer[1][i] < mid_voltage)
 	{
 	  peak2 = index;
 	  break;
@@ -152,7 +152,7 @@ void Waveform_arythmetics::Find_Peaks (void)
   index = 0;
   while (1)
     {
-      if (filtered_buffer[i][1] > mid_voltage)
+      if (filtered_buffer[1][i] > mid_voltage)
 	{
 	  break;
 	}
@@ -166,11 +166,11 @@ void Waveform_arythmetics::Find_Peaks (void)
   for (; i < buffer_size; i++)
     {
 
-      if (filtered_buffer[i][1] > filtered_buffer[index][0])
+      if (filtered_buffer[1][i] > filtered_buffer[0][index])
 	{
 	  index = i;
 	}
-      if (filtered_buffer[i][1] < mid_voltage)
+      if (filtered_buffer[1][i] < mid_voltage)
 	{
 	  minor_peak2 = index;
 	  break;
@@ -190,22 +190,22 @@ void Waveform_arythmetics::Calc_Amplitude (void)
   uint32_t index = peak1;
   for (uint32_t i = peak1; i < minor_peak1; i++)
     {
-      if (filtered_buffer[i][0] < filtered_buffer[index][0])
+      if (filtered_buffer[0][i] < filtered_buffer[0][index])
 	{
 	  index = i;
 	}
     }
-  amplitude1 = (filtered_buffer[peak1][0] - filtered_buffer[index][0]) / 2;
+  amplitude1 = (filtered_buffer[0][peak1] - filtered_buffer[0][index]) / 2;
 
   index = peak2;
   for (uint32_t i = peak2; i < minor_peak2; i++)
     {
-      if (filtered_buffer[i][1] < filtered_buffer[index][1])
+      if (filtered_buffer[1][i] < filtered_buffer[1][index])
 	{
 	  index = i;
 	}
     }
-  amplitude2 = (filtered_buffer[peak2][1] - filtered_buffer[index][1]) / 2;
+  amplitude2 = (filtered_buffer[1][peak2] - filtered_buffer[1][index]) / 2;
 }
 
 void Waveform_arythmetics::Process_Signal (uint32_t *buffer, uint32_t size,
