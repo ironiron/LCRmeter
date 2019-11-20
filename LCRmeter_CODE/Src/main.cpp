@@ -102,6 +102,8 @@ static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
 
+int yolo=0;
+
 extern "C" {
 void DMA1_Channel1_IRQHandler(void)
 {
@@ -132,9 +134,34 @@ void DMA1_Channel4_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel4_IRQn 1 */
 }
+
+void DMA1_Channel6_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+  DMA1->IFCR =DMA_IFCR_CGIF1;
+  /* USER CODE END DMA1_Channel4_IRQn 0 */
+
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 1 */
+}
+
+void EXTI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI2_IRQn 0 */
+yolo++;
+  /* USER CODE END EXTI2_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+  /* USER CODE BEGIN EXTI2_IRQn 1 */
+
+  /* USER CODE END EXTI2_IRQn 1 */
+}
+
 }
 //void SystemClock_Config(void);
 //static void MX_GPIO_Init(void);
+
+
 
 ADC_HandleTypeDef adc;
 
@@ -196,11 +223,11 @@ GPIOC->ODR^=(1<<13);
 HAL_Delay(40);
 GPIOC->ODR^=(1<<13);
 
-// Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
-// pwm.Initialise();//one timer-two channels->thus only one initialization TODO fix typo
-// pwm.Set_Frequency(5000);
-// pwm.Set_Duty(0);
-// pwm.Enable();
+ Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
+ pwm.Initialise();//one timer-two channels->thus only one initialization TODO fix typo
+ pwm.Set_Frequency(5000);
+ pwm.Set_Duty(50);
+ pwm.Enable();
 
  ///////////////////////////////////////////////////////////////////////////
 ///	I2C
@@ -229,7 +256,7 @@ GPIOC->ODR^=(1<<13);
  I2C_HandleTypeDef i2c;
 
   i2c.Instance             = I2C2;
-  i2c.Init.ClockSpeed      = 240000;
+  i2c.Init.ClockSpeed      = 400000;
   i2c.Init.DutyCycle       = I2C_DUTYCYCLE_2;
   i2c.Init.OwnAddress1     = 0xff;
   i2c.Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
@@ -281,6 +308,9 @@ GPIOC->ODR^=(1<<13);
  //////////////////////////////////////////////////////////////////////////////////////////////
  /////DAC
 
+ HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 1, 0);
+ HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+
  __HAL_RCC_DMA1_CLK_ENABLE();
   DMA dma(DMA1_Channel6);
 
@@ -288,7 +318,7 @@ GPIOC->ODR^=(1<<13);
   dma.Set_Minc(0);
   dma.Set_Priority(DMA::Priority::HIGH);
 
-
+  //DMA1_Channel6->CCR|=14;
   I2C i2c_dma(I2C1,&dma);
   i2c_dma.Initialise();
   i2c_dma.Enable_DMA();
@@ -304,7 +334,7 @@ GPIOC->ODR^=(1<<13);
  // sprintf (buf, "vv=%d", arr[60]);
    // oled.Set_Cursor (70, 20); oled.Write_String (buf);
 
- h = dac.Set_Vref (MCP47FEB::Vref::VREF);
+ h = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
  sprintf (buf, "vref = %d", h);
  oled.Set_Cursor (0, 20), oled.Write_String (buf);
  oled.Update_Screen ();
@@ -322,7 +352,7 @@ dac.Enable_Output();
 ///////////////////////////////////////////////////////////////////////////////
   Adc::Set_Oscilloscope ();
 
-  Adc::Set_Sampling_time(ADC_SAMPLETIME_71CYCLES_5);
+  Adc::Set_Sampling_time(ADC_SAMPLETIME_1CYCLE_5);
 
 // uint16_t value = HAL_ADC_GetValue(&adc);
   float v;
@@ -338,6 +368,9 @@ uint8_t xx[1000];
 //             sprintf(buf,"ADC%d = %d", 0, value);
 //             oled.Set_Cursor(0,0),
 //             oled.Write_String(buf);
+            sprintf (buf, "yolo= %ld", yolo);
+            oled.Set_Cursor (0, 00), oled.Write_String (buf);
+            oled.Update_Screen ();
 
       Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
       for (int i=0;i<1000;i++)
@@ -527,10 +560,6 @@ void SystemClock_Config(void)
  __HAL_RCC_ADC1_CLK_ENABLE();
  __HAL_RCC_TIM1_CLK_ENABLE();
 
- RCC_PeriphCLKInitTypeDef adc_clk;
- adc_clk.PeriphClockSelection = RCC_PERIPHCLK_ADC;
- adc_clk.AdcClockSelection = RCC_ADCPCLK2_DIV6;
- HAL_RCCEx_PeriphCLKConfig(&adc_clk);
 
 }
 
@@ -587,6 +616,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /////
+  /*Configure GPIO pins : BUTTON_OK_Pin BUTTON_BACK_Pin BUTTON_OKA4_Pin BUTTON_UP_Pin */
+  GPIO_InitStruct.Pin = BUTTON_OK_Pin|BUTTON_BACK_Pin|BUTTON_OKA4_Pin|BUTTON_UP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
 }
 

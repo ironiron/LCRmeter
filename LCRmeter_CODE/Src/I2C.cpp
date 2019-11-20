@@ -128,6 +128,7 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint8_t* byte,
 I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
 					uint32_t size, uint8_t mem_addr)
 {
+#if 0 //0 for normal. 1 for test
     if(dma==0)
       {
         return I2C::ErrorCode::DMA_DISABLED;
@@ -145,7 +146,27 @@ I2C::ErrorCode I2C::Send_Data_Circular (uint8_t addr, const uint16_t *byte,
       array[j++] = (byte[i] & 0xff);
     }
   return Send_Bytes_DMA (addr, array, size * 2, &mem_addr, 1);
+#else
 
+  if(dma==0)
+    {
+      return I2C::ErrorCode::DMA_DISABLED;
+    }
+  uint8_t *array = new (std::nothrow) uint8_t[size * 3];
+if (array == 0)
+  {
+    return I2C::ErrorCode::GENERAL_ERROR;
+  }
+ptr_to_bytes=array;
+size_of_data=size * 2;
+for (uint32_t i = 0, j = 0; i < size; i++)
+  {
+    array[j++] = (byte[i] >> 8);
+    array[j++] = (byte[i] & 0xff);
+    array[j++]=mem_addr;
+  }
+return Send_Bytes_DMA (addr, array, size * 2, &mem_addr, 1);
+#endif
 }
 
 

@@ -175,7 +175,7 @@ uint32_t Set_Sampling_time(uint32_t sampling_time)
   uint32_t retval=0;
   if (state==CurrentState::OSCILLOSCOPE)
     {
-      adc_ch.Channel = ADC_CHANNEL_8;
+      adc_ch.Channel = ADC_CHANNEL_7;
       adc_ch.Rank = ADC_REGULAR_RANK_1;
       adc_ch.SamplingTime = sampling_time;
       retval= HAL_ADC_ConfigChannel (&hadc1, &adc_ch);
