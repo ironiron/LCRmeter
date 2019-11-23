@@ -238,3 +238,66 @@ TEST_CASE( "Calculate Amplitude")
 
 }
 
+TEST_CASE( "Gets index of rising edge for oscilloscope")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=8;
+  Waveform_arythmetics::filtered_buffer[0][1]=5;
+  Waveform_arythmetics::filtered_buffer[0][2]=3;
+  Waveform_arythmetics::filtered_buffer[0][3]=7;
+  Waveform_arythmetics::filtered_buffer[0][4]=3;
+  Waveform_arythmetics::filtered_buffer[0][5]=9;
+  Waveform_arythmetics::filtered_buffer[0][6]=3;
+  Waveform_arythmetics::filtered_buffer[0][7]=3;
+  Waveform_arythmetics::filtered_buffer[0][8]=5;
+  Waveform_arythmetics::filtered_buffer[0][9]=5;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,true);
+
+  REQUIRE(retval==3);
+}
+
+TEST_CASE( "Gets index of falling edge for oscilloscope")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=8;
+  Waveform_arythmetics::filtered_buffer[0][1]=5;
+  Waveform_arythmetics::filtered_buffer[0][2]=3;
+  Waveform_arythmetics::filtered_buffer[0][3]=7;
+  Waveform_arythmetics::filtered_buffer[0][4]=3;
+  Waveform_arythmetics::filtered_buffer[0][5]=9;
+  Waveform_arythmetics::filtered_buffer[0][6]=3;
+  Waveform_arythmetics::filtered_buffer[0][7]=3;
+  Waveform_arythmetics::filtered_buffer[0][8]=5;
+  Waveform_arythmetics::filtered_buffer[0][9]=5;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,false);
+
+  REQUIRE(retval==2);
+}
+
+TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 time")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=10;
+  Waveform_arythmetics::filtered_buffer[0][1]=10;
+  Waveform_arythmetics::filtered_buffer[0][2]=10;
+  Waveform_arythmetics::filtered_buffer[0][3]=0;
+  Waveform_arythmetics::filtered_buffer[0][4]=0;
+  Waveform_arythmetics::filtered_buffer[0][5]=0;
+  Waveform_arythmetics::filtered_buffer[0][6]=0;
+  Waveform_arythmetics::filtered_buffer[0][7]=0;
+  Waveform_arythmetics::filtered_buffer[0][8]=10;
+  Waveform_arythmetics::filtered_buffer[0][9]=10;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,true);
+
+  REQUIRE(retval==8);
+}
+
+
+TEST_CASE( "Checks everything for 0 value case")
+{
+//TODO in the future
+
+}

@@ -102,7 +102,8 @@ static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
 
-int yolo=0;
+volatile int yolo=0;
+volatile int xD=0;
 
 extern "C" {
 void DMA1_Channel1_IRQHandler(void)
@@ -113,10 +114,7 @@ void DMA1_Channel1_IRQHandler(void)
   /* USER CODE END DMA1_Channel1_IRQn 0 */
 //  __HAL_DMA_CLEAR_FLAG(hdma_adc1, __HAL_DMA_GET_TC_FLAG_INDEX(&hdma_adc1));
  // HAL_DMA_IRQHandler(&hdma_adc1);
-  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
-  DMA1_Channel1->CCR &=~DMA_CCR_EN;
-  DMA1_Channel1->CNDTR=1024;
-  DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
+xD=1;
  // HAL_ADC_Start_DMA (&hadc1, (uint32_t*) Adc::adc_value, SIZE_OF_ADC_BUFFER);
   /* USER CODE END DMA1_Channel1_IRQn 1 */
 }
@@ -138,7 +136,7 @@ void DMA1_Channel4_IRQHandler(void)
 void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
-  DMA1->IFCR =DMA_IFCR_CGIF1;
+  DMA1->IFCR =DMA_IFCR_CGIF6;
   /* USER CODE END DMA1_Channel4_IRQn 0 */
 
   /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
@@ -207,7 +205,7 @@ namespace
   */
 int main(void)
 {
-
+  uint8_t display_buffer[100];
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
   char buf[30];
@@ -216,7 +214,6 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
   MX_GPIO_Init();
-
 
   printf("asdczx");
 GPIOC->ODR^=(1<<13);
@@ -229,6 +226,9 @@ GPIOC->ODR^=(1<<13);
  pwm.Set_Duty(50);
  pwm.Enable();
 
+
+ __HAL_RCC_ADC2_CLK_ENABLE();
+ __HAL_RCC_ADC1_CLK_ENABLE();
  ///////////////////////////////////////////////////////////////////////////
 ///	I2C
 //////////////////////////////////////////////////////////////////////////
@@ -268,37 +268,18 @@ GPIOC->ODR^=(1<<13);
   HAL_I2C_Init(&i2c);
 // HAL_I2C_Master_Transmit(&hi2c1,0x44,&u,1,200);
 
-// i2c2.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
-// i2c.Send_Data(uint8_t(0x78),uint8_t(0x33),uint8_t(0x00));
-// i2c.Send_Data(uint8_t(0x78),uint8_t(0x56));
-// i2c.Send_Data(uint8_t(0x78),uint16_t(0x3449));
 /////////////////////////////////////////////////////////////
   volatile int err;
 
  SSD1306 oled(&i2c2,64);
  //SSD1306 led(i2c1,32,SSD1306::HardwareConf::SEQ_NOREMAP);
 
- //printf("asdczx");
  oled.Initialize();
  err=oled.Get_Last_Error();
- if(err)
-   {
-     er=I2C::ErrorCode::BUS_BUSY;
-   }
-
-// led.Initialize();
- //err=led.Get_Last_Error();
-
- //oled.Set_Font_size(Fonts::Font_16x26);
  err=oled.IsInitialized();
-// err=led.IsInitialized();
-// printf("asdczx");
+
  oled.Fill(SSD1306::WHITE);
  oled.Update_Screen();
- //led.Fill(SSD1306::WHITE);
-// led.Update_Screen();
- err=oled.Get_Last_Error();
-// err=led.Get_Last_Error();
  delay_ms(200);
  oled.Fill(SSD1306::BLACK);
  oled.Update_Screen();
@@ -330,10 +311,6 @@ GPIOC->ODR^=(1<<13);
  MCP4725 dac_dma(i2c_dma);
  MCP47FEB dac(i2c_dma);
 
- // std::vector<int>arr(990000,4);
- // sprintf (buf, "vv=%d", arr[60]);
-   // oled.Set_Cursor (70, 20); oled.Write_String (buf);
-
  h = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
  sprintf (buf, "vref = %d", h);
  oled.Set_Cursor (0, 20), oled.Write_String (buf);
@@ -350,138 +327,123 @@ dac.Enable_Output();
 ////////////////////////////////////////////////////
 //OSCILLOSCOPE
 ///////////////////////////////////////////////////////////////////////////////
-  Adc::Set_Oscilloscope ();
+  Adc::Set_LCR();
+  HAL_Delay(100);
+  Adc::Set_Oscilloscope();
+  double lala=0;
 
-  Adc::Set_Sampling_time(ADC_SAMPLETIME_1CYCLE_5);
-
-// uint16_t value = HAL_ADC_GetValue(&adc);
-  float v;
-uint8_t xx[1000];
+  lala=Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+int ff=0;
   while (1)
     {
-
-      HAL_Delay (80);
-      oled.Clean ();
-//	 //value = adc_value[0];
-//	 value = adc_read(ADC_CHANNEL_7);
-//	 v = (float)value * 3.3f / 4096.0f;
-//             sprintf(buf,"ADC%d = %d", 0, value);
-//             oled.Set_Cursor(0,0),
-//             oled.Write_String(buf);
-            sprintf (buf, "yolo= %ld", yolo);
-            oled.Set_Cursor (0, 00), oled.Write_String (buf);
-            oled.Update_Screen ();
-
-      Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
-      for (int i=0;i<1000;i++)
+      ff++;
+      if(ff>20)
 	{
-	  xx[i]=Waveform_arythmetics::filtered_buffer[0][i]/64;
+	  break;
 	}
-     	 oled.Draw_Waveform(10,60,xx,100,SSD1306::WHITE);
+      while(xD==0)
+	{
+
+	}
+      xD=0;
+      HAL_Delay (100);
+      oled.Clean ();
+      Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
+      uint32_t edge=Waveform_arythmetics::Get_Edge_index(1000,false);
+      for (int i=0;i<100;i++)
+	{
+	  display_buffer[i]=Waveform_arythmetics::filtered_buffer[0][i+edge]/64;
+	}
+      sprintf (buf, "yol=%1.3f", lala);
+      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+      sprintf (buf, "edge=%ld", edge);
+      oled.Set_Cursor (63, 0), oled.Write_String (buf);
+     	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
      	oled.Update_Screen ();
 
-//      sprintf (buf, "ADC%ld = %ld", 0, Adc::adc_value[0]);
-//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-//      sprintf (buf, "ADC%d = %d", 1, Adc::adc_value[1]);
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      v=Adc::adc_value[2]*3.3*2.0/4095.0;
-//      sprintf (buf, "ADC = %1.3f", v);
-//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
-//      oled.Set_Cursor (100, 55), oled.Write_String ("xD");
-//      oled.Update_Screen ();
+        DMA1_Channel1->CCR &=~DMA_CCR_EN;
+        DMA1_Channel1->CNDTR=1024;
+        DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
     }
-////////////////////////////////////////////////
-//WAVEFORM
-///////////////////////////////////////////////////////////////////////////
-oled.Clean();
-for(int i=0;i<120;i++)
-  {
-    oled.Draw_Pixel(i,(sine_table[i]/5),SSD1306::Color::WHITE);
-  }
-oled.Update_Screen();
-
-Waveform_arythmetics::Calc_Moving_Average((uint32_t *)sine_table,10,3);
  ///////////////////////////////////////////////////////////////////////////////////
  //ADC
  //////////////////////////////////////////////////////
-int t=0;
+  oled.Clean ();
+	oled.Update_Screen ();
              // char buf[30];
-Adc::Set_Oscilloscope();
-HAL_Delay(2000);
 Adc::Set_LCR();
 //
-             while (1)
-             {
-        	 t++;
-               /* USER CODE END WHILE */
-                       sprintf(buf,"ADC1=%2d  ;	%2d  ", ((Adc::adc_value[0]>>16)& 0xffff), (Adc::adc_value[0]&0xffff));
-                       oled.Set_Cursor(0,0),
-                       oled.Write_String(buf);
-                       sprintf(buf,"ADC1=%d;	%d", ((Adc::adc_value[1]>>16)& 0xffff), (Adc::adc_value[1]&0xffff));
-                       oled.Set_Cursor(0,20),
-                       oled.Write_String(buf);
-                       oled.Update_Screen();
-                       HAL_Delay(10);
-                       if(t>100)
-                	 {
-                	   break;
-                	 }
-//               /* USER CODE BEGIN 3 */
-             }
-// asm("bkpt 255");
+ff=0;
+  while (1)
+    {
+      ff++;
+      if(ff>20)
+	{
+	  break;
+	}
+      while(xD==0)
+	{
 
-   	  HAL_Delay(20);
-   	 oled.Clean();
-   	 oled.Set_Cursor(1,1);
-   	 oled.Write_String("aaaaaaaaa");
-   	 oled.Update_Screen();
-   	 HAL_Delay(300);
+	}
+      xD=0;
+      HAL_Delay (100);
+      oled.Clean ();
+      Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
+      uint32_t edge=Waveform_arythmetics::Get_Edge_index(1000,false);
+      for (int i=0;i<100;i++)
+	{
+	  display_buffer[i]=Waveform_arythmetics::filtered_buffer[0][i+edge]/64;
+	}
+      sprintf (buf, "yol=%1.3f", lala);
+      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+      sprintf (buf, "edge=%ld", edge);
+      oled.Set_Cursor (63, 0), oled.Write_String (buf);
+     	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
+     	oled.Update_Screen ();
 
+        DMA1_Channel1->CCR &=~DMA_CCR_EN;
+        DMA1_Channel1->CNDTR=1024;
+        DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
 
-
- //ADC_HandleTypeDef adc;
-
-// DMA dma_adc(DMA1_Channel1);
-// dma_adc.Set_Data_Count(1);
-// dma_adc.Set_Direction(false);
-// dma_adc.Set_Peripheral_Addr(uint16_t(ADC1->DR));
-// dma_adc.Set_Size_Memory(DMA::Size::HALF_WORD);
-// dma_adc.Set_Size_Peripheral(DMA::Size::HALF_WORD);
-// dma_adc.Set_Memory_Addr(&adc_value[0]);
-// dma_adc.Enable();
-
+    }
 
 
               Adc::Set_Oscilloscope();
 
 
-    // uint16_t value = HAL_ADC_GetValue(&adc);
-//     float v ;
+              //lala=Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+ff=0;
+              while (1)
+                {
+                  ff++;
+                  if(ff>20)
+            	{
+            	  break;
+            	}
+                  while(xD==0)
+            	{
 
+            	}
+                  xD=0;
+                  HAL_Delay (100);
+                  oled.Clean ();
+                  Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
+                  uint32_t edge=Waveform_arythmetics::Get_Edge_index(1000,false);
+                  for (int i=0;i<100;i++)
+            	{
+            	  display_buffer[i]=Waveform_arythmetics::filtered_buffer[0][i+edge]/64;
+            	}
+                  sprintf (buf, "yol=%1.3f", lala);
+                  oled.Set_Cursor (0, 0), oled.Write_String (buf);
+                  sprintf (buf, "edge=%ld", edge);
+                  oled.Set_Cursor (63, 0), oled.Write_String (buf);
+                 	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
+                 	oled.Update_Screen ();
 
-     while (1)
-       {
-
-	  HAL_Delay(20);
-	 oled.Clean();
-	// Waveform_arythmetics::Calc_Moving_Average(Adc::adc_value,1024,11);
-	 //oled.Draw_Waveform(0,0,(uint8_t*)(Waveform_arythmetics::filtered_buffer[0]),1024/11,SSD1306::WHITE);
-
-
-
-//             sprintf(buf,"ADC%d = %d", 0, Adc::adc_value[0]);
-//             oled.Set_Cursor(0,20),
-//             oled.Write_String(buf);
-//             sprintf(buf,"ADC%d = %d", 1, Adc::adc_value[1]);
-//             oled.Set_Cursor(0,0),
-//             oled.Write_String(buf);
-//             sprintf(buf,"ADC = %f", v);
-//             oled.Set_Cursor(0,40),
-//             oled.Write_String(buf);
-//             oled.Set_Cursor(100,40),
-//             oled.Write_String("xD");
-//             oled.Update_Screen();
-     }
+                    DMA1_Channel1->CCR &=~DMA_CCR_EN;
+                    DMA1_Channel1->CNDTR=1024;
+                    DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
+                }
 
  while(1);
  ///////////////////////////////////////////////////////////////////////////

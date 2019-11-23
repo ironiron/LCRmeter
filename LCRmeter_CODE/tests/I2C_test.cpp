@@ -149,28 +149,30 @@ TEST_CASE( "abort sending circular data without DMA")
 
   REQUIRE(er==I2C::ErrorCode::DMA_DISABLED);
 }
+///////////////////////////////////////////////////////////////////////////////
 
-TEST_CASE( "Send data circular thru DMA")
-{
-  uint8_t addr=0x24;
-  uint16_t data[3]={0x3256,0x0404,0x5589};
-  uint8_t mem_addr=0x44;
-  testing::i2c::send_data.clear();
+//TEST_CASE( "Send data circular thru DMA")
+//{
+//  uint8_t addr=0x24;
+//  uint16_t data[3]={0x3256,0x0404,0x5589};
+//  uint8_t mem_addr=0x44;
+//  testing::i2c::send_data.clear();
+//
+//  I2C::ErrorCode er=i2c_dma.Send_Data_Circular(addr,data,uint32_t(3),mem_addr);
+//
+//  REQUIRE(er==I2C::ErrorCode::OK);
+//  REQUIRE(testing::i2c::send_data.size()==8);
+//  REQUIRE(testing::i2c::send_data[0]==addr);
+//  REQUIRE(testing::i2c::send_data[1]==mem_addr);
+//  REQUIRE(testing::i2c::send_data[2]==0x32);
+//  REQUIRE(testing::i2c::send_data[3]==0x56);
+//  REQUIRE(testing::i2c::send_data[4]==0x04);
+//  REQUIRE(testing::i2c::send_data[5]==0x04);
+//  REQUIRE(testing::i2c::send_data[6]==0x55);
+//  REQUIRE(testing::i2c::send_data[7]==0x89);
+//}
 
-  I2C::ErrorCode er=i2c_dma.Send_Data_Circular(addr,data,uint32_t(3),mem_addr);
-
-  REQUIRE(er==I2C::ErrorCode::OK);
-  REQUIRE(testing::i2c::send_data.size()==8);
-  REQUIRE(testing::i2c::send_data[0]==addr);
-  REQUIRE(testing::i2c::send_data[1]==mem_addr);
-  REQUIRE(testing::i2c::send_data[2]==0x32);
-  REQUIRE(testing::i2c::send_data[3]==0x56);
-  REQUIRE(testing::i2c::send_data[4]==0x04);
-  REQUIRE(testing::i2c::send_data[5]==0x04);
-  REQUIRE(testing::i2c::send_data[6]==0x55);
-  REQUIRE(testing::i2c::send_data[7]==0x89);
-}
-
+//////////////////////////////////////////////
 TEST_CASE( "Sets frequency of I2C")
 {
 

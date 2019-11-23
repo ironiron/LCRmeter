@@ -15,14 +15,14 @@
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
   { 0 };
 uint32_t Waveform_arythmetics::buffer_size = 0;
+uint32_t Waveform_arythmetics::point_time = 0;
 uint32_t Waveform_arythmetics::peak1 = 0;
 uint32_t Waveform_arythmetics::peak2 = 0;
 int32_t Waveform_arythmetics::alfa = 0;
 uint32_t Waveform_arythmetics::frequency = 0;
-uint32_t Waveform_arythmetics::point_time = 0;
 uint32_t Waveform_arythmetics::minor_peak1 = 0;
 uint32_t Waveform_arythmetics::minor_peak2 = 0;
-uint32_t Waveform_arythmetics::mid_voltage = 0;
+uint32_t Waveform_arythmetics::mid_voltage = 0;/////////////////////////TODO make const, or add documenttation
 uint32_t Waveform_arythmetics::amplitude1 = 0;
 uint32_t Waveform_arythmetics::amplitude2 = 0;
 
@@ -33,6 +33,8 @@ void Waveform_arythmetics::Calc_Moving_Average (uint32_t* buffer, uint32_t size,
     {
       return;
     }
+
+  point_time=point_time*step;
   uint16_t temp1 = 0;
   uint16_t temp2 = 0;
   for (uint32_t i = 0, j = 0; i + step - 1 < size; i += step, j++)
@@ -216,4 +218,58 @@ void Waveform_arythmetics::Process_Signal (uint32_t *buffer, uint32_t size,
   Find_Peaks();
   Calc_Alfa();
   Calc_Amplitude();
+}
+
+uint32_t Waveform_arythmetics::Get_Edge_index (uint32_t level, bool is_rising)
+{
+  if (buffer_size < 1)
+    {
+      return 0;
+    }
+  uint32_t i=0;
+
+  if (is_rising == true)
+    {
+      for (i=0;i<buffer_size;i++)
+	{
+	  if(filtered_buffer[0][i]<level)
+	    {
+	      break;
+	    }
+	}
+      for (i++; i < buffer_size; i++)
+	{
+
+	  if (filtered_buffer[0][i]  > level)
+	    {
+	      if (filtered_buffer[0][i - 1] < filtered_buffer[0][i] )
+		{
+		  return i;
+		}
+	    }
+	}
+    }
+  else
+    {
+      for (i=0;i<buffer_size;i++)
+	{
+	  if(filtered_buffer[0][i]>level)
+	    {
+	      break;
+	    }
+	}
+      for (i++; i < buffer_size; i++)
+	{
+
+	  if (filtered_buffer[0][i]  < level )
+	    {
+	      if (filtered_buffer[0][i - 1]   > filtered_buffer[0][i] )
+		{
+		  return i;
+		}
+	    }
+	}
+    }
+
+  return 0;
 }

@@ -47,8 +47,12 @@ private:
   //size of buffer used for conditioning
   static const uint32_t max_buffer_size=1024;
 public:
+  ///length of time of 1 point in buffer in microseconds
+  static uint32_t point_time;
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,
   static uint16_t filtered_buffer[2][max_buffer_size];
+
+  //outputs
   ///size of filtered buffer ( after averaging it is smaller than original one).
   static uint32_t buffer_size;
   ///max value in ADC1
@@ -59,8 +63,6 @@ public:
   static int32_t alfa;
   ///frequency  with resolution of 1 Hz
   static uint32_t frequency;
-  ///length of time of 1 point in buffer in microseconds
-  static uint32_t point_time;
   /// 2nd max value in ADC1
   static uint32_t minor_peak1;
   /// 2nd max value in ADC2
@@ -92,7 +94,7 @@ public:
    */
   static void Calc_Amplitude (void);
 
-  /**@brief One function to take care of everything. Read class documentation dor more info.
+  /**@brief One function to take care of everything. Read class documentation for more info.
    * @param buffer pointer to array made of readings of ADC Data register
    * @param size of array
    * @param point_time_lenght sets #point_time class member
@@ -100,6 +102,12 @@ public:
   static void Process_Signal (uint32_t *buffer, uint32_t size,
 			      uint32_t point_time_lenght);
 
+  /**@brief Function used in oscilloscope configuration for edge detection.
+   * @param level of ADC value (0-4095)
+   * @param rising or falling trigger selection (true for rising)
+   * @retval index of detected edge
+   */
+  static uint32_t Get_Edge_index (uint32_t level, bool is_rising);
 };
 
 /** @}*/
