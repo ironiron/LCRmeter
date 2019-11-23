@@ -365,6 +365,32 @@ int ff=0;
         DMA1_Channel1->CNDTR=1024;
         DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
     }
+  //////////////////////////////////////////////
+  //TEMP
+  /////////////////
+  ff=0;
+  Adc::Set_Voltage_temperature();
+                while (1)
+                  {
+                    ff++;
+                    if(ff>20)
+              	{
+              	  break;
+              	}
+//
+                    xD=0;
+                    HAL_Delay (100);
+                    oled.Clean ();
+
+                    sprintf (buf, "volt=%d", Adc::volt_temp[0]);
+                    oled.Set_Cursor (0, 0), oled.Write_String (buf);
+                    sprintf (buf, "temp=%ld", Adc::volt_temp[1]);
+                    oled.Set_Cursor (63, 10), oled.Write_String (buf);
+                   	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
+                   	oled.Update_Screen ();
+
+                      ///DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
+                  }
  ///////////////////////////////////////////////////////////////////////////////////
  //ADC
  //////////////////////////////////////////////////////

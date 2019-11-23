@@ -25,6 +25,7 @@ namespace Adc {
 #define SIZE_OF_ADC_BUFFER 1024
 
 extern volatile uint32_t adc_value[SIZE_OF_ADC_BUFFER];
+extern volatile uint32_t volt_temp[2];
 
   enum SamplingTimeClocks: uint32_t
   {
@@ -52,6 +53,7 @@ extern volatile uint32_t adc_value[SIZE_OF_ADC_BUFFER];
 uint32_t Set_Oscilloscope(void);
 uint32_t Set_LCR(void);
 double Set_Sampling_time(SamplingTimeClocks sampling_time);
+uint32_t Set_Voltage_temperature(void);
 }
 
 #endif /* ADC_HPP_ */
