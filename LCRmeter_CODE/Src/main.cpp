@@ -81,6 +81,7 @@ USB- mass storage of data
 #include <string>
 #include <vector>
 #include "adc.hpp"
+#include "LCRmath.hpp"
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -313,7 +314,7 @@ GPIOC->ODR^=(1<<13);
 
  h = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
  sprintf (buf, "vref = %d", h);
- oled.Set_Cursor (0, 20), oled.Write_String (buf);
+ oled.Set_Cursor (0, 15), oled.Write_String (buf);
  oled.Update_Screen ();
 
   //h=dac.Set_Output(100);
@@ -321,7 +322,13 @@ GPIOC->ODR^=(1<<13);
    sprintf (buf, "E = %d", h);
    oled.Set_Cursor (0, 0), oled.Write_String (buf);
    oled.Update_Screen ();
-   HAL_Delay (600);
+   sprintf (buf, "trzy = %d", Adc::Adc_To_Milivolts(4095));
+   oled.Set_Cursor (0, 30), oled.Write_String (buf);
+   oled.Update_Screen ();
+   sprintf (buf, "dwa = %d", Adc::Adc_To_Milivolts(2000));
+   oled.Set_Cursor (40, 45), oled.Write_String (buf);
+   oled.Update_Screen ();
+   HAL_Delay (1000);
 
 dac.Enable_Output();
 ////////////////////////////////////////////////////
@@ -382,9 +389,9 @@ int ff=0;
                     HAL_Delay (100);
                     oled.Clean ();
 
-                    sprintf (buf, "volt=%d", Adc::volt_temp[0]);
+                    sprintf (buf, "volt=%d", Adc::Get_Vref());
                     oled.Set_Cursor (0, 0), oled.Write_String (buf);
-                    sprintf (buf, "temp=%ld", Adc::volt_temp[1]);
+                    sprintf (buf, "temp=%ld", Adc::Get_Temperature());
                     oled.Set_Cursor (63, 10), oled.Write_String (buf);
                    	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
                    	oled.Update_Screen ();
@@ -398,6 +405,7 @@ int ff=0;
 	oled.Update_Screen ();
              // char buf[30];
 Adc::Set_LCR();
+lala=Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
 //
 ff=0;
   while (1)
@@ -414,17 +422,27 @@ ff=0;
       xD=0;
       HAL_Delay (100);
       oled.Clean ();
+      Waveform_arythmetics::mid_voltage=2000;
+      Waveform_arythmetics::point_time=lala;
       Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
-      uint32_t edge=Waveform_arythmetics::Get_Edge_index(1000,false);
-      for (int i=0;i<100;i++)
-	{
-	  display_buffer[i]=Waveform_arythmetics::filtered_buffer[0][i+edge]/64;
-	}
-      sprintf (buf, "yol=%1.3f", lala);
+      Waveform_arythmetics::Find_Peaks();
+      Waveform_arythmetics::Calc_Alfa();
+      Waveform_arythmetics::Calc_Amplitude();
+
+
+
+      LCR_math::Calculate(Adc::Adc_To_Milivolts(Waveform_arythmetics::amplitude1),
+			  Adc::Adc_To_Milivolts(Waveform_arythmetics::amplitude2),
+			  Waveform_arythmetics::alfa,
+			  Waveform_arythmetics::frequency);
+
+
+      sprintf (buf, "cap=%1.3f", LCR_math::capacitance);
       oled.Set_Cursor (0, 0), oled.Write_String (buf);
-      sprintf (buf, "edge=%ld", edge);
-      oled.Set_Cursor (63, 0), oled.Write_String (buf);
-     	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
+      sprintf (buf, "ind=%ld", LCR_math::inductance);
+      oled.Set_Cursor (0, 20), oled.Write_String (buf);
+      sprintf (buf, "res=%ld", LCR_math::resistance);
+      oled.Set_Cursor (0, 40), oled.Write_String (buf);
      	oled.Update_Screen ();
 
         DMA1_Channel1->CCR &=~DMA_CCR_EN;

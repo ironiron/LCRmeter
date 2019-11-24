@@ -69,6 +69,7 @@ public:
   static uint32_t minor_peak2;
   /// value of the 0 point of input sine
   static uint32_t mid_voltage;
+  //TODO fix units!
   /// amplitude in ADC1
   static uint32_t amplitude1;
   /// amplitude in ADC2

@@ -21,8 +21,7 @@ ADC_HandleTypeDef hadc2 =
   { 0 };
 DMA_HandleTypeDef hdma_adc1 =
   { 0 };
-DMA_HandleTypeDef dma_init =
-  { 0 };
+
 
 ADC_ChannelConfTypeDef adc_ch =
   { 0 };
@@ -33,6 +32,8 @@ namespace Adc
   volatile uint32_t adc_value[SIZE_OF_ADC_BUFFER] =
     { 0 };
   volatile uint32_t volt_temp[2]={0};
+
+  uint32_t vref=3300;
   enum CurrentState
   {
     NOT_INITIALISED, LCR, OSCILLOSCOPE
@@ -70,16 +71,16 @@ namespace Adc
 
     Set_Sampling_time (SamplingTimeClocks::ADCCLK_71CYCLES5);
 
-    dma_init.Instance = DMA1_Channel1;
-    dma_init.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    dma_init.Init.PeriphInc = DMA_PINC_DISABLE;
-    dma_init.Init.MemInc = DMA_MINC_ENABLE;
-    dma_init.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-    dma_init.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-    dma_init.Init.Mode = DMA_NORMAL; //TODO make the same for dual adc
-    dma_init.Init.Priority = DMA_PRIORITY_HIGH;
-    HAL_DMA_Init (&dma_init);
-    __HAL_LINKDMA(&hadc1, DMA_Handle, dma_init);
+    hdma_adc1.Instance = DMA1_Channel1;
+    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_adc1.Init.Mode = DMA_NORMAL; //TODO make the same for dual adc
+    hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
+    HAL_DMA_Init (&hdma_adc1);
+    __HAL_LINKDMA(&hadc1, DMA_Handle, hdma_adc1);
 
     HAL_ADC_Start_DMA (&hadc1, (uint32_t*) adc_value, SIZE_OF_ADC_BUFFER);
 
@@ -183,7 +184,7 @@ namespace Adc
     */
     sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
     sConfig.Rank = ADC_REGULAR_RANK_1;
-    sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+    sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
     if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
     {
 	asm("bkpt 255");
@@ -242,5 +243,26 @@ namespace Adc
       }
 
     return 1/12.0*SampleTime[sampling_time];//microseconds, assuming ADC clock=12MHz
+  }
+
+
+
+  int Get_Temperature(void)
+  {
+
+    int temp=(14300-(volt_temp[0]*vref*10/4095))/43+25;
+    return temp;
+  }
+
+  uint32_t Get_Vref(void)
+  {
+    uint32_t temp=1200*4095/volt_temp[1];
+    vref=temp;
+    return temp;
+  }
+
+  uint32_t Adc_To_Milivolts(uint32_t adc)
+  {
+    return adc*vref/4095;
   }
 }
