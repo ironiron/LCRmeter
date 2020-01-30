@@ -40,7 +40,9 @@ void I2C::Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular)
   }
 
   dma->Set_Peripheral_Addr((uint32_t)(&i2c->DR));
+
   dma->Set_Memory_Addr((uint32_t)(bytes));
+//  dma->Set_Memory_Addr((uint32_t)(&bytes));
   dma->Enable();
 }
 
@@ -143,7 +145,7 @@ void I2C::Disable_DMA(void)
 
  bool I2C::Get_Status_Bus_Busy_Bit (void)
 {
-  return i2c->SR1 & I2C_SR2_BUSY;
+  return i2c->SR2 & I2C_SR2_BUSY;
 }
 
  bool I2C::Get_Status_Start_Bit (void)

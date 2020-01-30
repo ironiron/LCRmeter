@@ -57,7 +57,7 @@ public:
    * @retval error code from underlaying I2C interface class.
    * @warning It does not test arguments for out-of-range.
    */
-  uint32_t Set_Continuous(const uint16_t *value,uint32_t lenght);
+  uint32_t Set_Continuous(const uint8_t *value,uint32_t lenght);
 
   /**@brief Hardware related function used for setting latch pin
    */

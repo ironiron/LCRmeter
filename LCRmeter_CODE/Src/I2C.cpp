@@ -158,14 +158,16 @@ if (array == 0)
     return I2C::ErrorCode::GENERAL_ERROR;
   }
 ptr_to_bytes=array;
-size_of_data=size * 2;
+size_of_data=size * 3;
 for (uint32_t i = 0, j = 0; i < size; i++)
   {
-    array[j++] = (byte[i] >> 8);
     array[j++] = (byte[i] & 0xff);
+    array[j++] = (byte[i] >> 8);
+
     array[j++]=mem_addr;
+
   }
-return Send_Bytes_DMA (addr, array, size * 2, &mem_addr, 1);
+return Send_Bytes_DMA (addr, ptr_to_bytes, size * 2, &mem_addr, 1);
 #endif
 }
 
@@ -238,16 +240,17 @@ I2C::ErrorCode I2C::Send_Bytes_DMA (uint8_t address, const uint8_t *data,
     }
   Get_Status1_Reg ();
   Get_Status2_Reg ();
-  for (i = 0; i < mem_size; i++)
-    {
-      Send_Byte (mem_bytes[i]);
-      error = Check_Errors_After_Data ();
-      if (error != ErrorCode::OK)
-	{
-	  Generate_Stop ();
-	  return error;
-	}
-    }
+  //commented out for the sake of test wiht mcp47feb
+//  for (i = 0; i < mem_size; i++)
+//    {
+//      Send_Byte (mem_bytes[i]);
+//      error = Check_Errors_After_Data ();
+//      if (error != ErrorCode::OK)
+//	{
+//	  Generate_Stop ();
+//	  return error;
+//	}
+//    }
   Allocate_Bytes_DMA (data, size);
 
   return I2C::ErrorCode::OK;

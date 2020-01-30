@@ -89,7 +89,7 @@ public:
     return this->lasterror;
   } //TODO naming convention- define here or in hpp?
 
-private:
+//private:
   I2C_TYPE_DEF * i2c;
   DMA_TYPE_DEF *dma;
   uint32_t timeout = 20000;
