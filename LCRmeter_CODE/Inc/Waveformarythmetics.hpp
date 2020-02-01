@@ -46,9 +46,12 @@ class Waveform_arythmetics
 private:
   //size of buffer used for conditioning
   static const uint32_t max_buffer_size=1024;
-public:
   ///length of time of 1 point in buffer in microseconds
   static uint32_t point_time;
+public:
+  ///length of time of 1 point in buffer in microseconds
+  static uint32_t user_point_time;
+
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,
   static uint16_t filtered_buffer[2][max_buffer_size];
 

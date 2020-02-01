@@ -2,8 +2,8 @@
  ******************************************************************************
  * @file    adc.cpp
  * @author  Rafał Mazurkiewicz
- * @date    08.10.2019
- * @brief   Class header file for DAC based on MCP4725 chip
+ * @date    1.02.2020
+ * @brief   source file for ADC. Made primary for LCR meter project.
  ******************************************************************************
  * @attention
  * &copy; standard MIT License COPYRIGHT(c) 2019 Rafał Mazurkiewicz
@@ -12,8 +12,6 @@
 
 #include <adc.hpp>
 #include "stm32f1xx_hal.h"
-
-//TODO add battery voltage
 
 ADC_HandleTypeDef hadc1 =
   { 0 };
@@ -29,7 +27,7 @@ ADC_ChannelConfTypeDef adc_ch =
 namespace Adc
 {
   int retval = 0;
-  volatile uint32_t adc_value[SIZE_OF_ADC_BUFFER] =
+  volatile uint32_t adc_value[size_of_adc_buffer] =
     { 0 };
   volatile uint32_t volt_temp[2]={0};
 
@@ -41,7 +39,7 @@ namespace Adc
 
   void Clean_Buffer (void)
   {
-    for (uint32_t i = 0; i < SIZE_OF_ADC_BUFFER; i++)
+    for (uint32_t i = 0; i < size_of_adc_buffer; i++)
       {
 	adc_value[i] = 0;
       }
@@ -49,6 +47,7 @@ namespace Adc
 
   uint32_t Set_Oscilloscope (void)
   {
+    uint32_t retval=0;
     if (state == CurrentState::LCR)
       {
 	HAL_ADCEx_MultiModeStop_DMA (&hadc1);
@@ -65,9 +64,17 @@ namespace Adc
     hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
     hadc1.Init.NbrOfConversion = 1;
-    HAL_ADC_Init (&hadc1);
+    retval=HAL_ADC_Init (&hadc1);
+    if(retval!=0)
+      {
+	return retval;
+      }
 
-    HAL_ADCEx_Calibration_Start (&hadc1);
+    retval=HAL_ADCEx_Calibration_Start (&hadc1);
+    if(retval!=0)
+      {
+	return retval;
+      }
 
     Set_Sampling_time (SamplingTimeClocks::ADCCLK_71CYCLES5);
 
@@ -79,20 +86,31 @@ namespace Adc
     hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
     hdma_adc1.Init.Mode = DMA_NORMAL; //TODO make the same for dual adc
     hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
-    HAL_DMA_Init (&hdma_adc1);
+    retval=HAL_DMA_Init (&hdma_adc1);
+    if(retval!=0)
+      {
+	return retval;
+      }
+
     __HAL_LINKDMA(&hadc1, DMA_Handle, hdma_adc1);
 
-    HAL_ADC_Start_DMA (&hadc1, (uint32_t*) adc_value, SIZE_OF_ADC_BUFFER);
+    retval= HAL_ADC_Start_DMA (&hadc1, (uint32_t*) adc_value, size_of_adc_buffer);
+    if(retval!=0)
+      {
+	return retval;
+      }
 
     return 0;
   }
 
   uint32_t Set_LCR (void)
   {
+    uint32_t retval=0;
     if (state==CurrentState::OSCILLOSCOPE)
       {
         HAL_ADC_Stop_DMA(&hadc1);
         HAL_ADC_DeInit (&hadc1);
+        HAL_DMA_DeInit(&hdma_adc1);
         Clean_Buffer();
       }
   state=LCR;
@@ -107,17 +125,19 @@ namespace Adc
     hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
     hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     hadc1.Init.NbrOfConversion = 1;
-    if (HAL_ADC_Init (&hadc1) != HAL_OK)
-      {
-        asm("bkpt 255");
-      }
+    retval=HAL_ADC_Init (&hadc1);
+      if(retval!=0)
+        {
+  	return retval;
+        }
     /**Configure the ADC multi-mode
      */
     multimode.Mode = ADC_DUALMODE_REGSIMULT;
-    if (HAL_ADCEx_MultiModeConfigChannel (&hadc1, &multimode) != HAL_OK)
-      {
-        asm("bkpt 255");
-      }
+    retval=HAL_ADCEx_MultiModeConfigChannel (&hadc1, &multimode);
+      if(retval!=0)
+        {
+  	return retval;
+        }
 
     //////////////////////////////////////////////////////////
     //ADC 2
@@ -130,10 +150,11 @@ namespace Adc
     hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
     hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     hadc2.Init.NbrOfConversion = 1;
-    if (HAL_ADC_Init (&hadc2) != HAL_OK)
-      {
-        asm("bkpt 255");
-      }
+    retval=HAL_ADC_Init (&hadc2);
+      if(retval!=0)
+        {
+  	return retval;
+        }
 
     hdma_adc1.Instance = DMA1_Channel1;
     hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
@@ -143,28 +164,31 @@ namespace Adc
     hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
     hdma_adc1.Init.Mode = DMA_NORMAL;
     hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
-    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
-    {
-	asm("bkpt 255");
-    }
+    retval=HAL_DMA_Init(&hdma_adc1);
+      if(retval!=0)
+        {
+  	return retval;
+        }
+    Set_Sampling_time (SamplingTimeClocks::ADCCLK_239CYCLES5);
 
     __HAL_LINKDMA(&hadc1,DMA_Handle,hdma_adc1);
 
-    retval = HAL_ADCEx_MultiModeStart_DMA (&hadc1, (uint32_t*) adc_value, SIZE_OF_ADC_BUFFER);
-    if (retval != 0)
+    retval=HAL_ADC_Start(&hadc2);
+      if(retval!=0)
+        {
+  	return retval;
+        }
+    retval = HAL_ADCEx_MultiModeStart_DMA (&hadc1, (uint32_t*) adc_value, size_of_adc_buffer);
+    if(retval!=0)
       {
-        asm("bkpt 255");
+	return retval;
       }
-
-    Set_Sampling_time(SamplingTimeClocks::ADCCLK_239CYCLES5);
     return 0;
   }
 
-  uint32_t Set_Voltage_temperature(void)
+  uint32_t Set_Voltage_Temperature(void)
   {
-    //TODO finish
-
-
+    uint32_t retval=0;
     ADC_ChannelConfTypeDef sConfig = {0};
 
     /** Common config
@@ -176,29 +200,30 @@ namespace Adc
     hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
     hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     hadc1.Init.NbrOfConversion = 2;
-    if (HAL_ADC_Init(&hadc1) != HAL_OK)
-    {
-	asm("bkpt 255");
-    }
+    retval=HAL_ADC_Init(&hadc1);
+      if(retval!=0)
+        {
+  	return retval;
+        }
     /** Configure Regular Channel
     */
     sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
     sConfig.Rank = ADC_REGULAR_RANK_1;
     sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-	asm("bkpt 255");
-    }
+    retval=HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+      if(retval!=0)
+        {
+  	return retval;
+        }
     /** Configure Regular Channel
     */
     sConfig.Channel = ADC_CHANNEL_VREFINT;
     sConfig.Rank = ADC_REGULAR_RANK_2;
-    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-    {
-	asm("bkpt 255");
-    }
-
-    __HAL_RCC_ADC1_CLK_ENABLE();
+    retval=HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+      if(retval!=0)
+        {
+  	return retval;
+        }
 
     /* ADC1 DMA Init */
     /* ADC1 Init */
@@ -210,16 +235,24 @@ namespace Adc
     hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
     hdma_adc1.Init.Mode = DMA_CIRCULAR;
     hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
-    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
-    {
-	asm("bkpt 255");
-    }
+    retval=HAL_DMA_Init(&hdma_adc1);
+      if(retval!=0)
+        {
+  	return retval;
+        }
 
     __HAL_LINKDMA(&hadc1,DMA_Handle,hdma_adc1);
 
-    HAL_ADC_Start_DMA (&hadc1, (uint32_t*) volt_temp, 2);
+    retval=HAL_ADC_Start_DMA (&hadc1, (uint32_t*) volt_temp, 2);
+    if(retval!=0)
+      {
+	return retval;
+      }
+    return 0;
   }
 
+  //TODO fix below \/
+  ///@warning hard fault occured when executed after ADC2 starte
   double Set_Sampling_time (SamplingTimeClocks sampling_time)
   {
     if (state == CurrentState::OSCILLOSCOPE)
@@ -241,7 +274,6 @@ namespace Adc
 	adc_ch.SamplingTime = sampling_time;
 	HAL_ADC_ConfigChannel (&hadc2, &adc_ch);
       }
-
     return 1/12.0*SampleTime[sampling_time];//microseconds, assuming ADC clock=12MHz
   }
 
@@ -249,7 +281,6 @@ namespace Adc
 
   int Get_Temperature(void)
   {
-
     int temp=(14300-(volt_temp[0]*vref*10/4095))/43+25;
     return temp;
   }

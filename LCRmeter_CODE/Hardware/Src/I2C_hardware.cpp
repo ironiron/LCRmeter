@@ -73,6 +73,8 @@ void I2C::Initialise (void)
 {
   Reset_Bus();
 
+  i2c->CR2|=I2C_CR2_ITERREN;//enable error interrupt.
+
   i2c->CR2|=36;
 //CCR = 50ns
   i2c->CCR|=I2C_CCR_FS| I2C_CCR_DUTY | 6;

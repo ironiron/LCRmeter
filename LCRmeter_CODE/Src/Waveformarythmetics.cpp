@@ -15,6 +15,7 @@
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
   { 0 };
 uint32_t Waveform_arythmetics::buffer_size = 0;
+uint32_t Waveform_arythmetics::user_point_time = 0;
 uint32_t Waveform_arythmetics::point_time = 0;
 uint32_t Waveform_arythmetics::peak1 = 0;
 uint32_t Waveform_arythmetics::peak2 = 0;
@@ -34,7 +35,7 @@ void Waveform_arythmetics::Calc_Moving_Average (uint32_t* buffer, uint32_t size,
       return;
     }
 
-  point_time=point_time*step;
+  point_time=user_point_time*step;
   uint16_t temp1 = 0;
   uint16_t temp2 = 0;
   for (uint32_t i = 0, j = 0; i + step - 1 < size; i += step, j++)
