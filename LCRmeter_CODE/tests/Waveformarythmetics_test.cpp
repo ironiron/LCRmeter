@@ -87,10 +87,10 @@ TEST_CASE( "Finds peaks")
   Waveform_arythmetics::filtered_buffer[0][8]=0;
   Waveform_arythmetics::filtered_buffer[0][9]=1;
 
-  Waveform_arythmetics::filtered_buffer[1][0]=10;//
+  Waveform_arythmetics::filtered_buffer[1][0]=10;//skip first so get wider view.
   Waveform_arythmetics::filtered_buffer[1][1]=2;
-  Waveform_arythmetics::filtered_buffer[1][2]=8;
-  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][2]=3;
+  Waveform_arythmetics::filtered_buffer[1][3]=9;//
   Waveform_arythmetics::filtered_buffer[1][4]=4;
   Waveform_arythmetics::filtered_buffer[1][5]=5;
   Waveform_arythmetics::filtered_buffer[1][6]=2;
@@ -101,7 +101,7 @@ TEST_CASE( "Finds peaks")
   Waveform_arythmetics::Find_Peaks();
 
   REQUIRE(Waveform_arythmetics::peak1==2);
-  REQUIRE(Waveform_arythmetics::peak2==0);
+  REQUIRE(Waveform_arythmetics::peak2==3);
 
 }
 
@@ -146,7 +146,7 @@ TEST_CASE( "Finds other peaks and decides which to choose; gets frequency")
 TEST_CASE( "Finds several peaks with different amplitude")
 {
   Waveform_arythmetics::buffer_size=10;
-  Waveform_arythmetics::point_time=10;//microseconds
+  Waveform_arythmetics::user_point_time=10;//microseconds
   Waveform_arythmetics::mid_voltage=5;
 
 
@@ -187,6 +187,8 @@ TEST_CASE( "Calculate phase swift")
   Waveform_arythmetics::point_time=10;
   Waveform_arythmetics::peak1=100;
   Waveform_arythmetics::peak2=105;//Initial values: 10 points per full period(100us).
+  Waveform_arythmetics::minor_peak1=0;
+  Waveform_arythmetics::minor_peak2=0;
 
   Waveform_arythmetics::Calc_Alfa();
 
@@ -200,6 +202,31 @@ TEST_CASE( "Calculate phase swift")
   Waveform_arythmetics::Calc_Alfa();
 
   REQUIRE(Waveform_arythmetics::alfa==(-115200));
+}
+
+TEST_CASE( "Calculate phase swift and decide sign (+/-)")
+{
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=10;
+  Waveform_arythmetics::mid_voltage=5;
+
+  Waveform_arythmetics::peak1=0;
+  Waveform_arythmetics::peak2=2;
+  Waveform_arythmetics::minor_peak1=10;
+  Waveform_arythmetics::minor_peak2=12;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE(Waveform_arythmetics::alfa==(72000));
+
+  Waveform_arythmetics::peak1=0;
+  Waveform_arythmetics::peak2=8;
+  Waveform_arythmetics::minor_peak1=10;
+  Waveform_arythmetics::minor_peak2=18;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE(Waveform_arythmetics::alfa==(-72000));
 }
 
 TEST_CASE( "Calculate Amplitude")

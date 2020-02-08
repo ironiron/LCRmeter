@@ -285,7 +285,7 @@ namespace Adc
     return temp;
   }
 
-  uint32_t Get_Vref(void)
+  uint32_t Update_Vref(void)
   {
     uint32_t temp=1200*4095/volt_temp[1];
     vref=temp;

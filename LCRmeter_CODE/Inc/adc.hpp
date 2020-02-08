@@ -26,7 +26,7 @@ namespace Adc
 {
   ///size of buffer for LCR and Oscilloscope mode
   ///
-  const uint32_t size_of_adc_buffer = 3000;
+  const uint32_t size_of_adc_buffer = 2000;
 
   extern volatile uint32_t adc_value[size_of_adc_buffer];
   extern volatile uint32_t volt_temp[2];///array containing value of internal vref and temp.
@@ -89,7 +89,7 @@ namespace Adc
    * @note #Set_Voltage_Temperature shall be executed prior to this function.
    * @retval voltage in milivolts.
    */
-  uint32_t Get_Vref (void);
+  uint32_t Update_Vref (void);
 
   /**@brief Converts ADC readings to milivolts
    * @param 12bit value

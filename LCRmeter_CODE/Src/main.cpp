@@ -226,7 +226,7 @@ int main (void)
   uint32_t error = 0;
 
   Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
-  pwm.Initialise (); //one timer-two channels->thus only one initialization TODO fix typo
+  pwm.Initialise ();//TODO fix typo
   pwm.Set_Frequency (5000);
   pwm.Set_Duty (30);
   pwm.Enable ();
@@ -333,29 +333,34 @@ int main (void)
   //////////////////////////////////////////////
   //TEMP
   /////////////////
-//  ff=0;
-//  Adc::Set_Voltage_temperature();
-//                while (1)
-//                  {
-//                    ff++;
-//                    if(ff>20)
-//              	{
-//              	  break;
-//              	}
-////
-//                    xD=0;
-//                    HAL_Delay (100);
-//                    oled.Clean ();
-//
-//                    sprintf (buf, "volt=%d", Adc::Get_Vref());
-//                    oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//                    sprintf (buf, "temp=%ld", Adc::Get_Temperature());
-//                    oled.Set_Cursor (63, 10), oled.Write_String (buf);
-//                   	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
-//                   	oled.Update_Screen ();
-//
-//                      ///DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
-//                  }
+//  int ff = 0;
+  Adc::Set_Voltage_Temperature ();
+//  while (1)
+//    {
+//      ff++;
+//      if (ff > 20)
+//	{
+//	  break;
+//	}
+      while (xD == 0)
+	{
+
+	}
+      xD = 0;
+      oled.Clean ();
+
+      sprintf (buf, "volt=%ld", Adc::Update_Vref ());
+      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
+      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+      oled.Update_Screen ();
+      HAL_Delay (1000);
+      oled.Clean ();
+
+//      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
+//      DMA1_Channel1->CNDTR = 2;
+//      DMA1_Channel1->CCR |= DMA_CCR_EN; // Check corectness for dual adc
+//    }
 // ///////////////////////////////////////////////////////////////////////////////////
 // //ADC
 // //////////////////////////////////////////////////////
@@ -384,7 +389,7 @@ int main (void)
 	  oled.Update_Screen ();
 	  break;
 	}
-      HAL_Delay (500);
+      HAL_Delay (400);
       oled.Clean ();
 
 //      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
@@ -398,34 +403,43 @@ int main (void)
 //      oled.Draw_Waveform (10, 60, display_buffer, 100, SSD1306::WHITE);
 //      oled.Update_Screen ();
       Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
-						 Adc::size_of_adc_buffer, 30);
+						 Adc::size_of_adc_buffer, 5);
       Waveform_arythmetics::Find_Peaks ();
       Waveform_arythmetics::Calc_Alfa ();
       Waveform_arythmetics::Calc_Amplitude ();
 
-      LCR_math::Calculate (
+      bool ind=LCR_math::Calculate (
 	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
 	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-	  Waveform_arythmetics::alfa, Waveform_arythmetics::frequency);
+	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
 
-//  sprintf (buf, "cap=%1.3f", LCR_math::capacitance);
-//  oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//  sprintf (buf, "ind=%ld", LCR_math::inductance);
-//  oled.Set_Cursor (0, 20), oled.Write_String (buf);
-//  sprintf (buf, "res=%ld", LCR_math::resistance);
-//  oled.Set_Cursor (0, 40), oled.Write_String (buf);
-      sprintf (buf, "a1=%3ld", Waveform_arythmetics::amplitude1);
-      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
-      oled.Set_Cursor (60, 0), oled.Write_String (buf);
-      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
-      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
-      oled.Set_Cursor (60, 20), oled.Write_String (buf);
-      sprintf (buf, "e=%ld", error);
-      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
-      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+  sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
+  oled.Set_Cursor (0, 0), oled.Write_String (buf);
+  sprintf (buf, "ind=%1.9f", LCR_math::inductance);
+  oled.Set_Cursor (0, 20), oled.Write_String (buf);
+  sprintf (buf, "res=%1.9f", LCR_math::resistance);
+  oled.Set_Cursor (0, 40), oled.Write_String (buf);
+//      sprintf (buf, "a1=%3ld", Waveform_arythmetics::amplitude1);
+//      oled.Set_Cursor (60, 0), oled.Write_String (buf);
+//      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
+//      oled.Set_Cursor (60, 20), oled.Write_String (buf);
+//      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
+//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
+//      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
+//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
+//      sprintf (buf, "e=%ld", error);
+//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
+//      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
+//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+
+  if(ind==true)
+    {
+      oled.Draw_Line_H(10,60,20,SSD1306::Color::WHITE);
+    }
+  else
+    {
+      oled.Draw_Line_H(10,60,20,SSD1306::Color::BLACK);
+    }
 
       oled.Update_Screen ();
 

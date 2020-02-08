@@ -11,6 +11,7 @@
  */
 
 #include <Waveformarythmetics.hpp>
+#include <stdlib.h>
 
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
   { 0 };
@@ -59,7 +60,21 @@ void Waveform_arythmetics::Find_Peaks (void)
 {
   uint32_t index = 0;
   uint32_t i = 0;
-
+//move to the lower value first
+  while (1)
+    {
+      if (filtered_buffer[0][i] < mid_voltage)
+	{
+	  break;
+	}
+      if (i >= buffer_size)
+	{
+	  break;
+	}
+      i++;
+    }
+  index=i;
+  //rising edge detect
   while (1)
     {
       if (filtered_buffer[0][i] > mid_voltage)
@@ -83,10 +98,11 @@ void Waveform_arythmetics::Find_Peaks (void)
       if (filtered_buffer[0][i] < mid_voltage)
 	{
 	  peak1 = index;
+	  index = i;
 	  break;
 	}
     }
-  index = 0;
+//find next rising edge
   while (1)
     {
       if (filtered_buffer[0][i] > mid_voltage)
@@ -113,8 +129,7 @@ void Waveform_arythmetics::Find_Peaks (void)
 	  break;
 	}
     }
-
-  if (point_time != 0 && minor_peak1 != peak1)
+  if (point_time != 0 && minor_peak1 != peak1)//TODO put this in separate func.
     {
       frequency = 1000000 / point_time / (minor_peak1 - peak1);
     }
@@ -126,6 +141,20 @@ void Waveform_arythmetics::Find_Peaks (void)
   // 2nd waveform
   i = 0;
   index = 0;
+
+  while (1)
+    {
+      if (filtered_buffer[1][i] < mid_voltage)
+	{
+	  break;
+	}
+      if (i >= buffer_size)
+	{
+	  break;
+	}
+      i++;
+    }
+  index=i;
   while (1)
     {
       if (filtered_buffer[1][i] > mid_voltage)
@@ -149,10 +178,10 @@ void Waveform_arythmetics::Find_Peaks (void)
       if (filtered_buffer[1][i] < mid_voltage)
 	{
 	  peak2 = index;
+	  index=i;
 	  break;
 	}
     }
-  index = 0;
   while (1)
     {
       if (filtered_buffer[1][i] > mid_voltage)
@@ -183,9 +212,18 @@ void Waveform_arythmetics::Find_Peaks (void)
 
 void Waveform_arythmetics::Calc_Alfa (void)
 {
+  if(abs(int32_t(peak2-peak1))<abs(int32_t(peak2-minor_peak1)))
+    {
   alfa = int32_t (
       (int32_t (peak2) - int32_t (peak1)) * int32_t (point_time)
 	  * int32_t (frequency) * 360 / 1000);
+    }
+  else
+    {
+      alfa = int32_t (
+          (int32_t (peak2) - int32_t (minor_peak1)) * int32_t (point_time)
+    	  * int32_t (frequency) * 360 / 1000);
+    }
 }
 
 void Waveform_arythmetics::Calc_Amplitude (void)
@@ -214,7 +252,7 @@ void Waveform_arythmetics::Calc_Amplitude (void)
 void Waveform_arythmetics::Process_Signal (uint32_t *buffer, uint32_t size,
 					   uint32_t point_time_lenght)
 {
-  point_time=point_time_lenght;
+  user_point_time=point_time_lenght;
   Calc_Moving_Average(buffer,size,5);
   Find_Peaks();
   Calc_Alfa();
