@@ -13,6 +13,8 @@
 #define WAVEFORMARYTHMETICS_HPP_
 
 #include <stdint.h>
+//TODO fix comments and docs
+//TODO make this class more safer
 
 /** \defgroup  Waveform Waveform
  * @brief Signal conditioning for LCRmeter's ADC purposes
@@ -99,7 +101,7 @@ public:
   static void Calc_Amplitude (void);
 
   /**@brief One function to take care of everything. Read class documentation for more info.
-   * @param buffer pointer to array made of readings of ADC Data register
+   * @param pointer to buffer array made of readings of ADC Data register
    * @param size of array
    * @param point_time_lenght sets #point_time class member
    */

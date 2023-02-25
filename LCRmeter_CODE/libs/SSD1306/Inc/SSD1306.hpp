@@ -8,7 +8,7 @@
  ******************************************************************************
  * <h2><center>&copy;
  * Original work COPYRIGHT (c) 2016 Olivier Van den Eede - ovde.be
- * Modified w	work COPYRIGHT(c) 2019 Rafał Mazurkiewicz
+ * Modified work COPYRIGHT(c) 2019 Rafał Mazurkiewicz
  * </center></h2>
  *
  *Permission is hereby granted, free of charge,
@@ -39,6 +39,8 @@
  *
  */
 
+//TODO make buffer_size modifiable template or as an argument???
+
 #ifndef SSD1306_HPP_
 #define SSD1306_HPP_
 
@@ -49,6 +51,7 @@
 #include "fonts.h"
 
 //TODO add lines delimeters to write string, functions.
+//TODO add I2C_template to filesystem for custom hardware implementation
 
 /*! @class SSD1306
  *  @brief This class is controlling display.
@@ -95,8 +98,7 @@ public:
    */
   bool Initialize (void);
 
-  /**@brief Initialize device, cleans display
-   * @warning This function have to be called to refresh screen with new data
+  /**@brief This function have to be called to refresh screen with new data
    */
   void Update_Screen (void);
 
@@ -112,6 +114,7 @@ public:
   /**@brief set cursor to given coordinates
    * @param x: X Coordinate
    * @param y: Y Coordinate
+   * @note Coordinates goes from top to bottom and left right x=0,y=0 means top left corner
    */
   void Set_Cursor (uint8_t x, uint8_t y);
 
@@ -133,7 +136,8 @@ public:
   void Draw_Pixel (uint8_t x, uint8_t y, SSD1306::Color c);
 
   /**@brief Copy Image to internal buffer.
-   * @param image: array of size 128*64=1024(buffer_size) containing image
+   * @param image: array of size 128*64=1024(\a buffer_size) containing image
+   * @note if image size is too big additional bytes will be ignored
    */
   void Draw_Image (const uint8_t *image);
 
@@ -172,8 +176,8 @@ public:
    * @param size: length of array
    * @param c: Color to draw
    * @note Moves from bottom to up and left to right (value of 0 in buffer data results in
-   *  drawing pixels in X coordinates)
-   * @warning It does not check inputs- User should ensure that buffer<y!
+   *  drawing pixels in the given \a x coordinates)
+   * @warning It does not check inputs - User should ensure that buffer<y!
    */
   void Draw_Waveform(uint8_t x, uint8_t y, uint8_t *buffer, uint8_t size, SSD1306::Color c);
 
@@ -215,7 +219,7 @@ public:
    */
   bool IsInitialized (void) const;
 
-  /**@brief Returns error of I2C interface
+  /**@brief Returns error of underlying I2C interface
    * @retval 0 if none error occured since last SSD1306::Clean_Errors call.
    */
   int Get_Last_Error (void) const;
@@ -237,10 +241,9 @@ private:
   std::array<uint8_t, buffer_size> buffer; ///<internal buffer used for displaying data
   bool isinitialized = false;
   int last_error = 0;
-  int temp = 0;
 
-  const uint8_t control_b_command = 0x00;  ///<required for I2C communication
-  const uint8_t control_b_data = 0x40;  ///<required for I2C communication
+  const uint8_t control_b_command = 0x00;  ///<required for I2C to indicate type of message
+  const uint8_t control_b_data = 0x40;  ///<required for I2C to indicate type of message
 
   struct
   {

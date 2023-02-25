@@ -226,22 +226,20 @@ int main (void)
   uint32_t error = 0;
 
   Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
-  pwm.Initialise ();//TODO fix typo
+  pwm.Initialise ();
   pwm.Set_Frequency (5000);
   pwm.Set_Duty (30);
   pwm.Enable ();
 
   HAL_Delay (200);
-  __HAL_RCC_ADC2_CLK_ENABLE ();
-  __HAL_RCC_ADC1_CLK_ENABLE()
-  ;
+  __HAL_RCC_ADC2_CLK_ENABLE();
+  __HAL_RCC_ADC1_CLK_ENABLE();
   ///////////////////////////////////////////////////////////////////////////
 ///	I2C
 //////////////////////////////////////////////////////////////////////////
 
-  __HAL_RCC_I2C1_CLK_ENABLE()
-  ;
-  __HAL_RCC_I2C2_CLK_ENABLE ();
+  __HAL_RCC_I2C1_CLK_ENABLE();
+  __HAL_RCC_I2C2_CLK_ENABLE();
 
   I2C i2c2 (I2C2);
 
@@ -269,7 +267,7 @@ int main (void)
 
   oled.Fill (SSD1306::WHITE);
   oled.Update_Screen ();
-  delay_ms (200);
+  delay_ms (500);
   oled.Fill (SSD1306::BLACK);
   oled.Update_Screen ();
 
@@ -279,8 +277,7 @@ int main (void)
   HAL_NVIC_SetPriority (DMA1_Channel6_IRQn, 2, 1);
   HAL_NVIC_EnableIRQ (DMA1_Channel6_IRQn);
 
-  __HAL_RCC_DMA1_CLK_ENABLE()
-  ;
+  __HAL_RCC_DMA1_CLK_ENABLE();
   DMA dma (DMA1_Channel6);
 
   //DMA1_Channel6->CCR|=14;
@@ -333,15 +330,7 @@ int main (void)
   //////////////////////////////////////////////
   //TEMP
   /////////////////
-//  int ff = 0;
   Adc::Set_Voltage_Temperature ();
-//  while (1)
-//    {
-//      ff++;
-//      if (ff > 20)
-//	{
-//	  break;
-//	}
       while (xD == 0)
 	{
 

@@ -1,13 +1,13 @@
 EESchema Schematic File Version 4
 LIBS:lcrmeter-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
+Title "LCRmeter"
 Date ""
-Rev ""
+Rev "2.5"
 Comp ""
 Comment1 ""
 Comment2 ""

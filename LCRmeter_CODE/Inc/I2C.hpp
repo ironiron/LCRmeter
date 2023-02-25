@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file    DMA.hpp
+ * @file    I2C.hpp
  * @author  Rafał Mazurkiewicz
  * @date    13.05.2019
  * @brief   Class header to configure STM32's I2C
@@ -19,6 +19,8 @@
 
 //TODO add case to Errorcode enum for blocked interface.
 //TODO add case for allocation problem
+//TODO document those functions
+//TODO is this a class? what's with private functions?
 
 /**
  * @brief This class is configuring I2C
@@ -43,7 +45,7 @@ public:
     TIMEOUT,
     NACK,
     BUS_ERROR,
-    ARBITION_LOST,
+    ARBITION_LOST,//TODO fix spelling
     BUS_BUSY,
     GENERAL_ERROR,
     DMA_DISABLED

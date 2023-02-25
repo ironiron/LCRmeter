@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * @file    Pwm.hpp
-  * @author  Rafa≥ Mazurkiewicz
+  * @author  Rafa≈Ç Mazurkiewicz
   * @date    14.05.2019
   * @brief   Class file header for PWM signal generation
   ******************************************************************************
   * @attention
-  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≥ Mazurkiewicz</center></h2>
+  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafa≈Ç Mazurkiewicz</center></h2>
   ******************************************************************************
   */
 
@@ -15,23 +15,24 @@
 #include <stdint.h>
 
 /*! @class Pwm
- *  @brief This class is intended to generate waveform on desired Timer channel.
+ *  @brief This class is intended to generate waveform on desired Timer channel of STM32 microcontrollers.
  *  @tparam T timer structure
- *  @tparam width base resolution of timer(uint16_t etc.)
- *  @tparam chn timer's channel on which will be generated signal
+ *  @tparam Specifies resolution of timer (uint16_t uint32_t etc.)
+ *  @tparam chn timer's channel on which will be generated signal (if chn=0 all 4 channels will be used)
  */
 template < class  T, typename width,uint8_t chn>
  class Pwm
 {
 public:
-  /**@brief Constructor. Only initialise variables
+  /**@brief Constructor. Only initializes variables
    * @param tim: pointer to timer structure
    * @param period: max counter value
    */
   Pwm ( T* tim,width period=100):
     _timer(tim),
-    cnt_initialvalue(period)
+    cnt_initialvalue(period)//TODO rename period to something more meaningful
   {
+    static_assert(chn<=4,"error, channel can be of value 0-4");
   }
   /**@brief This function computes optimal prescaler and ARR registers
    * for desired frequency. Ensuring at least 1% of duty resolution.
@@ -59,6 +60,7 @@ public:
 
  /**@brief This function calculates compare registers for desired duty.
   * @param duty : desired duty in range of 0-100%.
+  * @note If parameter \a duty is over 100% it will be implicitly reduced to 100%
   */
  void Set_Duty (uint8_t duty )
   {
@@ -114,6 +116,7 @@ public:
   private:
    /**@brief Gets base frequency of timer clock
     * @return  clock value in integer
+    * @warning Currently The value is hardcoded to 72 MHz
     */
    uint32_t Get_Clock (void);
     T* _timer; 			///< pointer to template timer struct

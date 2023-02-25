@@ -1,9 +1,15 @@
-/*
- * Pwm_hardware.hpp
- *
- *  Created on: 18.04.2019
- *      Author: Rafa� Mazurkiewicz
- */
+/**
+  ******************************************************************************
+  * @file    Pwm_hardware.hpp
+  * @author  Rafał Mazurkiewicz
+  * @date    14.05.2019
+  * @brief   Class file header for PWM signal generation
+  ******************************************************************************
+  * @attention
+  * <h2><center>&copy; standard MIT License COPYRIGHT(c) 2019 Rafał Mazurkiewicz</center></h2>
+  ******************************************************************************
+  */
+//TODO add doxygen to PWM lib
 
 #ifndef FAKES_PWM_HARDWARE_HPP_
 #define FAKES_PWM_HARDWARE_HPP_
@@ -32,7 +38,6 @@ void Pwm<T,width,chn>::Set_Prescaler (width psc)
 template <class T, typename width,uint8_t chn>
 void Pwm<T,width,chn>::Set_Compare (width comp)
 {
-  static_assert(chn<=4,"error, channel can be of value 0-4");
   switch(chn)
   {
     case 1:
@@ -67,7 +72,7 @@ void Pwm<T,width,chn>::Set_Counter (width cnt)
 template <class T, typename width,uint8_t chn>
 uint32_t Pwm<T,width,chn>::Get_Clock (void)
 {
-  return 72000000;
+  return 72000000;//TODO implement actual freq
 }
 
 template <class T, typename width,uint8_t chn>

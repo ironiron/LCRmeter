@@ -16,7 +16,7 @@ uint8_t MCP47FEB::make_write (uint8_t a)
 {
   return (a << 3);//refer to datasheet. Memory address needs to be moved 3 bits
 }
-
+//TODO test those commented functions
 //uint32_t MCP47FEB::Set_Output (uint16_t value)
 //{
 //  auto temp = make_write (MCP47FEB_addresses::DAC0_volatile);

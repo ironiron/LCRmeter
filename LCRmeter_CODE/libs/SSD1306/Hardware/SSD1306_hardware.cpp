@@ -1,9 +1,9 @@
 /**
  ******************************************************************************
- * @file    fakes/SSD1306_hardware.cpp
+ * @file    SSD1306_hardware.cpp
  * @author  Rafał Mazurkiewicz
  * @date    13.08.2019
- * @brief   This file contains fake hardware related functions for unit testing
+ * @brief   This file contains hardware related functions
  ******************************************************************************
  * @attention
  * <h2><center>&copy; COPYRIGHT(c) 2019 Rafał Mazurkiewicz </center></h2>
@@ -28,17 +28,28 @@
  *******************************************************************************
  */
 
-#include <SSD1306.hpp>
-#include <vector>
-#include "testing.hpp"
+
+#include <stdint.h> //TODO why sys/_stdint.h and not normal check this???
+#include <array>
+
+#include "SSD1306.hpp"
+#include "I2C.hpp"
 
 
-void SSD1306::Write_Command (uint8_t com)
+void SSD1306::Write_Command (uint8_t command)
 {
-  testing::ssd1306::data.push_back(com);
+  auto temp=conn->Send_Data(address,command,control_b_command);
+  if(temp !=0)
+    {
+      last_error=temp;
+    }
 }
 
 void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
 {
-  testing::ssd1306::data.insert(testing::ssd1306::data.end(), data.begin(), data.end());
+  auto temp=conn->Send_Data_Cont(address,data.begin(),height*(width)/8,control_b_data);
+  if(temp !=0)
+    {
+      last_error=temp;
+    }
 }

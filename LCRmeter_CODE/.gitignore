@@ -1,3 +1,7 @@
-/Debug/
-/Test/
-/newer toolchain/
+Debug/
+Test/
+newer toolchain/
+.settings/
+*.launch
+.metadata
+

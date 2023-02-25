@@ -40,7 +40,7 @@ SSD1306 oled64(&i2c,64);
 
 TEST_CASE( "fills screen buffer within bounds")
 {
-  testing::ssd1306::data.clear();
+  testing::ssd1306::data.clear(); // TODO refractor those initial cleanings
 
   oled64.Fill(SSD1306::Color::WHITE);
   oled64.Update_Screen();
