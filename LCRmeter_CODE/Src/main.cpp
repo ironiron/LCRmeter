@@ -90,6 +90,7 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern volatile uint32_t Adc::adc_value[size_of_adc_buffer];
 
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 DMA_HandleTypeDef hdma_i2c1_tx;
 
 /* USER CODE BEGIN PV */
@@ -97,11 +98,10 @@ DMA_HandleTypeDef hdma_i2c1_tx;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config (void);
-static void MX_GPIO_Init (void);
-static void MX_DMA_Init (void);
-static void MX_I2C1_Init (void);
-static void MX_I2C2_Init (void);
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
+static void MX_I2C1_Init(void);
 //void Fatal_Error(void);
 
 volatile int yolo = 0;
@@ -110,65 +110,66 @@ volatile uint32_t error_flag = 0;
 
 extern "C"
 {
-  void DMA1_Channel1_IRQHandler (void)
-  {
-    /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+void DMA1_Channel1_IRQHandler(void)
+{
+	/* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
 //  DMA1->IFCR |=DMA_IFCR_CHTIF1;
-    DMA1->IFCR = DMA_IFCR_CGIF1;
-    /* USER CODE END DMA1_Channel1_IRQn 0 */
+	DMA1->IFCR = DMA_IFCR_CGIF1;
+	/* USER CODE END DMA1_Channel1_IRQn 0 */
 //  __HAL_DMA_CLEAR_FLAG(hdma_adc1, __HAL_DMA_GET_TC_FLAG_INDEX(&hdma_adc1));
-    // HAL_DMA_IRQHandler(&hdma_adc1);
-    xD = 1;
-    // HAL_ADC_Start_DMA (&hadc1, (uint32_t*) Adc::adc_value, SIZE_OF_ADC_BUFFER);
-    /* USER CODE END DMA1_Channel1_IRQn 1 */
-  }
+	// HAL_DMA_IRQHandler(&hdma_adc1);
+	xD = 1;
+	// HAL_ADC_Start_DMA (&hadc1, (uint32_t*) Adc::adc_value, SIZE_OF_ADC_BUFFER);
+	/* USER CODE END DMA1_Channel1_IRQn 1 */
+}
 
-  int _write (int file, char *ptr, int len)
-  {
-    int DataIdx;
+int _write(int file, char *ptr, int len)
+{
+	(void)(file);
+	int DataIdx;
 
-    for (DataIdx = 0; DataIdx < len; DataIdx++)
-      {
-	ITM_SendChar ((*ptr++));
-	//__io_putchar(*ptr++);
-      }
-    return len;
-  }
+	for (DataIdx = 0; DataIdx < len; DataIdx++)
+	{
+		ITM_SendChar((*ptr++));
+		//__io_putchar(*ptr++);
+	}
+	return len;
+}
 
-  /**
-   * @brief This function handles DMA1 channel4 global interrupt.
-   */
-  void DMA1_Channel4_IRQHandler (void)
-  {
-    /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+/**
+ * @brief This function handles DMA1 channel4 global interrupt.
+ */
+void DMA1_Channel4_IRQHandler(void)
+{
+	/* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
 
-    /* USER CODE END DMA1_Channel4_IRQn 0 */
+	/* USER CODE END DMA1_Channel4_IRQn 0 */
 
-    /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+	/* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
 
-    /* USER CODE END DMA1_Channel4_IRQn 1 */
-  }
+	/* USER CODE END DMA1_Channel4_IRQn 1 */
+}
 
-  /**
-   * @brief This function handles I2C1 error interrupt.
-   */
-  void I2C1_ER_IRQHandler (void)
-  {
-    //  __disable_irq();
-    HAL_NVIC_DisableIRQ (I2C1_ER_IRQn);
-    error_flag = 1;
-  }
+/**
+ * @brief This function handles I2C1 error interrupt.
+ */
+void I2C1_ER_IRQHandler(void)
+{
+	//  __disable_irq();
+	HAL_NVIC_DisableIRQ (I2C1_ER_IRQn);
+	error_flag = 1;
+}
 
-  void EXTI3_IRQHandler (void)
-  {
-    /* USER CODE BEGIN EXTI2_IRQn 0 */
-    yolo++;
-    /* USER CODE END EXTI2_IRQn 0 */
-    HAL_GPIO_EXTI_IRQHandler (GPIO_PIN_3);
-    /* USER CODE BEGIN EXTI2_IRQn 1 */
+void EXTI3_IRQHandler(void)
+{
+	/* USER CODE BEGIN EXTI2_IRQn 0 */
+	yolo++;
+	/* USER CODE END EXTI2_IRQn 0 */
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+	/* USER CODE BEGIN EXTI2_IRQn 1 */
 
-    /* USER CODE END EXTI2_IRQn 1 */
-  }
+	/* USER CODE END EXTI2_IRQn 1 */
+}
 
 }
 //void SystemClock_Config(void);
@@ -182,94 +183,98 @@ typename bval_type,
 const port_type port,
 const bval_type bval>
 class led_template
-  {
-  public:
-    led_template ()
-      {
+{
+public:
+	led_template ()
+	{
 // Set the port pin value to low.
-	// *reinterpret_cast<volatile bval_type*> (port) &=
-	//static_cast<bval_type> (~bval);
+		// *reinterpret_cast<volatile bval_type*> (port) &=
+		//static_cast<bval_type> (~bval);
 // Set the port pin direction to output.
-	//*reinterpret_cast<volatile bval_type*> (pdir) |= bval;
-      }
-    static void
-    toggle ()
-      {
+		//*reinterpret_cast<volatile bval_type*> (pdir) |= bval;
+	}
+	static void
+	toggle ()
+	{
 // Toggle the LED.
-	*reinterpret_cast<volatile bval_type*> (port) ^= bval;
-      }
-  private:
-    static constexpr port_type pdir = port - 1U;
-  };
+		*reinterpret_cast<volatile bval_type*> (port) ^= bval;
+	}
+private:
+	static constexpr port_type pdir = port - 1U;
+};
 
 namespace
-  {
-    const led_template<uint32_t, uint32_t, &uint32_t(GPIOC->ODR), (1<<13)> led_c13;
-  }
+{
+	const led_template<uint32_t, uint32_t, &uint32_t(GPIOC->ODR), (1<<13)> led_c13;
+}
 
 #endif
+
+static void Init(void)
+{
+	HAL_Init();
+	SystemClock_Config();
+	__HAL_RCC_ADC2_CLK_ENABLE();
+	__HAL_RCC_ADC1_CLK_ENABLE();
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	__HAL_RCC_I2C2_CLK_ENABLE();
+	HAL_Delay(10);
+
+	MX_DMA_Init();
+	MX_GPIO_Init();
+	HAL_Delay(10);
+	//MX_I2C1_Init();
+
+
+	/* Because of messed cubemx configuration and this file
+	 * I2C2 is here instead of MX_I2Cx_Init() like I2C1
+	 * It didn't work with MX so I left it here if you have time you can fix it.
+	*/
+
+	  hi2c2.Instance = I2C2;
+	  hi2c2.Init.ClockSpeed = 400000;
+	  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+	  hi2c2.Init.OwnAddress1 = 0xff;
+	  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	  hi2c2.Init.OwnAddress2 = 0xff;
+	  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	  auto tret=HAL_I2C_Init (&hi2c2);
+	  printf("tret=%d",tret);
+	  printf("1111hi2c2->State=%d\n",hi2c2.State);
+}
 
 /**
  * @brief  The application entry point.
  * @retval int
  */
-int main (void)
+int main(void)
 {
-  HAL_Init ();
-  MX_DMA_Init ();
-  SystemClock_Config ();
-  MX_GPIO_Init ();
-  MX_I2C1_Init ();
+	Init();
+	HAL_Delay(100);
+	char buf[30];
+	uint8_t display_buffer[100];
+	uint32_t error = 0;
+	printf("hola!! \n");
 
-  char buf[30];
-  uint8_t display_buffer[100];
-  uint32_t error = 0;
+//	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
+//	pwm.Initialise();
+//	pwm.Set_Frequency(5000);
+//	pwm.Set_Duty(30);
+//	pwm.Enable();
 
-  Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
-  pwm.Initialise ();
-  pwm.Set_Frequency (5000);
-  pwm.Set_Duty (30);
-  pwm.Enable ();
+	SSD1306 oled(&hi2c2, 64);
+	oled.Initialize();
+	oled.Set_Brightness(0xff);
 
-  HAL_Delay (200);
-  __HAL_RCC_ADC2_CLK_ENABLE();
-  __HAL_RCC_ADC1_CLK_ENABLE();
-  ///////////////////////////////////////////////////////////////////////////
-///	I2C
-//////////////////////////////////////////////////////////////////////////
+	oled.Fill(SSD1306::WHITE);
+	oled.Update_Screen();
+	delay_ms(1000);
+	oled.Fill(SSD1306::BLACK);
+	oled.Update_Screen();
+	delay_ms(500);
 
-  __HAL_RCC_I2C1_CLK_ENABLE();
-  __HAL_RCC_I2C2_CLK_ENABLE();
-
-  I2C i2c2 (I2C2);
-
-  I2C_HandleTypeDef i2c;
-
-  i2c.Instance = I2C2;
-  i2c.Init.ClockSpeed = 400000;
-  i2c.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  i2c.Init.OwnAddress1 = 0xff;
-  i2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  i2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  i2c.Init.OwnAddress2 = 0xff;
-  i2c.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-
-  HAL_I2C_Init (&i2c);
-
-  delay_ms (200);
-
-  SSD1306 oled (&i2c2, 64);
-
-  oled.Initialize ();
-  //oled.Get_Last_Error();
-  //oled.IsInitialized();
-
-  oled.Fill (SSD1306::WHITE);
-  oled.Update_Screen ();
-  delay_ms (500);
-  oled.Fill (SSD1306::BLACK);
-  oled.Update_Screen ();
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /////DAC
@@ -286,10 +291,45 @@ int main (void)
   i2c_dma.Enable_DMA ();
   i2c_dma.Enable ();
 
-  MCP47FEB dac (i2c_dma);
+  MCP47FEB dac(i2c_dma);
   error = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
+	oled.Set_Cursor(0, 0);
+	sprintf (buf, "dac.error1=%lu", error);
+	oled.Write_String (buf);
   error = dac.Set_Continuous (sine_table, sine_table_lenght);
+	oled.Set_Cursor(0, 20);
+	sprintf (buf, "dac.error2=%lu", error);
+	oled.Write_String (buf);
   dac.Enable_Output ();
+  oled.Update_Screen();
+  dac.Stop_DAC();
+
+  while (1)
+	{
+	  error = dac.Set_Continuous (sine_table, sine_table_lenght);
+		oled.Set_Cursor(0, 20);
+		sprintf (buf, "dac.error2=%lu", error);
+		oled.Write_String (buf);
+		oled.Set_Cursor(0, 40);
+		oled.Write_String ("ENABLED");
+		oled.Update_Screen();
+		delay_ms(3000);
+
+		i2c_dma.Stop_Transfer();
+		oled.Set_Cursor(0, 40);
+		oled.Write_String ("DISABLED");
+		oled.Update_Screen();
+		delay_ms(3000);
+
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////
 //OSCILLOSCOPE
@@ -327,24 +367,25 @@ int main (void)
 //        DMA1_Channel1->CNDTR=1024;
 //        DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
 //    }
-  //////////////////////////////////////////////
-  //TEMP
-  /////////////////
-  Adc::Set_Voltage_Temperature ();
-      while (xD == 0)
-	{
+	//////////////////////////////////////////////
 
-	}
-      xD = 0;
-      oled.Clean ();
-
-      sprintf (buf, "volt=%ld", Adc::Update_Vref ());
-      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
-      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-      oled.Update_Screen ();
-      HAL_Delay (1000);
-      oled.Clean ();
+	//TEMP
+	/////////////////
+//  Adc::Set_Voltage_Temperature ();
+//      while (xD == 0)
+//	{
+//
+//	}
+//      xD = 0;
+//      oled.Clean ();
+//
+//      sprintf (buf, "volt=%ld", Adc::Update_Vref ());
+//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
+//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+//      oled.Update_Screen ();
+//      HAL_Delay (1000);
+//      oled.Clean ();
 
 //      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
 //      DMA1_Channel1->CNDTR = 2;
@@ -354,170 +395,154 @@ int main (void)
 // //ADC
 // //////////////////////////////////////////////////////
 //  oled.Clean ();
-//	oled.Update_Screen ();
-//             // char buf[30];
-  double lala = 0;
-  error = Adc::Set_LCR ();
-//  lala = Adc::Set_Sampling_time (Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+////	oled.Update_Screen ();
+////             // char buf[30];
+//  double lala = 0;
+//  error = Adc::Set_LCR ();
+////  lala = Adc::Set_Sampling_time (Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+////
+//  Waveform_arythmetics::mid_voltage = 2000;
+//  Waveform_arythmetics::user_point_time = 21;
 //
-  Waveform_arythmetics::mid_voltage = 2000;
-  Waveform_arythmetics::user_point_time = 21;
-
-  while (1)
-    {
-      while (xD == 0)
-	{
-
-	}
-      xD = 0;
-      if (error_flag == 1)
-	{
-	  oled.Set_Cursor (20, 20);
-	  oled.Set_Font_size (Fonts::font_16x26);
-	  oled.Write_String_Inverted ("FATAL");
-	  oled.Update_Screen ();
-	  break;
-	}
-      HAL_Delay (400);
-      oled.Clean ();
-
-//      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
-//						 Adc::size_of_adc_buffer, 1);
-//      uint32_t edge = Waveform_arythmetics::Get_Edge_index (1000, false);
-//      for (int i = 0; i < 100; i++)
+//  while (1)
+//    {
+//      while (xD == 0)
 //	{
-//	  display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i + edge]
-//	      / 64;
+//
 //	}
-//      oled.Draw_Waveform (10, 60, display_buffer, 100, SSD1306::WHITE);
+//      xD = 0;
+//      if (error_flag == 1)
+//	{
+//	  oled.Set_Cursor (20, 20);
+//	  oled.Set_Font_size (Fonts::font_16x26);
+//	  oled.Write_String_Inverted ("FATAL");
+//	  oled.Update_Screen ();
+//	  break;
+//	}
+//      HAL_Delay (400);
+//      oled.Clean ();
+//
+////      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
+////						 Adc::size_of_adc_buffer, 1);
+////      uint32_t edge = Waveform_arythmetics::Get_Edge_index (1000, false);
+////      for (int i = 0; i < 100; i++)
+////	{
+////	  display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i + edge]
+////	      / 64;
+////	}
+////      oled.Draw_Waveform (10, 60, display_buffer, 100, SSD1306::WHITE);
+////      oled.Update_Screen ();
+//      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
+//						 Adc::size_of_adc_buffer, 5);
+//      Waveform_arythmetics::Find_Peaks ();
+//      Waveform_arythmetics::Calc_Alfa ();
+//      Waveform_arythmetics::Calc_Amplitude ();
+//
+//      bool ind=LCR_math::Calculate (
+//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
+//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
+//	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
+//
+//  sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
+//  oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//  sprintf (buf, "ind=%1.9f", LCR_math::inductance);
+//  oled.Set_Cursor (0, 20), oled.Write_String (buf);
+//  sprintf (buf, "res=%1.9f", LCR_math::resistance);
+//  oled.Set_Cursor (0, 40), oled.Write_String (buf);
+////      sprintf (buf, "a1=%3ld", Waveform_arythmetics::amplitude1);
+////      oled.Set_Cursor (60, 0), oled.Write_String (buf);
+////      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
+////      oled.Set_Cursor (60, 20), oled.Write_String (buf);
+////      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
+////      oled.Set_Cursor (0, 20), oled.Write_String (buf);
+////      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
+////      oled.Set_Cursor (60, 40), oled.Write_String (buf);
+////      sprintf (buf, "e=%ld", error);
+////      oled.Set_Cursor (60, 40), oled.Write_String (buf);
+////      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
+////      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+//
+//  if(ind==true)
+//    {
+//      oled.Draw_Line_H(10,60,20,SSD1306::Color::WHITE);
+//    }
+//  else
+//    {
+//      oled.Draw_Line_H(10,60,20,SSD1306::Color::BLACK);
+//    }
+//
 //      oled.Update_Screen ();
-      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
-						 Adc::size_of_adc_buffer, 5);
-      Waveform_arythmetics::Find_Peaks ();
-      Waveform_arythmetics::Calc_Alfa ();
-      Waveform_arythmetics::Calc_Amplitude ();
-
-      bool ind=LCR_math::Calculate (
-	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
-	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
-
-  sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
-  oled.Set_Cursor (0, 0), oled.Write_String (buf);
-  sprintf (buf, "ind=%1.9f", LCR_math::inductance);
-  oled.Set_Cursor (0, 20), oled.Write_String (buf);
-  sprintf (buf, "res=%1.9f", LCR_math::resistance);
-  oled.Set_Cursor (0, 40), oled.Write_String (buf);
-//      sprintf (buf, "a1=%3ld", Waveform_arythmetics::amplitude1);
-//      oled.Set_Cursor (60, 0), oled.Write_String (buf);
-//      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
-//      oled.Set_Cursor (60, 20), oled.Write_String (buf);
-//      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
-//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-//      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
-//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-//      sprintf (buf, "e=%ld", error);
-//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-//      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
-//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
-
-  if(ind==true)
-    {
-      oled.Draw_Line_H(10,60,20,SSD1306::Color::WHITE);
-    }
-  else
-    {
-      oled.Draw_Line_H(10,60,20,SSD1306::Color::BLACK);
-    }
-
-      oled.Update_Screen ();
-
-      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
-      DMA1_Channel1->CNDTR = Adc::size_of_adc_buffer;
-      DMA1_Channel1->CCR |= DMA_CCR_EN; // Check corectness for dual adc
-    }
-
-///////////////////////////////////////////////////////////////////////////
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-    {
-//    delay_ms (200);
-//    /* USER CODE EN
-//     * D WHILE */
-//    GPIOC->ODR ^= (1 << 13);
-//    printf ("sdshm  mj");
-//    /* USER CODE BEGIN 3 */
-    }
-  /* USER CODE END 3 */
+//
+//      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
+//      DMA1_Channel1->CNDTR = Adc::size_of_adc_buffer;
+//      DMA1_Channel1->CCR |= DMA_CCR_EN; // Check corectness for dual adc
+//    }
 }
 
 /**
  * @brief System Clock Configuration
  * @retval None
  */
-void SystemClock_Config (void)
+void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct =
-    { 0 };
-  RCC_ClkInitTypeDef RCC_ClkInitStruct =
-    { 0 };
-  RCC_PeriphCLKInitTypeDef PeriphClkInit =
-    { 0 };
+	RCC_OscInitTypeDef RCC_OscInitStruct =
+	{ 0 };
+	RCC_ClkInitTypeDef RCC_ClkInitStruct =
+	{ 0 };
+	RCC_PeriphCLKInitTypeDef PeriphClkInit =
+	{ 0 };
 
-  /**Initializes the CPU, AHB and APB busses clocks
-   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-  RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  if (HAL_RCC_OscConfig (&RCC_OscInitStruct) != HAL_OK)
-    {
-      Error_Handler ();
-    }
-  /**Initializes the CPU, AHB and APB busses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-      | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+	/**Initializes the CPU, AHB and APB busses clocks
+	 */
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+	RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+	// RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+	RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	/**Initializes the CPU, AHB and APB busses clocks
+	 */
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig (&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-    {
-      Error_Handler ();
-    }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-  PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
-  if (HAL_RCCEx_PeriphCLKConfig (&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler ();
-    }
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
+	PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
+	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+	{
+		Error_Handler();
+	}
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6; //12Mhz at 72Mhz core clock
-  if (HAL_RCCEx_PeriphCLKConfig (&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler ();
-    }
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+	PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6; //12Mhz at 72Mhz core clock
+	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+	{
+		Error_Handler();
+	}
 
-  HAL_RCC_MCOConfig (RCC_MCO, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
-  /**Enables the Clock Security System
-   */
-  HAL_RCC_EnableCSS ();
+	HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
+	/**Enables the Clock Security System
+	 */
+	HAL_RCC_EnableCSS();
 
-  __HAL_RCC_DMA1_CLK_ENABLE()
-  ;
-  __HAL_RCC_ADC1_CLK_ENABLE()
-  ;
-  __HAL_RCC_TIM1_CLK_ENABLE()
-  ;
+	__HAL_RCC_DMA1_CLK_ENABLE()
+	;
+	__HAL_RCC_ADC1_CLK_ENABLE()
+	;
+	__HAL_RCC_TIM1_CLK_ENABLE()
+	;
 
 }
 
@@ -526,70 +551,70 @@ void SystemClock_Config (void)
  * @param None
  * @retval None
  */
-static void MX_GPIO_Init (void)
+static void MX_GPIO_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct =
-    { 0 };
+	GPIO_InitTypeDef GPIO_InitStruct =
+	{ 0 };
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOD_CLK_ENABLE()
-  ;
-  __HAL_RCC_GPIOA_CLK_ENABLE()
-  ;
-  __HAL_RCC_GPIOB_CLK_ENABLE()
-  ;
-  __HAL_RCC_GPIOC_CLK_ENABLE()
-  ;
+	/* GPIO Ports Clock Enable */
+	__HAL_RCC_GPIOD_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOA_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOB_CLK_ENABLE()
+	;
+	__HAL_RCC_GPIOC_CLK_ENABLE()
+	;
 
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init (GPIOA, &GPIO_InitStruct);
+	/*Configure GPIO pin : PA8 */
+	GPIO_InitStruct.Pin = GPIO_PIN_8;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_9;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init (GPIOA, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = GPIO_PIN_9;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init (GPIOC, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = GPIO_PIN_13;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_5; //latch
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init (GPIOB, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = GPIO_PIN_5; //latch
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  GPIO_InitTypeDef gpio;
+	GPIO_InitTypeDef gpio;
 
-  gpio.Mode = GPIO_MODE_ANALOG; //LCR
-  gpio.Pin = GPIO_PIN_0 | GPIO_PIN_1;
-  HAL_GPIO_Init (GPIOB, &gpio);
+	gpio.Mode = GPIO_MODE_ANALOG; //LCR
+	gpio.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+	HAL_GPIO_Init(GPIOB, &gpio);
 
-  gpio.Mode = GPIO_MODE_ANALOG; //OSCILLOSCOPE
-  gpio.Pin = GPIO_PIN_7;
-  HAL_GPIO_Init (GPIOA, &gpio);
+	gpio.Mode = GPIO_MODE_ANALOG; //OSCILLOSCOPE
+	gpio.Pin = GPIO_PIN_7;
+	HAL_GPIO_Init(GPIOA, &gpio);
 
-  //I2C
+	//I2C
 
-  GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_6 | GPIO_PIN_7;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init (GPIOB, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_6 | GPIO_PIN_7;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /////
-  /*Configure GPIO pins : BUTTON_OK_Pin BUTTON_BACK_Pin BUTTON_OKA4_Pin BUTTON_UP_Pin */
-  GPIO_InitStruct.Pin = BUTTON_OK_Pin | BUTTON_BACK_Pin | BUTTON_OKA4_Pin
-      | BUTTON_UP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init (GPIOA, &GPIO_InitStruct);
+	/////
+	/*Configure GPIO pins : BUTTON_OK_Pin BUTTON_BACK_Pin BUTTON_OKA4_Pin BUTTON_UP_Pin */
+	GPIO_InitStruct.Pin = BUTTON_OK_Pin | BUTTON_BACK_Pin | BUTTON_OKA4_Pin
+			| BUTTON_UP_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority (EXTI3_IRQn, 2, 0);
-  HAL_NVIC_EnableIRQ (EXTI3_IRQn);
+	/* EXTI interrupt init*/
+	HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0);
+	HAL_NVIC_EnableIRQ (EXTI3_IRQn);
 
 }
 
@@ -598,122 +623,48 @@ static void MX_GPIO_Init (void)
  * @param None
  * @retval None
  */
-static void MX_I2C1_Init (void)
+static void MX_I2C1_Init(void)
 {
+	/* USER CODE BEGIN I2C1_Init 0 */
 
-  /* USER CODE BEGIN I2C1_Init 0 */
+	/* USER CODE END I2C1_Init 0 */
 
-  /* USER CODE END I2C1_Init 0 */
+	/* USER CODE BEGIN I2C1_Init 1 */
 
-  /* USER CODE BEGIN I2C1_Init 1 */
+	/* USER CODE END I2C1_Init 1 */
+	hi2c1.Instance = I2C1;
+	hi2c1.Init.ClockSpeed = 400000;
+	hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+	hi2c1.Init.OwnAddress1 = 0;
+	hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	hi2c1.Init.OwnAddress2 = 0;
+	hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+	{
+		Error_Handler();
+	}
+	/* USER CODE BEGIN I2C1_Init 2 */
 
-  /* USER CODE END I2C1_Init 1 */
-  hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 400000;
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init (&hi2c1) != HAL_OK)
-    {
-      Error_Handler ();
-    }
-  /* USER CODE BEGIN I2C1_Init 2 */
-
-  /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
- * @brief I2C2 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_I2C2_Init (void)
-{
-
-  /* USER CODE BEGIN I2C2_Init 0 */
-
-  /* USER CODE END I2C2_Init 0 */
-
-  LL_I2C_InitTypeDef I2C_InitStruct =
-    { 0 };
-
-  LL_GPIO_InitTypeDef GPIO_InitStruct =
-    { 0 };
-
-  LL_APB2_GRP1_EnableClock (LL_APB2_GRP1_PERIPH_GPIOB);
-  /**I2C2 GPIO Configuration
-   PB10   ------> I2C2_SCL
-   PB11   ------> I2C2_SDA
-   */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_10 | LL_GPIO_PIN_11;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-  LL_GPIO_Init (GPIOB, &GPIO_InitStruct);
-
-  /* Peripheral clock enable */
-  LL_APB1_GRP1_EnableClock (LL_APB1_GRP1_PERIPH_I2C2);
-
-  /* I2C2 DMA Init */
-
-  /* I2C2_TX Init */
-  LL_DMA_SetDataTransferDirection (DMA1, LL_DMA_CHANNEL_4,
-				   LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
-
-  LL_DMA_SetChannelPriorityLevel (DMA1, LL_DMA_CHANNEL_4, LL_DMA_PRIORITY_LOW);
-
-  LL_DMA_SetMode (DMA1, LL_DMA_CHANNEL_4, LL_DMA_MODE_CIRCULAR);
-
-  LL_DMA_SetPeriphIncMode (DMA1, LL_DMA_CHANNEL_4, LL_DMA_PERIPH_NOINCREMENT);
-
-  LL_DMA_SetMemoryIncMode (DMA1, LL_DMA_CHANNEL_4, LL_DMA_MEMORY_INCREMENT);
-
-  LL_DMA_SetPeriphSize (DMA1, LL_DMA_CHANNEL_4, LL_DMA_PDATAALIGN_BYTE);
-
-  LL_DMA_SetMemorySize (DMA1, LL_DMA_CHANNEL_4, LL_DMA_MDATAALIGN_BYTE);
-
-  /* USER CODE BEGIN I2C2_Init 1 */
-
-  /* USER CODE END I2C2_Init 1 */
-  /**I2C Initialization
-   */
-  LL_I2C_DisableOwnAddress2 (I2C2);
-  LL_I2C_DisableGeneralCall (I2C2);
-  LL_I2C_EnableClockStretching (I2C2);
-  I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
-  I2C_InitStruct.ClockSpeed = 400000;
-  I2C_InitStruct.DutyCycle = LL_I2C_DUTYCYCLE_2;
-  I2C_InitStruct.OwnAddress1 = 0;
-  I2C_InitStruct.TypeAcknowledge = LL_I2C_ACK;
-  I2C_InitStruct.OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
-  LL_I2C_Init (I2C2, &I2C_InitStruct);
-  LL_I2C_SetOwnAddress2 (I2C2, 0);
-  /* USER CODE BEGIN I2C2_Init 2 */
-
-  /* USER CODE END I2C2_Init 2 */
-
+	/* USER CODE END I2C1_Init 2 */
 }
 
 /**
  * Enable DMA controller clock
  */
-static void MX_DMA_Init (void)
+static void MX_DMA_Init(void)
 {
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE()
-  ;
+	/* DMA controller clock enable */
+	__HAL_RCC_DMA1_CLK_ENABLE()
+	;
 
-  HAL_NVIC_SetPriority (DMA1_Channel1_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ (DMA1_Channel1_IRQn);
+	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 0);
+	HAL_NVIC_EnableIRQ (DMA1_Channel1_IRQn);
 
-  /* DMA1_Channel4_IRQn interrupt configuration */
-  //NVIC_SetPriority(DMA1_Channel4_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-  // NVIC_EnableIRQ(DMA1_Channel4_IRQn);
+	/* DMA1_Channel4_IRQn interrupt configuration */
+	//NVIC_SetPriority(DMA1_Channel4_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+	// NVIC_EnableIRQ(DMA1_Channel4_IRQn);
 }
 /* USER CODE END 4 */
 
@@ -721,12 +672,12 @@ static void MX_DMA_Init (void)
  * @brief  This function is executed in case of error occurrence.
  * @retval None
  */
-void Error_Handler (void)
+void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+	/* USER CODE BEGIN Error_Handler_Debug */
+	/* User can add his own implementation to report the HAL error return state */
 
-  /* USER CODE END Error_Handler_Debug */
+	/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -738,12 +689,12 @@ void Error_Handler (void)
  * @retval None
  */
 void assert_failed(uint8_t *file, uint32_t line)
-  {
-    /* USER CODE BEGIN 6 */
-    /* User can add his own implementation to report the file name and line number,
-     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    /* USER CODE END 6 */
-  }
+{
+	/* USER CODE BEGIN 6 */
+	/* User can add his own implementation to report the file name and line number,
+	 tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+	/* USER CODE END 6 */
+}
 #endif /* USE_FULL_ASSERT */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

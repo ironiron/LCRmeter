@@ -16,6 +16,12 @@
 
 /*! @class Pwm
  *  @brief This class is intended to generate waveform on desired Timer channel of STM32 microcontrollers.
+ *  Example of use:
+ *    Pwm<TIM_TypeDef, uint16_t, 2> pwm (TIM1, 100);
+ *    pwm.Initialise ();
+ * 	  pwm.Set_Frequency (5000);
+ * 	  pwm.Set_Duty (30);
+ * 	  pwm.Enable ();
  *  @tparam T timer structure
  *  @tparam Specifies resolution of timer (uint16_t uint32_t etc.)
  *  @tparam chn timer's channel on which will be generated signal (if chn=0 all 4 channels will be used)

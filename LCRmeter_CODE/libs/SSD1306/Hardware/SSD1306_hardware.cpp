@@ -28,28 +28,26 @@
  *******************************************************************************
  */
 
-
-#include <stdint.h> //TODO why sys/_stdint.h and not normal check this???
+#include <stdint.h>
 #include <array>
-
 #include "SSD1306.hpp"
-#include "I2C.hpp"
 
-
-void SSD1306::Write_Command (uint8_t command)
+void SSD1306::Write_Command(uint8_t command)
 {
-  auto temp=conn->Send_Data(address,command,control_b_command);
-  if(temp !=0)
+    auto temp = HAL_I2C_Mem_Write(conn, address, control_b_command, 1, &command,
+            1, 1000);
+    if (temp != 0)
     {
-      last_error=temp;
+        last_error = temp;
     }
 }
 
-void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
+void SSD1306::Write_Data(std::array<uint8_t, SSD1306::buffer_size> &data)
 {
-  auto temp=conn->Send_Data_Cont(address,data.begin(),height*(width)/8,control_b_data);
-  if(temp !=0)
+    auto temp = HAL_I2C_Mem_Write(conn, address, control_b_data, 1,
+            data.begin(), height * (width) / 8, 1000);
+    if (temp != 0)
     {
-      last_error=temp;
+        last_error = temp;
     }
 }

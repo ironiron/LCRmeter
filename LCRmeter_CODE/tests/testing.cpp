@@ -2,7 +2,7 @@
  * testing.cpp
  *
  *  Created on: 01.09.2019
- *      Author: Rafa³
+ *      Author: Rafaï¿½
  */
 
 
@@ -34,9 +34,9 @@ namespace testing
 
     }
 
-    namespace ssd1306
-    {
-      std::vector<uint8_t>  data;
-
-    }
+//    namespace ssd1306
+//    {
+//      std::vector<uint8_t>  data;
+//
+//    }
 }

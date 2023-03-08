@@ -2,7 +2,7 @@
  * testing.hpp
  *
  *  Created on: 01.09.2019
- *      Author: Rafa³
+ *      Author: Rafaï¿½
  */
 
 #ifndef TESTING_HPP_
@@ -37,10 +37,10 @@ namespace testing
   }
 
 
-  namespace ssd1306
-  {
-    extern std::vector<uint8_t>  data;
-  }
+//  namespace ssd1306
+//  {
+//    extern std::vector<uint8_t>  data;
+//  }
 }
 
 

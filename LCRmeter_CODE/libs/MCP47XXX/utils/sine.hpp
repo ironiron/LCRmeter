@@ -8,10 +8,11 @@
 #ifndef SINE_HPP_
 #define SINE_HPP_
 
-//#include <array>
-
+// 0 for MCP74FEB and 1 for MCP7425
 #if 0
 
+
+//Not tested might be some problems
 static const uint16_t sine_table[]=
 {
   128,131,134,137,140,143,146,149,
@@ -49,6 +50,8 @@ static const uint16_t sine_table[]=
 };
 
 #else
+//TODO test with another low resolution sinewave, maybe quality is still OK?
+// 0,0, because MCP47FEB in continous mode still requires address and additional byte for 16bit alignment
 static const uint8_t sine_table[]=
 {
     0	,	0	,	131	,
@@ -156,9 +159,5 @@ static const uint8_t sine_table[]=
 #endif
 
 static constexpr uint32_t sine_table_lenght=(sizeof(sine_table)/sizeof(*sine_table));
-
-
-
-
 
 #endif /* SINE_HPP_ */

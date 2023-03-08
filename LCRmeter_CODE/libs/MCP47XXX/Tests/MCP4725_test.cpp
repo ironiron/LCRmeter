@@ -13,9 +13,9 @@
 
 static I2C i2c;//fake
 MCP4725 dac4725(i2c);
-
+//
 //This tests needs to be rewritten: update testing namespace, get rid of i2C fake,write better tests
-
+//
 //void Reset_Data(void)
 //{
 //  i2c.data.clear();

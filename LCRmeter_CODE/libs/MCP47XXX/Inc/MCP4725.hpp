@@ -48,27 +48,27 @@ public:
 
   /**@brief Sets output voltage
    * @param voltage in bits(4095 max.)
-   * @retval error code from underlaying I2C interface class.
+   * @retval error code from underlying I2C interface class.
    * @warning It does not test arguments for out-of-range.
    */
   uint32_t Set_Output(uint16_t voltage);
 
-  /**@brief Sets output voltage
-   * @param value byte of values bits(4095 max. value)
-   * @param length size of array
-   * @retval error code from underlaying I2C interface class.
+  /**@brief Sets output voltage based on value stored in input array
+   * @param voltage_array: byte of values bits(4095 max. value)
+   * @param length: size of array
+   * @retval error code from underlying I2C interface class.
    * @warning It does not test arguments for out-of-range.
    */
-  uint32_t Set_Continuous(const uint16_t *value,uint32_t length);
+  uint32_t Set_Continuous(const uint16_t *voltage_array,uint32_t length);
 
   /**@brief Resets DAC internal circuit
-   * @retval error code from underlaying I2C interface class.
+   * @retval error code from underlying I2C interface class.
    */
   uint32_t Reset(void);
 
   /**@brief Sets Operating mode
    * @param mode Can be a value of #PowerMode
-   * @retval error code from underlaying I2C interface class.
+   * @retval error code from underlying I2C interface class.
    */
   uint32_t Set_Power_mode(PowerMode mode);
 

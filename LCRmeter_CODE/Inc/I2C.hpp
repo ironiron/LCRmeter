@@ -25,7 +25,14 @@
 /**
  * @brief This class is configuring I2C
  * @warning class not finished: no tests provided, and no good error handling,
- * no stop dma transfer function, nor single dma transfer, bad code organisation. BUT WORKS.
+ * no stop dma transfer function, nor single dma transfer, bad code organisation.
+ * Currently only
+ * Send_Data(uint8_t addr, uint16_t byte, uint8_t mem_addr)
+ * Send_Data_Circular(uint8_t addr, const uint8_t* byte,
+ *		uint32_t size, uint8_t mem_addr)
+ *		is tested and is working.
+ *	The rest is not guaranted to work. This library seems like dead end, move to HAL if possible.
+ *
  */
 class I2C
 {

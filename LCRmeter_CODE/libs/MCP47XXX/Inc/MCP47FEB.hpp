@@ -51,11 +51,13 @@ public:
    */
   uint32_t Set_Output(uint16_t voltage);
 
-  /**@brief Sets output voltage
+  /**@brief Sets output voltage based on arrayed input
    * @param value byte of values bits(4095 max. value)
    * @param lenght size of array
    * @retval error code from underlaying I2C interface class.
    * @warning It does not test arguments for out-of-range.
+   * @warning because of limitations of current I2C library input array has to be in format:
+   * {0,0,value1,0,0,value2....} and its working only for 8bit one channel version.
    */
   uint32_t Set_Continuous(const uint8_t *value,uint32_t lenght);
 

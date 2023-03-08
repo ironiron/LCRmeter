@@ -19,7 +19,7 @@
 							<option id="com.atollic.truestudio.toolchain_options.mcu.1736594068" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F103C8" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.337962874" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.2054752829" isAbstract="false" name="Debug platform" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/LCRmeter}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\PCTools\\bin|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1">
+							<builder buildPath="${workspace_loc:/LCRmeter}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=D:\\Programs\\attolic\\TrueSTUDIO for STM32 9.0.0\\ARMTools\\bin|" id="com.atollic.truestudio.mbs.builder1.1222194476" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
 								</outputEntries>
@@ -112,7 +112,9 @@
 								<option id="com.atollic.truestudio.gpp.directories.select.72333903" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../USB_DEVICE/App"/>
 									<listOptionValue builtIn="false" value="../libs/SSD1306/Inc"/>
+									<listOptionValue builtIn="false" value="../libs/SSD1306/Hardware"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Inc"/>
+									<listOptionValue builtIn="false" value="../libs/MCP47XXX/utils"/>
 									<listOptionValue builtIn="false" value="../USB_DEVICE/Target"/>
 									<listOptionValue builtIn="false" value="../Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32F1xx_HAL_Driver/Inc"/>
@@ -182,17 +184,17 @@
 							<inputType id="com.atollic.truestudio.gcc.input.1274347818" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.177369565" name="SSD1306.hpp" rcbsApplicability="disable" resourcePath="libs/SSD1306/Inc/SSD1306.hpp" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="SSD1306|libs|Hardware|Drivers|Inc|Src|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="utils|SSD1306|libs|Hardware|Drivers|Inc|Src|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Src"/>
 						<entry excluding="MCP47XXX|SSD1306" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry excluding="Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
+						<entry excluding="utils|Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/utils"/>
 						<entry excluding="Src|Inc|Tests|Hardware" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Inc"/>
@@ -336,9 +338,10 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="USB_DEVICE"/>
 						<entry excluding="MCP47XXX|SSD1306" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry excluding="Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
+						<entry excluding="utils|Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/utils"/>
 						<entry excluding="Src|Inc|Tests|Hardware" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Inc"/>
@@ -391,6 +394,9 @@
 							<tool command="g++ -std=c++14 -Weffc++" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1754374927" name="C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
 								<option id="gnu.cpp.compiler.option.include.paths.516388568" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../Inc"/>
+									<listOptionValue builtIn="false" value="../libs/SSD1306/Tests"/>
+									<listOptionValue builtIn="false" value="../libs/SSD1306/Tests/fakes"/>
+									<listOptionValue builtIn="false" value="../libs/MCP47XXX/utils"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Inc"/>
 									<listOptionValue builtIn="false" value="../libs/SSD1306/Inc"/>
 									<listOptionValue builtIn="false" value="../tests"/>
@@ -445,13 +451,14 @@
 						</tool>
 					</fileInfo>
 					<sourceEntries>
-						<entry excluding="SSD1306|libs|Src/adc.cpp|Src/usbd_storage_if.c|Src/usbd_desc.c|Src/usbd_conf.c|Src/usb_device.c|Src/system_stm32f1xx.c|Src/stm32f1xx_it.c|Src/stm32f1xx_hal_msp.c|Src/main.cpp|Src/DMA.cpp|Src/delay.c|Hardware|Drivers|Drivers/CMSIS|syscalls.c|USB_DEVICE|Middlewares|Inc|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="utils|SSD1306|libs|Src/adc.cpp|Src/usbd_storage_if.c|Src/usbd_desc.c|Src/usbd_conf.c|Src/usb_device.c|Src/system_stm32f1xx.c|Src/stm32f1xx_it.c|Src/stm32f1xx_hal_msp.c|Src/main.cpp|Src/DMA.cpp|Src/delay.c|Hardware|Drivers|Drivers/CMSIS|syscalls.c|USB_DEVICE|Middlewares|Inc|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Inc"/>
 						<entry excluding="MCP47XXX|SSD1306" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry excluding="Hardware|Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
+						<entry excluding="utils|Hardware|Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Tests"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/utils"/>
 						<entry excluding="Src|Inc|Tests|Hardware" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Src"/>
@@ -634,17 +641,17 @@
 							<inputType id="com.atollic.truestudio.gcc.input.644357187" superClass="com.atollic.truestudio.gcc.input"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="com.atollic.truestudio.exe.debug.1518366166.2006838671.Inc/SSD1306.hpp" name="SSD1306.hpp" rcbsApplicability="disable" resourcePath="libs/SSD1306/Inc/SSD1306.hpp" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="SSD1306|libs|Hardware|Drivers|Inc|Src|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="utils|SSD1306|libs|Hardware|Drivers|Inc|Src|startup|tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Src"/>
 						<entry excluding="MCP47XXX|SSD1306" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry excluding="Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
+						<entry excluding="utils|Tests|Inc|Src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/Src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/MCP47XXX/utils"/>
 						<entry excluding="Src|Inc|Tests|Hardware" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/SSD1306/Inc"/>

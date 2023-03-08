@@ -1,21 +1,22 @@
-/*
- * MCP47_test.cpp
- *
- *  Created on: 12.05.2019
- *      Author: Rafa�
- */
-
-#include "catch.hpp"
-
-#include <I2C_fake.hpp>
-#include <MCP47FEB.hpp>
-#include "sine.hpp"
-
-static I2C i2c;//fake
-MCP47FEB dac47FEB(i2c);
-
-//TODO adjust tests for real hardware
-
+///*
+// * MCP47_test.cpp
+// *
+// *  Created on: 12.05.2019
+// *      Author: Rafa�
+// */
+//
+//#include "catch.hpp"
+//
+//#include <I2C_fake.hpp>
+//#include <MCP47FEB.hpp>
+////#include <MCP4725.hpp>
+//#include "sine.hpp"
+//
+//static I2C i2c;//fake
+//MCP47FEB dac47feb(i2c);
+////MCP4725 dac4725(i2c);
+////TODO adjust tests for real hardware
+//
 //void Reset_Data(void)
 //{
 //  i2c.data.clear();
@@ -30,19 +31,19 @@ MCP47FEB dac47FEB(i2c);
 //
 //TEST_CASE( "set output value, and checks if no more data is written")
 //{
-//    SECTION("MCP7425")
-//    {
-//      Reset_Data();
-//    dac4725.Set_Output (5);
-//  //before data
-//    REQUIRE(i2c.data[i2c.index - 1] == 0);
-//    REQUIRE(i2c.adress[i2c.index-1] == 0);
-//  //data
-//    REQUIRE(i2c.data[i2c.index] == 5);
-//    REQUIRE(i2c.adress[i2c.index] == dac4725.address_write);
-//  //no more data
-//    REQUIRE(i2c.index <= 1);
-//  }
+////    SECTION("MCP7425")
+////    {
+////      Reset_Data();
+////    dac4725.Set_Output (5);
+////  //before data
+////    REQUIRE(i2c.data[i2c.index - 1] == 0);
+////    REQUIRE(i2c.adress[i2c.index-1] == 0);
+////  //data
+////    REQUIRE(i2c.data[i2c.index] == 5);
+////    REQUIRE(i2c.adress[i2c.index] == dac4725.address_write);
+////  //no more data
+////    REQUIRE(i2c.index <= 1);
+////  }
 //  SECTION("MCPFEB")
 //  {
 //    Reset_Data();
@@ -77,5 +78,5 @@ MCP47FEB dac47FEB(i2c);
 //  REQUIRE(i2c.memoryaddress[i2c.index] == 0x00);//dac0 address
 //  }
 //}
-
-
+//
+//

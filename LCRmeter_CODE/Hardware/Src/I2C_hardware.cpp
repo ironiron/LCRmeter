@@ -42,7 +42,6 @@ void I2C::Allocate_Bytes_DMA(const uint8_t* bytes,uint32_t size,bool circular)
   dma->Set_Peripheral_Addr((uint32_t)(&i2c->DR));
 
   dma->Set_Memory_Addr((uint32_t)(bytes));
-//  dma->Set_Memory_Addr((uint32_t)(&bytes));
   dma->Enable();
 }
 
@@ -100,8 +99,6 @@ void I2C::Initialise (void)
    i2c->TRISE|=7;
    i2c->CR1|=I2C_CR1_ACK |I2C_CR1_START| I2C_CR1_PE;*/
 }
-//TODO finish this function \/
-
 
 void I2C::Enable_DMA(void)
 {

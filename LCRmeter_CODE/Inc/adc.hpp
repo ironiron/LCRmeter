@@ -13,7 +13,7 @@
 #ifndef ADC_HPP_
 #define ADC_HPP_
 
-#include "stdint.h"
+#include <stdint.h>
 #include "stm32f1xx_hal.h"
 #include <unordered_map>
 #include <map>
@@ -65,8 +65,8 @@ namespace Adc
    * @retval HAL error code
    */
   uint32_t Set_LCR (void);
-
-  /**@brief Sets ADC1 for osc. input. deinit adc2
+//TODO fix docs
+  /**@brief
    * @param Sample time can be value of #SamplingTimeClocks
    * @retval Duration of one sample point in microseconds
    * @note return value is valid for ADC clock=12MHz

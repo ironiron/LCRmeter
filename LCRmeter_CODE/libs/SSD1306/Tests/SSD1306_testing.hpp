@@ -1,12 +1,12 @@
 /**
  ******************************************************************************
- * @file    fakes/SSD1306_hardware.cpp
+ * @file    SSD1306_testing.hpp
  * @author  Rafał Mazurkiewicz
- * @date    13.08.2019
- * @brief   This file contains fake hardware related functions for unit testing
+ * @date    01.09.2019
+ * @brief   Misc file for unit tests
  ******************************************************************************
- * @attention
- * <h2><center>&copy; COPYRIGHT(c) 2019 Rafał Mazurkiewicz </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Rafał Mazurkiewicz
+ * </center></h2>
  *
  *Permission is hereby granted, free of charge,
  *to any person obtaining a copy of this software and associated documentation files
@@ -28,17 +28,17 @@
  *******************************************************************************
  */
 
-#include "SSD1306.hpp"
+#ifndef SSD1306_TESTING_HPP_
+#define SSD1306_TESTING_HPP_
+
+#include <stdint.h>
 #include <vector>
-#include "SSD1306_testing.hpp"
 
-
-void SSD1306::Write_Command (uint8_t com)
+namespace testing
 {
-  testing::ssd1306::data.push_back(com);
+  namespace ssd1306
+  {
+    extern std::vector<uint8_t>  data;
+  }
 }
-
-void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
-{
-  testing::ssd1306::data.insert(testing::ssd1306::data.end(), data.begin(), data.end());
-}
+#endif /* SSD1306_TESTING_HPP_ */

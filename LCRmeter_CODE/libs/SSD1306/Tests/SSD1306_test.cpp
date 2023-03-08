@@ -28,15 +28,15 @@
  *******************************************************************************
  */
 
-#include <catch.hpp>
-#include <image.hpp>
-#include <SSD1306.hpp>
-#include <testing.hpp>
 #include <vector>
+#include "catch.hpp"
+#include "image.hpp"
+#include "SSD1306.hpp"
+#include "SSD1306_testing.hpp"
 
-static I2C i2c;
 
-SSD1306 oled64(&i2c,64);
+static void *dummy;
+SSD1306 oled64(&dummy,64);
 
 TEST_CASE( "fills screen buffer within bounds")
 {

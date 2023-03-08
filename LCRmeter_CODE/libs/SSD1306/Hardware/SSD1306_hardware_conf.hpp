@@ -1,12 +1,12 @@
 /**
  ******************************************************************************
- * @file    fakes/SSD1306_hardware.cpp
+ * @file    SSD1306_hardware.cpp
  * @author  Rafał Mazurkiewicz
- * @date    13.08.2019
- * @brief   This file contains fake hardware related functions for unit testing
+ * @date    06.03.2023
+ * @brief   This file contains hardware related functions
  ******************************************************************************
  * @attention
- * <h2><center>&copy; COPYRIGHT(c) 2019 Rafał Mazurkiewicz </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2023 Rafał Mazurkiewicz </center></h2>
  *
  *Permission is hereby granted, free of charge,
  *to any person obtaining a copy of this software and associated documentation files
@@ -28,17 +28,6 @@
  *******************************************************************************
  */
 
-#include "SSD1306.hpp"
-#include <vector>
-#include "SSD1306_testing.hpp"
+#include "stm32f1xx_hal.h"
 
-
-void SSD1306::Write_Command (uint8_t com)
-{
-  testing::ssd1306::data.push_back(com);
-}
-
-void SSD1306::Write_Data (std::array<uint8_t, SSD1306::buffer_size>  &data)
-{
-  testing::ssd1306::data.insert(testing::ssd1306::data.end(), data.begin(), data.end());
-}
+#define SSD1306_I2C_Typedef I2C_HandleTypeDef

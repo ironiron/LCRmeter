@@ -17,9 +17,9 @@ uint32_t MCP4725::Set_Output (uint16_t value)
   return conn.Send_Data (address, value);
 }
 
-uint32_t MCP4725::Set_Continuous (const uint16_t * value, uint32_t length)
+uint32_t MCP4725::Set_Continuous (const uint16_t * voltage_array, uint32_t length)
 {
-  return conn.Send_Data_Circular (address, value, length);
+  return conn.Send_Data_Circular (address, voltage_array, length);
 }
 
 uint32_t MCP4725::Reset (void)
@@ -27,14 +27,14 @@ uint32_t MCP4725::Reset (void)
   return conn.Send_Data (address, uint16_t(1<<14));//POR bit in DAC register
 }
 
-uint32_t MCP4725::Set_Power_mode (PowerMode mode)
+uint32_t MCP4725::Set_Power_mode(PowerMode mode)
 {
-  return conn.Send_Data (address, uint16_t(mode<<12));//PD0 and PD1 bits in DAC register
-  //(enum is in range of 0-3)
+  //PD0 and PD1 bits in DAC register (enum is in range of 0-3)
+  return conn.Send_Data(address, uint16_t(mode << 12));
 }
 
 uint32_t MCP4725::Stop_DAC (void)
 {
   conn.Stop_Transfer();
-  return 0;
+  return 0;//TODO fix this hard coded 0
 }
