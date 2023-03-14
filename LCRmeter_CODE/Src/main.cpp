@@ -87,7 +87,7 @@
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
 extern DMA_HandleTypeDef hdma_adc1;
-extern volatile uint32_t Adc::adc_value[size_of_adc_buffer];
+extern volatile uint32_t Adc::adc_buffer[size_of_adc_buffer];
 
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
@@ -112,15 +112,14 @@ extern "C"
 {
 void DMA1_Channel1_IRQHandler(void)
 {
-	/* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+	if(DMA1->ISR & DMA_ISR_TEIF1)
+	{
+		//TODO add global error
+		return;
+	}
 //  DMA1->IFCR |=DMA_IFCR_CHTIF1;
 	DMA1->IFCR = DMA_IFCR_CGIF1;
-	/* USER CODE END DMA1_Channel1_IRQn 0 */
-//  __HAL_DMA_CLEAR_FLAG(hdma_adc1, __HAL_DMA_GET_TC_FLAG_INDEX(&hdma_adc1));
-	// HAL_DMA_IRQHandler(&hdma_adc1);
 	xD = 1;
-	// HAL_ADC_Start_DMA (&hadc1, (uint32_t*) Adc::adc_value, SIZE_OF_ADC_BUFFER);
-	/* USER CODE END DMA1_Channel1_IRQn 1 */
 }
 
 int _write(int file, char *ptr, int len)
@@ -131,7 +130,6 @@ int _write(int file, char *ptr, int len)
 	for (DataIdx = 0; DataIdx < len; DataIdx++)
 	{
 		ITM_SendChar((*ptr++));
-		//__io_putchar(*ptr++);
 	}
 	return len;
 }
@@ -258,11 +256,11 @@ int main(void)
 	uint32_t error = 0;
 	printf("hola!! \n");
 
-//	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
-//	pwm.Initialise();
-//	pwm.Set_Frequency(5000);
-//	pwm.Set_Duty(30);
-//	pwm.Enable();
+	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
+	pwm.Initialise();
+	pwm.Set_Frequency(600);
+	pwm.Set_Duty(80);
+	pwm.Enable();
 
 	SSD1306 oled(&hi2c2, 64);
 	oled.Initialize();
@@ -302,95 +300,101 @@ int main(void)
 	oled.Write_String (buf);
   dac.Enable_Output ();
   oled.Update_Screen();
-  dac.Stop_DAC();
 
-  while (1)
-	{
-	  error = dac.Set_Continuous (sine_table, sine_table_lenght);
-		oled.Set_Cursor(0, 20);
-		sprintf (buf, "dac.error2=%lu", error);
-		oled.Write_String (buf);
-		oled.Set_Cursor(0, 40);
-		oled.Write_String ("ENABLED");
-		oled.Update_Screen();
-		delay_ms(3000);
 
-		i2c_dma.Stop_Transfer();
-		oled.Set_Cursor(0, 40);
-		oled.Write_String ("DISABLED");
-		oled.Update_Screen();
-		delay_ms(3000);
-
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////
 //OSCILLOSCOPE
-///////////////////////////////////////////////////////////////////////////////
-//  Adc::Set_LCR();
-//  HAL_Delay(100);
-//  Adc::Set_Oscilloscope();
-//  double lala=0;
+/////////////////////////////////////////////////////////////////////////////
+	int eh = 0;
+	eh = Adc::Set_LCR();
+	oled.Clean();
+	oled.Set_Cursor(0, 0);
+	sprintf(buf, "dac.error1=%d", eh);
+	oled.Write_String(buf);
+	HAL_Delay(100);
+	eh = Adc::Set_Oscilloscope();
+	double lala = 0;
+
+	lala = Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+
+	oled.Set_Cursor(0, 20);
+	sprintf(buf, "dac.error2=%d", eh);
+	oled.Write_String(buf);
+	oled.Set_Cursor(0, 30);
+	sprintf(buf, "dac.error3=%f", lala);
+	oled.Write_String(buf);
+	oled.Update_Screen();
+	HAL_Delay(1300);
+	while (1)
+	{
+		while (xD == 0)
+		{
+
+		}
+
+		xD = 0;
+		HAL_Delay(100);
+		oled.Clean();
+		Waveform_arythmetics::Calc_Moving_Average((uint32_t*) Adc::adc_buffer,
+				1024, 1);
+		uint32_t edge = Waveform_arythmetics::Get_Edge_index(1000, false);
+		if (edge >900)
+		{
+			Adc::Resume_DMA();
+			continue;
+		}
+		for (int i = 0; i < 100; i++)
+		{
+			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
+					+ edge] / 64;
+		}
+		sprintf(buf, "yol=%1.3f", lala);
+		oled.Set_Cursor(0, 0), oled.Write_String(buf);
+		sprintf(buf, "edge=%ld", edge);
+		oled.Set_Cursor(63, 0), oled.Write_String(buf);
+		oled.Draw_Waveform(10, 60, display_buffer, 100, SSD1306::WHITE);
+		oled.Update_Screen();
+
+		Adc::Resume_DMA();
+	}
 //
-//  lala=Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
-//  while (1)
-//    {
-//
-//      while(xD==0)
-//	{
-//
-//	}
-//      xD=0;
-//      HAL_Delay (100);
-//      oled.Clean ();
-//      Waveform_arythmetics::Calc_Moving_Average((uint32_t*)Adc::adc_value,1024,1);
-//      uint32_t edge=Waveform_arythmetics::Get_Edge_index(1000,false);
-//      for (int i=0;i<100;i++)
-//	{
-//	  display_buffer[i]=Waveform_arythmetics::filtered_buffer[0][i+edge]/64;
-//	}
-//      sprintf (buf, "yol=%1.3f", lala);
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      sprintf (buf, "edge=%ld", edge);
-//      oled.Set_Cursor (63, 0), oled.Write_String (buf);
-//     	 oled.Draw_Waveform(10,60,display_buffer,100,SSD1306::WHITE);
-//     	oled.Update_Screen ();
-//
-//        DMA1_Channel1->CCR &=~DMA_CCR_EN;
-//        DMA1_Channel1->CNDTR=1024;
-//        DMA1_Channel1->CCR |=DMA_CCR_EN;// Check corectness for dual adc
-//    }
-	//////////////////////////////////////////////
+//	HAL_Delay(1000);
+	////////////////////////////////////////////
 
 	//TEMP
 	/////////////////
-//  Adc::Set_Voltage_Temperature ();
-//      while (xD == 0)
-//	{
-//
-//	}
-//      xD = 0;
-//      oled.Clean ();
-//
-//      sprintf (buf, "volt=%ld", Adc::Update_Vref ());
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
-//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-//      oled.Update_Screen ();
-//      HAL_Delay (1000);
-//      oled.Clean ();
+  Adc::Set_Voltage_Temperature ();
+  uint32_t Vmax=0;
+  uint32_t Vmin=99999;
+  uint32_t Vref=0;
+  while(1)
+  {
+      while (xD == 0)
+	{
 
-//      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
-//      DMA1_Channel1->CNDTR = 2;
-//      DMA1_Channel1->CCR |= DMA_CCR_EN; // Check corectness for dual adc
-//    }
+	}
+      xD = 0;
+      oled.Clean ();
+      Vref=Adc::Update_Vref ();
+      if(Vref<Vmin)
+      {
+    	  Vmin=Vref;
+      }
+      if(Vref>Vmax)
+      {
+    	  Vmax=Vref;
+      }
+      sprintf (buf, "Vref=%ld",Vref);
+      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
+      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+      sprintf (buf, "Vmax=%d", Vmax);
+      oled.Set_Cursor (0, 20), oled.Write_String (buf);
+      sprintf (buf, "Vmin=%d", Vmin);
+      oled.Set_Cursor (0, 30), oled.Write_String (buf);
+      oled.Update_Screen ();
+      HAL_Delay (100);
+    }
 // ///////////////////////////////////////////////////////////////////////////////////
 // //ADC
 // //////////////////////////////////////////////////////

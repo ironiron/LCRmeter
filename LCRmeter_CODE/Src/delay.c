@@ -5,6 +5,7 @@ volatile int32_t _timer_delay=0;
 void SysTick_Handler(void)
 {
 	_timer_delay--;
+	HAL_IncTick();
 }
 
 void delay_ms(int32_t t)
