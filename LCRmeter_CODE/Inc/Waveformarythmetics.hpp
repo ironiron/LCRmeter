@@ -24,7 +24,7 @@
 /**
  *
  *
- * This Class is made for conditioning signal from MCU ADC working in dual ADC
+ * This Class is made for conditioning signal from STM32F103 MCU ADC working in dual ADC
  * with 32bit data wide and data from ADCs stored in upper and lower 16bit.
  * It is developed primary for stm32f103 MCU only. All members and methods are static.
  *
@@ -40,7 +40,7 @@
  * From now on all the variable shall contain valid data.
  * \note No getters nor setters provided! Make sure nothing writes data
  *  to class members.
- * \note This class is made solely for LCRmeter project!
+ * \note This class is made solely for LCRmeter project.
  */
 
 class Waveform_arythmetics
@@ -65,7 +65,7 @@ public:
   ///max value in ADC2
   static uint32_t peak2;
   ///phase swift with resolution of 0.001 degrees
-  static int32_t alfa;
+  static int32_t alfa; //TODO alfa is with resolution 330 or sth? why
   ///frequency  with resolution of 1 Hz
   static uint32_t frequency;
   /// 2nd max value in ADC1
@@ -88,7 +88,8 @@ public:
   static void Calc_Moving_Average (uint32_t *buffer, uint32_t size,
 				   uint32_t step);
 
-  /** Finds 2 maximum peaks from filtered_buffer and stores them in peakx and minor_peakx
+  /**@brief Finds 2 maximum peaks from filtered_buffer and stores them in peakx and minor_peakx
+   * @note if minor_peakX=0 and and peakX !=0 means only one peak has been found
    */
   static void Find_Peaks (void);
 

@@ -181,6 +181,42 @@ TEST_CASE( "Finds several peaks with different amplitude")
 
 }
 
+TEST_CASE( "Find center of peak")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=5;
+
+  Waveform_arythmetics::filtered_buffer[0][0]=0;
+  Waveform_arythmetics::filtered_buffer[0][1]=2;
+  Waveform_arythmetics::filtered_buffer[0][2]=8;
+  Waveform_arythmetics::filtered_buffer[0][3]=8;//
+  Waveform_arythmetics::filtered_buffer[0][4]=8;
+  Waveform_arythmetics::filtered_buffer[0][5]=4;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=2;
+  Waveform_arythmetics::filtered_buffer[0][8]=2;
+  Waveform_arythmetics::filtered_buffer[0][9]=2;
+
+  Waveform_arythmetics::filtered_buffer[1][0]=0;
+  Waveform_arythmetics::filtered_buffer[1][1]=1;
+  Waveform_arythmetics::filtered_buffer[1][2]=2;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=10;
+  Waveform_arythmetics::filtered_buffer[1][5]=10;//
+  Waveform_arythmetics::filtered_buffer[1][6]=10;
+  Waveform_arythmetics::filtered_buffer[1][7]=10;
+  Waveform_arythmetics::filtered_buffer[1][8]=2;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::peak1==3);
+  REQUIRE(Waveform_arythmetics::minor_peak1==0);
+  REQUIRE(Waveform_arythmetics::peak2==5);
+  REQUIRE(Waveform_arythmetics::minor_peak2==0);
+}
+
 TEST_CASE( "Calculate phase swift")
 {
   Waveform_arythmetics::frequency=10000;

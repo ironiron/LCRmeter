@@ -122,17 +122,17 @@ void DMA1_Channel1_IRQHandler(void)
 	xD = 1;
 }
 
-int _write(int file, char *ptr, int len)
-{
-	(void)(file);
-	int DataIdx;
-
-	for (DataIdx = 0; DataIdx < len; DataIdx++)
-	{
-		ITM_SendChar((*ptr++));
-	}
-	return len;
-}
+//int _write(int file, char *ptr, int len)
+//{
+//	(void)(file);
+//	int DataIdx;
+//
+//	for (DataIdx = 0; DataIdx < len; DataIdx++)
+//	{
+//		ITM_SendChar((*ptr++));
+//	}
+//	return len;
+//}
 
 /**
  * @brief This function handles DMA1 channel4 global interrupt.
@@ -273,6 +273,14 @@ int main(void)
 	oled.Update_Screen();
 	delay_ms(500);
 
+	/////////////////////////////////////////////////////////////////////////////////////////
+	//USB
+//	MX_USB_DEVICE_Init ();
+
+
+
+	///////////////////////////////////////////////////////////
+
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /////DAC
@@ -305,68 +313,69 @@ int main(void)
 //////////////////////////////////////////////////
 //OSCILLOSCOPE
 /////////////////////////////////////////////////////////////////////////////
-	int eh = 0;
-	eh = Adc::Set_LCR();
-	oled.Clean();
-	oled.Set_Cursor(0, 0);
-	sprintf(buf, "dac.error1=%d", eh);
-	oled.Write_String(buf);
-	HAL_Delay(100);
-	eh = Adc::Set_Oscilloscope();
-	double lala = 0;
-
-	lala = Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
-
-	oled.Set_Cursor(0, 20);
-	sprintf(buf, "dac.error2=%d", eh);
-	oled.Write_String(buf);
-	oled.Set_Cursor(0, 30);
-	sprintf(buf, "dac.error3=%f", lala);
-	oled.Write_String(buf);
-	oled.Update_Screen();
-	HAL_Delay(1300);
-	while (1)
-	{
-		while (xD == 0)
-		{
-
-		}
-
-		xD = 0;
-		HAL_Delay(100);
-		oled.Clean();
-		Waveform_arythmetics::Calc_Moving_Average((uint32_t*) Adc::adc_buffer,
-				1024, 1);
-		uint32_t edge = Waveform_arythmetics::Get_Edge_index(1000, false);
-		if (edge >900)
-		{
-			Adc::Resume_DMA();
-			continue;
-		}
-		for (int i = 0; i < 100; i++)
-		{
-			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
-					+ edge] / 64;
-		}
-		sprintf(buf, "yol=%1.3f", lala);
-		oled.Set_Cursor(0, 0), oled.Write_String(buf);
-		sprintf(buf, "edge=%ld", edge);
-		oled.Set_Cursor(63, 0), oled.Write_String(buf);
-		oled.Draw_Waveform(10, 60, display_buffer, 100, SSD1306::WHITE);
-		oled.Update_Screen();
-
-		Adc::Resume_DMA();
-	}
+//	int eh = 0;
+//	eh = Adc::Set_LCR();
+//	oled.Clean();
+//	oled.Set_Cursor(0, 0);
+//	sprintf(buf, "dac.error1=%d", eh);
+//	oled.Write_String(buf);
+//	HAL_Delay(100);
+//	eh = Adc::Set_Oscilloscope();
+//	double lala = 0;
 //
-//	HAL_Delay(1000);
-	////////////////////////////////////////////
-
-	//TEMP
-	/////////////////
+//	lala = Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+//
+//	oled.Set_Cursor(0, 20);
+//	sprintf(buf, "dac.error2=%d", eh);
+//	oled.Write_String(buf);
+//	oled.Set_Cursor(0, 30);
+//	sprintf(buf, "dac.error3=%f", lala);
+//	oled.Write_String(buf);
+//	oled.Update_Screen();
+//	HAL_Delay(1300);
+//	while (1)
+//	{
+//		while (xD == 0)
+//		{
+//
+//		}
+//
+//		xD = 0;
+//		HAL_Delay(100);
+//		oled.Clean();
+//		Waveform_arythmetics::Calc_Moving_Average((uint32_t*) Adc::adc_buffer,
+//				1024, 1);
+//		uint32_t edge = Waveform_arythmetics::Get_Edge_index(1000, false);
+//		if (edge >900)
+//		{
+//			Adc::Resume_DMA();
+//			continue;
+//		}
+//		for (int i = 0; i < 100; i++)
+//		{
+//			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
+//					+ edge] / 64;
+//		}
+//		sprintf(buf, "yol=%1.3f", lala);
+//		oled.Set_Cursor(0, 0), oled.Write_String(buf);
+//		sprintf(buf, "edge=%ld", edge);
+//		oled.Set_Cursor(63, 0), oled.Write_String(buf);
+//		oled.Draw_Waveform(10, 60, display_buffer, 100, SSD1306::WHITE);
+//		oled.Update_Screen();
+//
+//		Adc::Resume_DMA();
+//	}
+////
+////	HAL_Delay(1000);
+//	////////////////////////////////////////////
+//
+//	//TEMP
+//	/////////////////
   Adc::Set_Voltage_Temperature ();
   uint32_t Vmax=0;
   uint32_t Vmin=99999;
   uint32_t Vref=0;
+  int co=0;
   while(1)
   {
       while (xD == 0)
@@ -394,93 +403,96 @@ int main(void)
       oled.Set_Cursor (0, 30), oled.Write_String (buf);
       oled.Update_Screen ();
       HAL_Delay (100);
+      co++;
+      if(co>2)
+      {
+    	  break;
+      }
     }
 // ///////////////////////////////////////////////////////////////////////////////////
 // //ADC
 // //////////////////////////////////////////////////////
-//  oled.Clean ();
-////	oled.Update_Screen ();
-////             // char buf[30];
-//  double lala = 0;
-//  error = Adc::Set_LCR ();
-////  lala = Adc::Set_Sampling_time (Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
-////
-//  Waveform_arythmetics::mid_voltage = 2000;
-//  Waveform_arythmetics::user_point_time = 21;
-//
-//  while (1)
-//    {
-//      while (xD == 0)
-//	{
-//
-//	}
-//      xD = 0;
-//      if (error_flag == 1)
-//	{
-//	  oled.Set_Cursor (20, 20);
-//	  oled.Set_Font_size (Fonts::font_16x26);
-//	  oled.Write_String_Inverted ("FATAL");
-//	  oled.Update_Screen ();
-//	  break;
-//	}
-//      HAL_Delay (400);
-//      oled.Clean ();
-//
-////      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
-////						 Adc::size_of_adc_buffer, 1);
-////      uint32_t edge = Waveform_arythmetics::Get_Edge_index (1000, false);
-////      for (int i = 0; i < 100; i++)
-////	{
-////	  display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i + edge]
-////	      / 64;
-////	}
-////      oled.Draw_Waveform (10, 60, display_buffer, 100, SSD1306::WHITE);
-////      oled.Update_Screen ();
-//      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_value,
-//						 Adc::size_of_adc_buffer, 5);
-//      Waveform_arythmetics::Find_Peaks ();
-//      Waveform_arythmetics::Calc_Alfa ();
-//      Waveform_arythmetics::Calc_Amplitude ();
-//
-//      bool ind=LCR_math::Calculate (
-//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
-//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-//	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
-//
+
+  oled.Clean ();
+  double lala = 0;
+  error = Adc::Set_LCR ();
+  lala = Adc::Set_Sampling_time (Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
+
+  Waveform_arythmetics::mid_voltage = 1000;
+  Waveform_arythmetics::user_point_time = 21; //TODO get the Set_Sampling_time in uint
+
+  while (1)
+    {
+      while (xD == 0)
+	{
+
+	}
+      xD = 0;
+      HAL_Delay (500);
+      oled.Clean ();
+
+      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
+						 Adc::size_of_adc_buffer, 5); //TODO with 1 it's to chaotic can proccessing be improved?
+      Waveform_arythmetics::Find_Peaks ();
+      Waveform_arythmetics::Calc_Alfa ();
+      Waveform_arythmetics::Calc_Amplitude ();
+
+      bool ind=LCR_math::Calculate (
+	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
+	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
+	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
+
 //  sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
 //  oled.Set_Cursor (0, 0), oled.Write_String (buf);
 //  sprintf (buf, "ind=%1.9f", LCR_math::inductance);
-//  oled.Set_Cursor (0, 20), oled.Write_String (buf);
+//  oled.Set_Cursor (0, 10), oled.Write_String (buf);
 //  sprintf (buf, "res=%1.9f", LCR_math::resistance);
-//  oled.Set_Cursor (0, 40), oled.Write_String (buf);
-////      sprintf (buf, "a1=%3ld", Waveform_arythmetics::amplitude1);
-////      oled.Set_Cursor (60, 0), oled.Write_String (buf);
-////      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
-////      oled.Set_Cursor (60, 20), oled.Write_String (buf);
-////      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
-////      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-////      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
-////      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-////      sprintf (buf, "e=%ld", error);
-////      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-////      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
-////      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+//  oled.Set_Cursor (0, 20), oled.Write_String (buf);
+
+//      sprintf (buf, "a1=%ld", Waveform_arythmetics::amplitude1);
+//      oled.Set_Cursor (0, 30), oled.Write_String (buf);
+//      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
+//      oled.Set_Cursor (60, 30), oled.Write_String (buf);
+//      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
+//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+//      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
+//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
 //
-//  if(ind==true)
-//    {
-//      oled.Draw_Line_H(10,60,20,SSD1306::Color::WHITE);
-//    }
-//  else
-//    {
-//      oled.Draw_Line_H(10,60,20,SSD1306::Color::BLACK);
-//    }
+//      sprintf (buf, "V1p=%ld", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
+//      oled.Set_Cursor (60, 50), oled.Write_String (buf);
 //
-//      oled.Update_Screen ();
-//
-//      DMA1_Channel1->CCR &= ~DMA_CCR_EN;
-//      DMA1_Channel1->CNDTR = Adc::size_of_adc_buffer;
-//      DMA1_Channel1->CCR |= DMA_CCR_EN; // Check corectness for dual adc
-//    }
+//      sprintf (buf, "P1=%ld", Waveform_arythmetics::peak1);
+//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
+//      oled.Set_Cursor (60, 0), oled.Write_String (buf);
+//      sprintf (buf, "P2=%ld", Waveform_arythmetics::peak2);
+//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+//      sprintf (buf, "mp2=%ld", Waveform_arythmetics::minor_peak2);
+//      oled.Set_Cursor (60, 10), oled.Write_String (buf);
+
+
+      int edge = Waveform_arythmetics::peak1-60;
+      printf("edge=%d; ampl=%ld \n",edge,Waveform_arythmetics::amplitude1);
+      		sprintf(buf, "ed=%d; ampl=%ld",edge,Waveform_arythmetics::amplitude1);
+      		oled.Set_Cursor(0, 0), oled.Write_String(buf);
+
+      if(edge>=0 )
+      {
+      		for (int i = 0; i < 127; i++)
+      		{
+      			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
+      					+ edge] / 40-20;
+      		}
+      		oled.Draw_Waveform(0, 63, display_buffer, 127, SSD1306::WHITE);
+      		oled.Draw_Line_V(60,0,64,SSD1306::WHITE);
+      		oled.Update_Screen ();
+      }
+
+
+
+
+      Adc::Resume_DMA();
+    }
 }
 
 /**

@@ -101,17 +101,18 @@ int _read (int file, char *ptr, int len)
 return len;
 }
 
-//int _write(int file, char *ptr, int len)
-//{
-//	int DataIdx;
-//
-//	for (DataIdx = 0; DataIdx < len; DataIdx++)
-//	{
-//	    ITM_SendChar((*ptr++));
-//		//__io_putchar(*ptr++);
-//	}
-//	return len;
-//}
+//TODO why is this commented??
+int _write(int file, char *ptr, int len)
+{
+	int DataIdx;
+
+	for (DataIdx = 0; DataIdx < len; DataIdx++)
+	{
+	    ITM_SendChar((*ptr++));
+		//__io_putchar(*ptr++);
+	}
+	return len;
+}
 
 caddr_t _sbrk(int incr)
 {
