@@ -122,18 +122,6 @@ void DMA1_Channel1_IRQHandler(void)
 	xD = 1;
 }
 
-//int _write(int file, char *ptr, int len)
-//{
-//	(void)(file);
-//	int DataIdx;
-//
-//	for (DataIdx = 0; DataIdx < len; DataIdx++)
-//	{
-//		ITM_SendChar((*ptr++));
-//	}
-//	return len;
-//}
-
 /**
  * @brief This function handles DMA1 channel4 global interrupt.
  */
