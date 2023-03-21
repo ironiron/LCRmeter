@@ -10,7 +10,7 @@
  ******************************************************************************
  */
 
-#include <Waveformarythmetics.hpp>
+#include "Waveformarythmetics.hpp"
 #include <stdlib.h>
 
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =

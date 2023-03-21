@@ -5,7 +5,7 @@
  *      Author: Rafał Mazurkiewicz
  */
 
-#include <I2C.hpp>
+#include "I2C.hpp"
 #include <array>
 
 I2C::ErrorCode I2C::Send_Data(uint8_t addr, uint8_t byte)

@@ -10,7 +10,7 @@
  ******************************************************************************
  */
 
-#include <LCRmath.hpp>
+#include "LCRmath.hpp"
 #include <cmath>
 
 double LCR_math::reactance = 0;

@@ -2,7 +2,7 @@
  * main_test.cpp
  *
  *  Created on: 19.03.2019
- *      Author: Rafa³ Mazurkiewicz
+ *      Author: Rafaï¿½ Mazurkiewicz
  */
 
 #define CATCH_CONFIG_NO_CPP11_TO_STRING
