@@ -1,0 +1,6 @@
+Debug/
+Unit_Tests/
+.settings/
+*.launch
+.metadata
+
