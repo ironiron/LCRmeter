@@ -185,15 +185,17 @@ static void Init(void)
 {
 	HAL_Init();
 	SystemClock_Config();
-	__HAL_RCC_ADC2_CLK_ENABLE();
-	__HAL_RCC_ADC1_CLK_ENABLE();
-	__HAL_RCC_I2C1_CLK_ENABLE();
-	__HAL_RCC_I2C2_CLK_ENABLE();
-	HAL_Delay(10);
-
-	MX_DMA_Init();
+//	__HAL_RCC_ADC2_CLK_ENABLE();
+//	__HAL_RCC_ADC1_CLK_ENABLE();
+//	__HAL_RCC_I2C1_CLK_ENABLE();
+//	__HAL_RCC_I2C2_CLK_ENABLE();
+//	HAL_Delay(10);
+//
+//	MX_DMA_Init();
 	MX_GPIO_Init();
-	HAL_Delay(10);
+//	HAL_Delay(10);
+
+
 	//MX_I2C1_Init();
 
 
@@ -201,7 +203,9 @@ static void Init(void)
 	 * I2C2 is here instead of MX_I2Cx_Init() like I2C1
 	 * It didn't work with MX so I left it here if you have time you can fix it.
 	*/
-	MX_I2C2_Init();
+//	MX_I2C2_Init();
+
+
 //	  hi2c2.Instance = I2C2;
 //	  hi2c2.Init.ClockSpeed = 400000;
 //	  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
@@ -215,11 +219,17 @@ static void Init(void)
 //	  printf("tret=%d",tret);
 	  printf("1111hi2c2->State=%d\n",hi2c2.State);
 }
+//#include "usb_device.h"
+#include "usbd_cdc_if.h"
+void USBsend (char *str)
+{
+    uint32_t ptr=0;
+    for(ptr=1;str[ptr]!=0;ptr++)
+    {
+    }
+    CDC_Transmit_FS((uint8_t*)str,ptr);
+}
 
-/**
- * @brief  The application entry point.
- * @retval int
- */
 int main(void)
 {
 	Init();
@@ -229,28 +239,34 @@ int main(void)
 	uint32_t error = 0;
 	printf("hola!! \n");
 
-	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
-	pwm.Initialise();
-	pwm.Set_Frequency(600);
-	pwm.Set_Duty(80);
-	pwm.Enable();
-
+//	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
+//	pwm.Initialise();
+//	pwm.Set_Frequency(600);
+//	pwm.Set_Duty(80);
+//	pwm.Enable();
+//
 	SSD1306 oled(&hi2c2, 64);
-	oled.Initialize();
-	oled.Set_Brightness(0xff);
-
-	oled.Fill(SSD1306::WHITE);
-	oled.Update_Screen();
-	delay_ms(1000);
-	oled.Fill(SSD1306::BLACK);
-	oled.Update_Screen();
-	delay_ms(500);
+//	oled.Initialize();
+//	oled.Set_Brightness(0xff);
+//
+//	oled.Fill(SSD1306::WHITE);
+//	oled.Update_Screen();
+//	delay_ms(1000);
+//	oled.Fill(SSD1306::BLACK);
+//	oled.Update_Screen();
+//	delay_ms(500);
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//USB
-//	MX_USB_DEVICE_Init ();
-
-
+	MX_USB_DEVICE_Init ();
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
+while(1)
+{
+    GPIOC->ODR ^=(1<<13);
+    HAL_Delay(500);
+//    if ()
+    USBsend("lala111\n");
+}
 
 	///////////////////////////////////////////////////////////
 
@@ -601,6 +617,20 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	////
+	//USB
+    GPIO_InitStruct.Pin = GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+
 
 	/* EXTI interrupt init*/
 	HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0);
