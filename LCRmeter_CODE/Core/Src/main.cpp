@@ -246,7 +246,7 @@ int main(void)
 //	pwm.Enable();
 //
 	SSD1306 oled(&hi2c2, 64);
-//	oled.Initialize();
+	oled.Initialize();
 //	oled.Set_Brightness(0xff);
 //
 //	oled.Fill(SSD1306::WHITE);
@@ -266,6 +266,7 @@ while(1)
     HAL_Delay(500);
 //    if ()
     USBsend("lala111\n");
+    Error_Handler();
 }
 
 	///////////////////////////////////////////////////////////
@@ -731,6 +732,18 @@ void Error_Handler(void)
 	/* USER CODE BEGIN Error_Handler_Debug */
 	/* User can add his own implementation to report the HAL error return state */
     __disable_irq();
+    printf("ERROR_HANDLER \n");
+    SSD1306 oled(&hi2c2, 64);
+
+  oled.Set_Brightness(0xff);
+
+  oled.Clean();
+  oled.Set_Font_size(Fonts::font_16x26);
+  oled.Set_Cursor(0, 20);
+  oled.Write_String("ERROR_HANDLER");
+  oled.Update_Screen();
+
+
     while (1)
     {
     }

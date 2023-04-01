@@ -26,7 +26,7 @@
 #include "usbd_cdc.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -206,11 +206,7 @@ void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
   USBD_LL_Suspend((USBD_HandleTypeDef*)hpcd->pData);
   /* Enter in STOP mode. */
   /* USER CODE BEGIN 2 */
-  if (hpcd->Init.low_power_enable)
-  {
-    /* Set SLEEPDEEP bit and SleepOnExit of Cortex System Control Register. */
-    SCB->SCR |= (uint32_t)((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));
-  }
+  printf("IN HAL_PCD_SuspendCallback\n");
   /* USER CODE END 2 */
 }
 
@@ -227,7 +223,7 @@ void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
   /* USER CODE BEGIN 3 */
-
+    printf("IN HAL_PCD_ResumeCallback\n");
   /* USER CODE END 3 */
   USBD_LL_Resume((USBD_HandleTypeDef*)hpcd->pData);
 }
@@ -273,6 +269,7 @@ static void PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
 void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
+    printf("IN HAL_PCD_ConnectCallback\n");
   USBD_LL_DevConnected((USBD_HandleTypeDef*)hpcd->pData);
 }
 
@@ -287,6 +284,7 @@ static void PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
 void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
+    printf("IN HAL_PCD_DisconnectCallback\n");
   USBD_LL_DevDisconnected((USBD_HandleTypeDef*)hpcd->pData);
 }
 
@@ -407,7 +405,7 @@ USBD_StatusTypeDef USBD_LL_OpenEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr, uin
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_OpenEP ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_Open(pdev->pData, ep_addr, ep_mps, ep_type);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -425,7 +423,7 @@ USBD_StatusTypeDef USBD_LL_CloseEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_CloseEP ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_Close(pdev->pData, ep_addr);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -443,7 +441,7 @@ USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_FlushEP ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_Flush(pdev->pData, ep_addr);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -461,7 +459,7 @@ USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_StallEP ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_SetStall(pdev->pData, ep_addr);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -479,7 +477,7 @@ USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_add
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_ClearStallEP ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_ClrStall(pdev->pData, ep_addr);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -496,7 +494,7 @@ USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_add
 uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
   PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef*) pdev->pData;
-
+  printf("IN USBD_LL_IsStallEP ep_addr=%d\n",ep_addr);
   if((ep_addr & 0x80) == 0x80)
   {
     return hpcd->IN_ep[ep_addr & 0x7F].is_stall;
@@ -517,7 +515,7 @@ USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev, uint8_t dev_a
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_SetUSBAddress dev_addr=%d\n",dev_addr);
   hal_status = HAL_PCD_SetAddress(pdev->pData, dev_addr);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -537,7 +535,7 @@ USBD_StatusTypeDef USBD_LL_Transmit(USBD_HandleTypeDef *pdev, uint8_t ep_addr, u
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_Transmit ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_Transmit(pdev->pData, ep_addr, pbuf, size);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -557,7 +555,7 @@ USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_a
 {
   HAL_StatusTypeDef hal_status = HAL_OK;
   USBD_StatusTypeDef usb_status = USBD_OK;
-
+  printf("IN USBD_LL_PrepareReceive ep_addr=%d\n",ep_addr);
   hal_status = HAL_PCD_EP_Receive(pdev->pData, ep_addr, pbuf, size);
 
   usb_status =  USBD_Get_USB_Status(hal_status);
@@ -573,6 +571,7 @@ USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev, uint8_t ep_a
   */
 uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev, uint8_t ep_addr)
 {
+    printf("IN USBD_LL_GetRxDataSize ep_addr=%d\n",ep_addr);
   return HAL_PCD_EP_GetRxCount((PCD_HandleTypeDef*) pdev->pData, ep_addr);
 }
 
@@ -620,8 +619,10 @@ void HAL_PCDEx_SetConnectionState(PCD_HandleTypeDef *hpcd, uint8_t state)
 #endif /* USE_HAL_PCD_REGISTER_CALLBACKS */
 {
   /* USER CODE BEGIN 6 */
+    printf("IN HAL_PCDEx_SetConnectionState state=%d\n",state);
   if (state == 1)
   {
+
     /* Configure Low connection state. */
 
   }
