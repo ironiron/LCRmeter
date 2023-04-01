@@ -56,6 +56,7 @@
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Hardware"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Inc"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/utils"/>
+									<listOptionValue builtIn="false" value="../libs/printf_redirection"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.languagestandard.1183758963" name="Language standard" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.languagestandard" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.languagestandard.value.gnu18" valueType="enumerated"/>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.warnings.pedantic.607282259" name="Issue all warnings demanded by strict ISO C and ISO C++ (-pedantic)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.warnings.pedantic" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -89,6 +90,7 @@
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Hardware"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/Inc"/>
 									<listOptionValue builtIn="false" value="../libs/MCP47XXX/utils"/>
+									<listOptionValue builtIn="false" value="../libs/printf_redirection"/>
 								</option>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.languagestandard.1639312043" name="Language standard" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.languagestandard" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.languagestandard.value.gnupp20" valueType="enumerated"/>
 								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.warnings.extra.1515959613" name="Enable extra warning flags (-Wextra)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.warnings.extra" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -123,7 +125,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="USB_DEVICE"/>
-						<entry excluding="MCP47XXX/Tests|SSD1306/Tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
+						<entry excluding="MCP47XXX/Tests|SSD1306/Tests" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="libs"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -234,7 +236,8 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Hardware"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="USB_DEVICE"/>
-						<entry excluding="MCP47XXX/Tests|SSD1306/Tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
+						<entry excluding="printf_redirection|MCP47XXX/Tests|SSD1306/Tests" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/printf_redirection"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -337,7 +340,8 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="Startup/|Src/adc.cpp|Src/delay.c|Src/main.cpp|Src/stm32f1xx_hal_msp.c|Src/stm32f1xx_it.c|Src/syscalls.c|Src/sysmem.c|Src/system_stm32f1xx.c|Inc/adc.hpp|Inc/delay.h|Inc/main.h|Inc/stm32f1xx_hal_conf.h|Inc/stm32f1xx_it.h" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="Core"/>
-						<entry excluding="SSD1306/Hardware/|MCP47XXX/Hardware/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="libs"/>
+						<entry excluding="printf_redirection|SSD1306/Hardware/|MCP47XXX/Hardware/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="libs"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs/printf_redirection"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="tests"/>
 					</sourceEntries>
 				</configuration>

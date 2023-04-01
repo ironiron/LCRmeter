@@ -51,6 +51,7 @@
 #include "adc.hpp"
 #include "LCRmath.hpp"
 
+
 /* Private function prototypes -----------------------------------------------*/
 
 extern ADC_HandleTypeDef hadc1;
@@ -61,6 +62,8 @@ extern volatile uint32_t Adc::adc_buffer[size_of_adc_buffer];
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 DMA_HandleTypeDef hdma_i2c1_tx;
+
+
 
 /* USER CODE BEGIN PV */
 
@@ -80,6 +83,8 @@ volatile uint32_t error_flag = 0;
 
 extern "C"
 {
+#include "printf_redirection.h"
+
 void DMA1_Channel1_IRQHandler(void)
 {
 	if(DMA1->ISR & DMA_ISR_TEIF1)
@@ -126,19 +131,6 @@ void EXTI3_IRQHandler(void)
 
 	/* USER CODE END EXTI2_IRQn 1 */
 }
-
-int _write(int file, char *ptr, int len)
-{
-  (void)file;
-  int DataIdx;
-
-  for (DataIdx = 0; DataIdx < len; DataIdx++)
-  {
-      ITM_SendChar((*ptr++));
-  }
-  return len;
-}
-
 
 }
 
@@ -230,6 +222,8 @@ void USBsend (char *str)
     CDC_Transmit_FS((uint8_t*)str,ptr);
 }
 
+
+
 int main(void)
 {
 	Init();
@@ -237,6 +231,8 @@ int main(void)
 	char buf[30];
 	uint8_t display_buffer[100];
 	uint32_t error = 0;
+
+	UART_printf_init();
 	printf("hola!! \n");
 
 //	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
@@ -266,7 +262,6 @@ while(1)
     HAL_Delay(500);
 //    if ()
     USBsend("lala111\n");
-    Error_Handler();
 }
 
 	///////////////////////////////////////////////////////////
@@ -733,15 +728,6 @@ void Error_Handler(void)
 	/* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     printf("ERROR_HANDLER \n");
-    SSD1306 oled(&hi2c2, 64);
-
-  oled.Set_Brightness(0xff);
-
-  oled.Clean();
-  oled.Set_Font_size(Fonts::font_16x26);
-  oled.Set_Cursor(0, 20);
-  oled.Write_String("ERROR_HANDLER");
-  oled.Update_Screen();
 
 
     while (1)
