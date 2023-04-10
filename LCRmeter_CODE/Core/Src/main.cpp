@@ -177,15 +177,15 @@ static void Init(void)
 {
 	HAL_Init();
 	SystemClock_Config();
-//	__HAL_RCC_ADC2_CLK_ENABLE();
-//	__HAL_RCC_ADC1_CLK_ENABLE();
-//	__HAL_RCC_I2C1_CLK_ENABLE();
-//	__HAL_RCC_I2C2_CLK_ENABLE();
-//	HAL_Delay(10);
-//
-//	MX_DMA_Init();
+	__HAL_RCC_ADC2_CLK_ENABLE();
+	__HAL_RCC_ADC1_CLK_ENABLE();
+	__HAL_RCC_I2C1_CLK_ENABLE();
+	__HAL_RCC_I2C2_CLK_ENABLE();
+	HAL_Delay(10);
+
+	MX_DMA_Init();
 	MX_GPIO_Init();
-//	HAL_Delay(10);
+	HAL_Delay(10);
 
 
 	//MX_I2C1_Init();
@@ -195,7 +195,7 @@ static void Init(void)
 	 * I2C2 is here instead of MX_I2Cx_Init() like I2C1
 	 * It didn't work with MX so I left it here if you have time you can fix it.
 	*/
-//	MX_I2C2_Init();
+	MX_I2C2_Init();
 
 
 //	  hi2c2.Instance = I2C2;
@@ -211,18 +211,6 @@ static void Init(void)
 //	  printf("tret=%d",tret);
 	  printf("1111hi2c2->State=%d\n",hi2c2.State);
 }
-//#include "usb_device.h"
-#include "usbd_cdc_if.h"
-void USBsend (char *str)
-{
-    uint32_t ptr=0;
-    for(ptr=1;str[ptr]!=0;ptr++)
-    {
-    }
-    CDC_Transmit_FS((uint8_t*)str,ptr);
-}
-
-
 
 int main(void)
 {
@@ -232,7 +220,7 @@ int main(void)
 	uint8_t display_buffer[100];
 	uint32_t error = 0;
 
-	UART_printf_init();
+	UART_HandleTypeDef* u1=UART_printf_init();
 	printf("hola!! \n");
 
 //	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
@@ -243,29 +231,14 @@ int main(void)
 //
 	SSD1306 oled(&hi2c2, 64);
 	oled.Initialize();
-//	oled.Set_Brightness(0xff);
-//
-//	oled.Fill(SSD1306::WHITE);
-//	oled.Update_Screen();
-//	delay_ms(1000);
-//	oled.Fill(SSD1306::BLACK);
-//	oled.Update_Screen();
-//	delay_ms(500);
+	oled.Set_Brightness(0xff);
 
-	/////////////////////////////////////////////////////////////////////////////////////////
-	//USB
-	MX_USB_DEVICE_Init ();
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET);
-while(1)
-{
-    GPIOC->ODR ^=(1<<13);
-    HAL_Delay(500);
-//    if ()
-    USBsend("lala111\n");
-}
-
-	///////////////////////////////////////////////////////////
-
+	oled.Fill(SSD1306::WHITE);
+	oled.Update_Screen();
+	delay_ms(1000);
+	oled.Fill(SSD1306::BLACK);
+	oled.Update_Screen();
+	delay_ms(500);
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /////DAC
@@ -457,9 +430,15 @@ while(1)
 
 
       int edge = Waveform_arythmetics::peak1-60;
-      printf("edge=%d; ampl=%ld \n",edge,Waveform_arythmetics::amplitude1);
+     // printf("edge=%d; ampl=%ld \n",edge,Waveform_arythmetics::amplitude1);
       		sprintf(buf, "ed=%d; ampl=%ld",edge,Waveform_arythmetics::amplitude1);
       		oled.Set_Cursor(0, 0), oled.Write_String(buf);
+
+      		uint8_t aaa123[]={0xff,0x00,0xab,0xaa};//start indication or sth
+      		  HAL_UART_Transmit(u1, (uint8_t*)(aaa123), 4, 1000);
+      		  HAL_Delay(100);
+      		HAL_UART_Transmit(u1, (uint8_t*)(Waveform_arythmetics::filtered_buffer[0][0]), Waveform_arythmetics::buffer_size*2, 1000);
+      		HAL_UART_Transmit(u1, (uint8_t*)(Waveform_arythmetics::filtered_buffer[1][0]), Waveform_arythmetics::buffer_size*2, 1000);
 
       if(edge>=0 )
       {

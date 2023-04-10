@@ -19,6 +19,6 @@
 #include "stm32f1xx_hal.h"
 
 int _write(int file, char *ptr, int len);
-void UART_printf_init(void);
+UART_HandleTypeDef* UART_printf_init(void);
 
 #endif /* PRINTF_REDIRECTION_H_ */

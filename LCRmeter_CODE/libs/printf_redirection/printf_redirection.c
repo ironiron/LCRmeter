@@ -35,7 +35,7 @@ int _write(int file, char *ptr, int len)
 }
 
 #ifdef UART_PRINTF
-void UART_printf_init(void)
+UART_HandleTypeDef* UART_printf_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -56,6 +56,13 @@ void UART_printf_init(void)
     huart1.Init.Mode = UART_MODE_TX_RX;
     huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-    HAL_HalfDuplex_Init(&huart1);
+    if (HAL_HalfDuplex_Init(&huart1) == HAL_OK)
+    {
+        return & huart1;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 #endif
