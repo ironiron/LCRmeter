@@ -390,7 +390,7 @@ int main(void)
       oled.Clean ();
 
       Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
-						 Adc::size_of_adc_buffer, 5); //TODO with 1 it's to chaotic can proccessing be improved?
+						 Adc::size_of_adc_buffer, 3); //TODO with 1 it's to chaotic can proccessing be improved?
       Waveform_arythmetics::Find_Peaks ();
       Waveform_arythmetics::Calc_Alfa ();
       Waveform_arythmetics::Calc_Amplitude ();
@@ -400,13 +400,13 @@ int main(void)
 	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
 	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
 
-//  sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
-//  oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//  sprintf (buf, "ind=%1.9f", LCR_math::inductance);
-//  oled.Set_Cursor (0, 10), oled.Write_String (buf);
-//  sprintf (buf, "res=%1.9f", LCR_math::resistance);
-//  oled.Set_Cursor (0, 20), oled.Write_String (buf);
-
+//      sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
+//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//      sprintf (buf, "ind=%1.9f", LCR_math::inductance);
+//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+//      sprintf (buf, "res=%1.9f", LCR_math::resistance);
+//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
+//
 //      sprintf (buf, "a1=%ld", Waveform_arythmetics::amplitude1);
 //      oled.Set_Cursor (0, 30), oled.Write_String (buf);
 //      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
@@ -419,41 +419,47 @@ int main(void)
 //      sprintf (buf, "V1p=%ld", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
 //      oled.Set_Cursor (60, 50), oled.Write_String (buf);
 //
-//      sprintf (buf, "P1=%ld", Waveform_arythmetics::peak1);
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
-//      oled.Set_Cursor (60, 0), oled.Write_String (buf);
-//      sprintf (buf, "P2=%ld", Waveform_arythmetics::peak2);
-//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-//      sprintf (buf, "mp2=%ld", Waveform_arythmetics::minor_peak2);
-//      oled.Set_Cursor (60, 10), oled.Write_String (buf);
+      sprintf (buf, "P1=%ld", Waveform_arythmetics::peak1);
+      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
+      oled.Set_Cursor (60, 0), oled.Write_String (buf);
+      sprintf (buf, "P2=%ld", Waveform_arythmetics::peak2);
+      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+      sprintf (buf, "mp2=%ld", Waveform_arythmetics::minor_peak2);
+      oled.Set_Cursor (60, 10), oled.Write_String (buf);
 
 
-      int edge = Waveform_arythmetics::peak1-60;
+//      int edge = Waveform_arythmetics::peak1-60;
      // printf("edge=%d; ampl=%ld \n",edge,Waveform_arythmetics::amplitude1);
-      		sprintf(buf, "ed=%d; ampl=%ld",edge,Waveform_arythmetics::amplitude1);
-      		oled.Set_Cursor(0, 0), oled.Write_String(buf);
+//      		sprintf(buf, "ed=%d; ampl=%ld",edge,Waveform_arythmetics::amplitude1);
+//      		oled.Set_Cursor(0, 0), oled.Write_String(buf);
 
-      		uint8_t aaa123[]={0xff,0x00,0xab,0xaa};//start indication or sth
-      		  HAL_UART_Transmit(u1, (uint8_t*)(aaa123), 4, 1000);
-      		  HAL_Delay(100);
-      		HAL_UART_Transmit(u1, (uint8_t*)(Waveform_arythmetics::filtered_buffer[0][0]), Waveform_arythmetics::buffer_size*2, 1000);
-      		HAL_UART_Transmit(u1, (uint8_t*)(Waveform_arythmetics::filtered_buffer[1][0]), Waveform_arythmetics::buffer_size*2, 1000);
-
-      if(edge>=0 )
-      {
-      		for (int i = 0; i < 127; i++)
+      		uint8_t aaa123[]={0xff,0x11,0xab,0xaa};//start indication or sth
+      		for(uint32_t i=0;i<Waveform_arythmetics::buffer_size;i++)
       		{
-      			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
-      					+ edge] / 40-20;
+                HAL_UART_Transmit(u1, (uint8_t*)(aaa123), 4, 1000);
+                uint8_t x[4];
+                x[0]=Waveform_arythmetics::filtered_buffer[0][i]>>8;
+                x[1]=Waveform_arythmetics::filtered_buffer[0][i]&0xff;
+                x[2]=Waveform_arythmetics::filtered_buffer[1][i]>>8;
+                x[3]=Waveform_arythmetics::filtered_buffer[1][i]&0xff;
+                HAL_UART_Transmit(u1, &x[0], 4, 1000);
+
       		}
-      		oled.Draw_Waveform(0, 63, display_buffer, 127, SSD1306::WHITE);
-      		oled.Draw_Line_V(60,0,64,SSD1306::WHITE);
       		oled.Update_Screen ();
-      }
+      		HAL_Delay(3000);
 
-
-
+//      if(edge>=0 )
+//      {
+////      		for (int i = 0; i < 127; i++)
+////      		{
+////      			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
+////      					+ edge] / 40-20;
+////      		}
+////      		oled.Draw_Waveform(0, 63, display_buffer, 127, SSD1306::WHITE);
+////      		oled.Draw_Line_V(60,0,64,SSD1306::WHITE);
+////      		oled.Update_Screen ();
+//      }
 
       Adc::Resume_DMA();
     }

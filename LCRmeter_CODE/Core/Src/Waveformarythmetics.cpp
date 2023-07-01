@@ -299,7 +299,7 @@ void Waveform_arythmetics::Process_Signal(uint32_t *buffer, uint32_t size,
 	Calc_Amplitude();
 }
 
-uint32_t Waveform_arythmetics::Get_Edge_index(uint32_t level, bool is_rising)
+uint32_t Waveform_arythmetics::Get_Edge_index(uint32_t level, bool is_rising)//TODO fix naming of is_rising
 {
 	if (buffer_size < 1)
 	{
