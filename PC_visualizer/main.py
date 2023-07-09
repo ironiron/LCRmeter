@@ -16,6 +16,9 @@ from random import randrange
 #TODO get rid of excessive buttons for now
 #TODO separete to files
 
+#todo connect received data with plot callback or sth
+
+
 
 
 

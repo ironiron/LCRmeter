@@ -247,6 +247,11 @@ void Waveform_arythmetics::Find_Peaks(void)
 	{
 		minor_peak2=0;
 	}
+
+	if (peak1>buffer_size-buffer_size*100/boundary_ignore_percentage)
+	{
+	    peak1=0;
+	}
 }
 
 void Waveform_arythmetics::Calc_Alfa(void)

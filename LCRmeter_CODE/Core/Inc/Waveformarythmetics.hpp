@@ -48,6 +48,8 @@ class Waveform_arythmetics
 private:
   //size of buffer used for conditioning
   static const uint32_t max_buffer_size=2000;
+  /// Will ignore data on buffer boundaries to avoid processing not reliable data.
+  static const uint_least8_t boundary_ignore_percentage=5;
 
 public:
   ///length of time of 1 point in buffer in microseconds

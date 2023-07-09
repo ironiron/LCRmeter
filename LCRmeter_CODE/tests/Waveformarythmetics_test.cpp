@@ -181,6 +181,44 @@ TEST_CASE( "Finds several peaks with different amplitude")
 
 }
 
+TEST_CASE( "Finds one peak and ignore boundary peaks")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=5;
+
+
+  Waveform_arythmetics::filtered_buffer[0][0]=10;//Ignore 3 first
+  Waveform_arythmetics::filtered_buffer[0][1]=9;//
+  Waveform_arythmetics::filtered_buffer[0][2]=8;//
+  Waveform_arythmetics::filtered_buffer[0][3]=2;
+  Waveform_arythmetics::filtered_buffer[0][4]=4;
+  Waveform_arythmetics::filtered_buffer[0][5]=8;//OK
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=7;//
+  Waveform_arythmetics::filtered_buffer[0][8]=8;
+  Waveform_arythmetics::filtered_buffer[0][9]=8;
+
+  Waveform_arythmetics::filtered_buffer[1][0]=0;
+  Waveform_arythmetics::filtered_buffer[1][1]=9;//ignore
+  Waveform_arythmetics::filtered_buffer[1][2]=4;
+  Waveform_arythmetics::filtered_buffer[1][3]=2;
+  Waveform_arythmetics::filtered_buffer[1][4]=6;
+  Waveform_arythmetics::filtered_buffer[1][5]=7;
+  Waveform_arythmetics::filtered_buffer[1][6]=10;// OK
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=2;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::peak1==5);
+  REQUIRE_FALSE(Waveform_arythmetics::minor_peak1==7);
+  REQUIRE(Waveform_arythmetics::peak2==6);
+  REQUIRE_FALSE(Waveform_arythmetics::minor_peak2==6);
+
+}
+
 TEST_CASE( "Find center of peak")
 {
   Waveform_arythmetics::buffer_size=10;
