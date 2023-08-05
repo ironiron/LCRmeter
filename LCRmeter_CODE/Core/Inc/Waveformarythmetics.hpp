@@ -51,13 +51,16 @@ private:
   /// Will ignore data on buffer boundaries to avoid processing not reliable data.
   static const uint_least8_t boundary_ignore_percentage=5;
 
+  static const uint8_t nbr_of_signals=2;
+  static const uint8_t max_peaks=10;
+
 public:
   ///length of time of 1 point in buffer in microseconds
   static uint32_t user_point_time;
   ///length of time of 1 point in buffer after averaging in microseconds
   static uint32_t point_time;
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,
-  static uint16_t filtered_buffer[2][max_buffer_size];
+  static uint16_t filtered_buffer[nbr_of_signals][max_buffer_size];
 
   //outputs
   ///size of filtered buffer ( after averaging it is smaller than original one).
@@ -66,13 +69,22 @@ public:
   static uint32_t peak1;
   ///max value in ADC2
   static uint32_t peak2;
+
+  static uint32_t peaks[nbr_of_signals][max_peaks];
+  static uint32_t minimas[nbr_of_signals][max_peaks];
+
+  static uint_fast16_t hysteresis_samples;//thounsds parts.
+
+  static uint32_t nbr_of_peaks[nbr_of_signals] ;
+  static uint32_t nbr_of_minimas[nbr_of_signals]  ;
+
   ///phase swift with resolution of 0.001 degrees
   static int32_t alfa; //TODO alfa is with resolution 330 or sth? why
   ///frequency  with resolution of 1 Hz
   static uint32_t frequency;
-  /// 2nd max value in ADC1
+  /// 2nd max value in ADC1 0 if not found
   static uint32_t minor_peak1;
-  /// 2nd max value in ADC2
+  /// 2nd max value in ADC2 0 if not found
   static uint32_t minor_peak2;
   /// value of the 0 point of input sine
   static uint32_t mid_voltage;
@@ -85,10 +97,10 @@ public:
   /**@brief filtering data by moving mean
    * @param buffer pointer to array made of readings of ADC Data register
    * @param size of array
-   * @param step of moving mean
+   * @param step of moving mean, if 0 function does nothing
    */
   static void Calc_Moving_Average (uint32_t *buffer, uint32_t size,
-				   uint32_t step);
+				   uint8_t step);
 
   /**@brief Finds 2 maximum peaks from filtered_buffer and stores them in peakx and minor_peakx
    * @note if minor_peakX=0 and and peakX !=0 means only one peak has been found
