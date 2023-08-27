@@ -325,20 +325,143 @@ void Waveform_arythmetics::Find_Peaks(void)
     }
 }
 
-void Waveform_arythmetics::Calc_Alfa(void)
+bool Waveform_arythmetics::Get_Indexes(uint32_t *first, uint32_t *second)
 {
-    if (abs(int32_t(peak2 - peak1)) < abs(int32_t(peak2 - minor_peak1)))
+    bool one_side=false;
+
+    if(nbr_of_peaks[0]>1 )
     {
-        alfa = int32_t(
-                (int32_t(peak2) - int32_t(peak1)) * int32_t(point_time)
-                        * int32_t(frequency) * 360 / 1000);
+        *first=peaks[0][0];
+        *second=peaks[0][1];
+        one_side=true;
+    }
+    else if (nbr_of_minimas[0]>1)
+    {
+        *first=minimas[0][0];
+        *second=minimas[0][1];
+        one_side=true;
+    }
+    else if (nbr_of_minimas[0]>0 && nbr_of_peaks[0]>0)
+    {
+        one_side=false;
+        if(peaks[0][0]>minimas[0][0])
+        {
+           *first=minimas[0][0];
+            *second=peaks[0][0];
+        }
+        else
+        {
+            *first=peaks[0][0];
+            *second=minimas[0][0];
+        }
     }
     else
     {
-        alfa = int32_t(
-                (int32_t(peak2) - int32_t(minor_peak1)) * int32_t(point_time)
-                        * int32_t(frequency) * 360 / 1000);
+        first=NULL;
+        second=NULL;
     }
+    return one_side;
+}
+
+void Waveform_arythmetics::Calc_Frequency(void)
+{
+    uint32_t i1=0;
+    uint32_t i2=0;
+    auto one_side=Get_Indexes(&i1,&i2);
+
+    if(i1 != 0 && i2 !=0)
+    {
+        if(one_side==true)
+        {
+            frequency=1000000/(i2-i1)/point_time;
+        }
+        else
+        {
+            frequency=1000000/(i2-i1)/point_time/2;
+        }
+    }
+    else
+    {
+        frequency=0;
+    }
+//    if(nbr_of_peaks[0]>1 )
+//    {
+//        frequency=1000000/(peaks[0][1]-peaks[0][0])/point_time;
+//    }
+//    else if (nbr_of_minimas[0]>1)
+//    {
+//        frequency=1000000/(minimas[0][1]-minimas[0][0])/point_time;
+//    }
+//    else if (nbr_of_minimas[0]>0 && nbr_of_peaks[0]>0)
+//    {
+//        if(peaks[0][0]>minimas[0][0])
+//        {
+//            frequency=1000000/(peaks[0][0]-minimas[0][0])/point_time/2;//because half of period
+//        }
+//        else
+//        {
+//            frequency=1000000/(minimas[0][0]-peaks[0][0])/point_time/2;//because half of period
+//        }
+//    }
+//    else
+//    {
+//        frequency=0;
+//    }
+
+}
+
+void Waveform_arythmetics::Calc_Alfa(void)
+{
+    uint32_t i1=0;
+    uint32_t i2=0;
+    auto one_side=Get_Indexes(&i1,&i2);
+
+    bool above1,above2;
+
+    if (nbr_of_peaks[0]>0)
+    {
+       i1=peaks[0][0];
+       above1=true;
+    }
+    else if (nbr_of_minimas[0]>0)
+    {
+       i1=peaks[0][0];
+       above1=false;
+    }
+    else
+    {
+        alfa=0xffffffff;
+        return;
+    }
+
+    if (nbr_of_peaks[1]>0)
+    {
+       i2=peaks[1][0];
+       above2=true;
+    }
+    else if (nbr_of_minimas[1]>0)
+    {
+       i2=peaks[1][0];
+       above2=false;
+    }
+    else
+    {
+        alfa=0xffffffff;
+        return;
+    }
+
+    int32_t diff=abs(int32_t (i1-i2));
+    if(diff>frequency*1000000/point_time/2)
+    {
+        diff=-diff;
+    }
+    if(above1!=above2) //one side no matter upper or lower TODO check name
+    {
+            diff*=2;
+    }
+
+        alfa = int32_t(diff) * int32_t(point_time)* int32_t(frequency) * 360 / 1000;
+
 }
 
 void Waveform_arythmetics::Calc_Amplitude(void)

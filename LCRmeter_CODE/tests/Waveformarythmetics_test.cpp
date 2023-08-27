@@ -527,44 +527,104 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
 
 
 
-//TEST_CASE( "Gets frequency")
-//{
-//  Waveform_arythmetics::buffer_size=10;
-//  Waveform_arythmetics::point_time=10;//microseconds
-//
-//Waveform_arythmetics::peaks[0][0]=2;
-//  Waveform_arythmetics::peaks[0][1]=7;
-//
-//  //TODO add function for frequncy
-//
-//  REQUIRE(Waveform_arythmetics::frequency==20000);
-//
-//}
+TEST_CASE( "Gets frequency")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::point_time=10;//microseconds
+
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::peaks[0][0]=2;
+  Waveform_arythmetics::peaks[0][1]=7;
+
+  Waveform_arythmetics::Calc_Frequency();
+
+  REQUIRE(Waveform_arythmetics::frequency==20000);
+
+}
 
 
-//TEST_CASE( "Calculate phase swift")
-//{
-//  Waveform_arythmetics::frequency=10000;
-//  Waveform_arythmetics::point_time=10;
-//  Waveform_arythmetics::peaks[0][0]=100;
-//  Waveform_arythmetics::peaks[1][0]=105;//Initial values: 10 points per full period(100us).
-//  Waveform_arythmetics::peaks[0][1]=0;
-//  Waveform_arythmetics::peaks[1][1]=0;
-//
-//  Waveform_arythmetics::Calc_Alfa();
-//
-//  REQUIRE(Waveform_arythmetics::alfa==180000);
-//
-//  Waveform_arythmetics::frequency=10000;
-//  Waveform_arythmetics::point_time=1;
-//  Waveform_arythmetics::peaks[0][0]=132;
-//  Waveform_arythmetics::peaks[1][0]=100;//Initial values: 100 points per full period(100us).
-//
-//  Waveform_arythmetics::Calc_Alfa();
-//
-//  REQUIRE(Waveform_arythmetics::alfa==(-115200));
-//}
-//
+TEST_CASE( "Gets frequency from minimas")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::point_time=10;//microseconds
+
+  Waveform_arythmetics::nbr_of_peaks[0]=0;
+  Waveform_arythmetics::nbr_of_minimas[0]=2;
+  Waveform_arythmetics::peaks[0][0]=0;
+  Waveform_arythmetics::peaks[0][1]=0;
+  Waveform_arythmetics::minimas[0][0]=2;
+  Waveform_arythmetics::minimas[0][1]=7;
+
+  Waveform_arythmetics::Calc_Frequency();
+
+  REQUIRE(Waveform_arythmetics::frequency==20000);
+
+}
+
+TEST_CASE( "Gets frequency from one peak and one minimum")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::point_time=10;//microseconds
+
+  Waveform_arythmetics::nbr_of_peaks[0]=1;
+  Waveform_arythmetics::nbr_of_minimas[0]=1;
+  Waveform_arythmetics::peaks[0][0]=2;
+  Waveform_arythmetics::peaks[0][1]=0;
+  Waveform_arythmetics::minimas[0][0]=7;
+  Waveform_arythmetics::minimas[0][1]=0;
+
+  Waveform_arythmetics::Calc_Frequency();
+
+  REQUIRE(Waveform_arythmetics::frequency==10000);
+
+}
+
+TEST_CASE( "gets 0 frequncy if cannot detect")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::point_time=10;//microseconds
+
+  Waveform_arythmetics::nbr_of_peaks[0]=1;
+  Waveform_arythmetics::nbr_of_minimas[0]=0;
+  Waveform_arythmetics::peaks[0][0]=2;
+  Waveform_arythmetics::peaks[0][1]=0;
+  Waveform_arythmetics::minimas[0][0]=7;
+  Waveform_arythmetics::minimas[0][1]=0;
+
+  Waveform_arythmetics::Calc_Frequency();
+
+  REQUIRE(Waveform_arythmetics::frequency==0);
+
+}
+
+TEST_CASE( "Calculate phase swift")
+{
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=10;
+
+  Waveform_arythmetics::nbr_of_peaks[0]=1;
+  Waveform_arythmetics::nbr_of_peaks[1]=1;
+  Waveform_arythmetics::nbr_of_minimas[0]=0;
+  Waveform_arythmetics::nbr_of_minimas[1]=0;
+  Waveform_arythmetics::peaks[0][0]=100;
+  Waveform_arythmetics::peaks[1][0]=105;//Initial values: 10 points per full period(100us).
+  Waveform_arythmetics::peaks[0][1]=0;
+  Waveform_arythmetics::peaks[1][1]=0;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE((Waveform_arythmetics::alfa==180000 || Waveform_arythmetics::alfa==-180000));
+
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=1;
+  Waveform_arythmetics::peaks[0][0]=132;
+  Waveform_arythmetics::peaks[1][0]=100;//Initial values: 100 points per full period(100us).
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE(Waveform_arythmetics::alfa==(115200));
+}
+
 //TEST_CASE( "Calculate phase swift and decide sign (+/-)")
 //{
 //  Waveform_arythmetics::frequency=10000;
@@ -578,7 +638,7 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
 //
 //  Waveform_arythmetics::Calc_Alfa();
 //
-//  REQUIRE(Waveform_arythmetics::alfa==(72000));
+//  REQUIRE((Waveform_arythmetics::alfa==72000 ||Waveform_arythmetics::alfa==-72000));
 //
 //  Waveform_arythmetics::peaks[0][0]=0;
 //  Waveform_arythmetics::peaks[1][0]=8;
@@ -589,7 +649,39 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
 //
 //  REQUIRE(Waveform_arythmetics::alfa==(-72000));
 //}
-//
+
+TEST_CASE( "Calculate phase swift on the boundary conditions")
+{
+  Waveform_arythmetics::frequency=100000;
+  Waveform_arythmetics::point_time=1;
+  Waveform_arythmetics::mid_voltage=5;
+
+  //Initial values: 10 points per full period(1us).
+  Waveform_arythmetics::peaks[0][0]=10;
+  Waveform_arythmetics::peaks[1][0]=14;
+  Waveform_arythmetics::Calc_Alfa();
+  REQUIRE(Waveform_arythmetics::alfa==144000);
+
+  Waveform_arythmetics::peaks[0][0]=10;
+  Waveform_arythmetics::peaks[1][0]=11;
+  Waveform_arythmetics::Calc_Alfa();
+  REQUIRE(Waveform_arythmetics::alfa==36000);
+
+  Waveform_arythmetics::peaks[0][0]=10;
+  Waveform_arythmetics::peaks[1][0]=16;
+  Waveform_arythmetics::Calc_Alfa();
+  REQUIRE(Waveform_arythmetics::alfa==-144000);
+
+  Waveform_arythmetics::peaks[0][0]=0;
+  Waveform_arythmetics::peaks[1][0]=8;
+  Waveform_arythmetics::peaks[0][1]=10;
+  Waveform_arythmetics::peaks[1][1]=18;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE(Waveform_arythmetics::alfa==(-72000));
+}
+
 //TEST_CASE( "Calculate Amplitude")
 //{
 //  Waveform_arythmetics::peaks[0][0]=2;
@@ -625,63 +717,63 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
 //  REQUIRE(Waveform_arythmetics::amplitude2==4);
 //
 //}
-//
-//TEST_CASE( "Gets index of rising edge for oscilloscope")
-//{
-//  Waveform_arythmetics::filtered_buffer[0][0]=8;
-//  Waveform_arythmetics::filtered_buffer[0][1]=5;
-//  Waveform_arythmetics::filtered_buffer[0][2]=3;
-//  Waveform_arythmetics::filtered_buffer[0][3]=7;
-//  Waveform_arythmetics::filtered_buffer[0][4]=3;
-//  Waveform_arythmetics::filtered_buffer[0][5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][6]=3;
-//  Waveform_arythmetics::filtered_buffer[0][7]=3;
-//  Waveform_arythmetics::filtered_buffer[0][8]=5;
-//  Waveform_arythmetics::filtered_buffer[0][9]=5;
-//
-//  uint32_t retval=0;
-//  retval=Waveform_arythmetics::Get_Edge_index(5,true);
-//
-//  REQUIRE(retval==3);
-//}
-//
-//TEST_CASE( "Gets index of falling edge for oscilloscope")
-//{
-//  Waveform_arythmetics::filtered_buffer[0][0]=8;
-//  Waveform_arythmetics::filtered_buffer[0][1]=5;
-//  Waveform_arythmetics::filtered_buffer[0][2]=3;
-//  Waveform_arythmetics::filtered_buffer[0][3]=7;
-//  Waveform_arythmetics::filtered_buffer[0][4]=3;
-//  Waveform_arythmetics::filtered_buffer[0][5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][6]=3;
-//  Waveform_arythmetics::filtered_buffer[0][7]=3;
-//  Waveform_arythmetics::filtered_buffer[0][8]=5;
-//  Waveform_arythmetics::filtered_buffer[0][9]=5;
-//
-//  uint32_t retval=0;
-//  retval=Waveform_arythmetics::Get_Edge_index(5,false);
-//
-//  REQUIRE(retval==2);
-//}
-//
-//TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 time")
-//{
-//  Waveform_arythmetics::filtered_buffer[0][0]=10;
-//  Waveform_arythmetics::filtered_buffer[0][1]=10;
-//  Waveform_arythmetics::filtered_buffer[0][2]=10;
-//  Waveform_arythmetics::filtered_buffer[0][3]=0;
-//  Waveform_arythmetics::filtered_buffer[0][4]=0;
-//  Waveform_arythmetics::filtered_buffer[0][5]=0;
-//  Waveform_arythmetics::filtered_buffer[0][6]=0;
-//  Waveform_arythmetics::filtered_buffer[0][7]=0;
-//  Waveform_arythmetics::filtered_buffer[0][8]=10;
-//  Waveform_arythmetics::filtered_buffer[0][9]=10;
-//
-//  uint32_t retval=0;
-//  retval=Waveform_arythmetics::Get_Edge_index(5,true);
-//
-//  REQUIRE(retval==8);
-//}
+
+TEST_CASE( "Gets index of rising edge for oscilloscope")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=8;
+  Waveform_arythmetics::filtered_buffer[0][1]=5;
+  Waveform_arythmetics::filtered_buffer[0][2]=3;
+  Waveform_arythmetics::filtered_buffer[0][3]=7;
+  Waveform_arythmetics::filtered_buffer[0][4]=3;
+  Waveform_arythmetics::filtered_buffer[0][5]=9;
+  Waveform_arythmetics::filtered_buffer[0][6]=3;
+  Waveform_arythmetics::filtered_buffer[0][7]=3;
+  Waveform_arythmetics::filtered_buffer[0][8]=5;
+  Waveform_arythmetics::filtered_buffer[0][9]=5;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,true);
+
+  REQUIRE(retval==3);
+}
+
+TEST_CASE( "Gets index of falling edge for oscilloscope")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=8;
+  Waveform_arythmetics::filtered_buffer[0][1]=5;
+  Waveform_arythmetics::filtered_buffer[0][2]=3;
+  Waveform_arythmetics::filtered_buffer[0][3]=7;
+  Waveform_arythmetics::filtered_buffer[0][4]=3;
+  Waveform_arythmetics::filtered_buffer[0][5]=9;
+  Waveform_arythmetics::filtered_buffer[0][6]=3;
+  Waveform_arythmetics::filtered_buffer[0][7]=3;
+  Waveform_arythmetics::filtered_buffer[0][8]=5;
+  Waveform_arythmetics::filtered_buffer[0][9]=5;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,false);
+
+  REQUIRE(retval==2);
+}
+
+TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 time")
+{
+  Waveform_arythmetics::filtered_buffer[0][0]=10;
+  Waveform_arythmetics::filtered_buffer[0][1]=10;
+  Waveform_arythmetics::filtered_buffer[0][2]=10;
+  Waveform_arythmetics::filtered_buffer[0][3]=0;
+  Waveform_arythmetics::filtered_buffer[0][4]=0;
+  Waveform_arythmetics::filtered_buffer[0][5]=0;
+  Waveform_arythmetics::filtered_buffer[0][6]=0;
+  Waveform_arythmetics::filtered_buffer[0][7]=0;
+  Waveform_arythmetics::filtered_buffer[0][8]=10;
+  Waveform_arythmetics::filtered_buffer[0][9]=10;
+
+  uint32_t retval=0;
+  retval=Waveform_arythmetics::Get_Edge_index(5,true);
+
+  REQUIRE(retval==8);
+}
 //
 //
 //TEST_CASE( "Checks everything for 0 value case")

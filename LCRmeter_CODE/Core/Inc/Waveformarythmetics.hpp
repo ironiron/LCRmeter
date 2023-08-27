@@ -102,10 +102,16 @@ public:
   static void Calc_Moving_Average (uint32_t *buffer, uint32_t size,
 				   uint8_t step);
 
+  static bool Get_Indexes(uint32_t *first, uint32_t *second);
+
   /**@brief Finds 2 maximum peaks from filtered_buffer and stores them in peakx and minor_peakx
    * @note if minor_peakX=0 and and peakX !=0 means only one peak has been found
    */
   static void Find_Peaks (void);
+
+  /** Calculates frequency based on #peaks, #minimas
+     */
+  static void Calc_Frequency(void);
 
   /** Calculates phase swift based on #peak1, #peak2, #frequency and #point_time variables
    */
