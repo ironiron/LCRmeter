@@ -34,6 +34,7 @@
  * - call functions:
  * 	- #Calc_Moving_Average
  * 	- #Find_Peaks
+ * 	- #Calc_Frequency
  * 	- #Calc_Alfa
  * 	- #Calc_Amplitude
  *

@@ -625,30 +625,30 @@ TEST_CASE( "Calculate phase swift")
   REQUIRE(Waveform_arythmetics::alfa==(115200));
 }
 
-//TEST_CASE( "Calculate phase swift and decide sign (+/-)")
-//{
-//  Waveform_arythmetics::frequency=10000;
-//  Waveform_arythmetics::point_time=10;
-//  Waveform_arythmetics::mid_voltage=5;
-//
-//  Waveform_arythmetics::peaks[0][0]=0;
-//  Waveform_arythmetics::peaks[1][0]=2;
-//  Waveform_arythmetics::peaks[0][1]=10;
-//  Waveform_arythmetics::peaks[1][1]=12;
-//
-//  Waveform_arythmetics::Calc_Alfa();
-//
-//  REQUIRE((Waveform_arythmetics::alfa==72000 ||Waveform_arythmetics::alfa==-72000));
-//
-//  Waveform_arythmetics::peaks[0][0]=0;
-//  Waveform_arythmetics::peaks[1][0]=8;
-//  Waveform_arythmetics::peaks[0][1]=10;
-//  Waveform_arythmetics::peaks[1][1]=18;
-//
-//  Waveform_arythmetics::Calc_Alfa();
-//
-//  REQUIRE(Waveform_arythmetics::alfa==(-72000));
-//}
+TEST_CASE( "Calculate phase swift and decide sign (+/-)")
+{
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=10;
+  Waveform_arythmetics::mid_voltage=5;
+
+  Waveform_arythmetics::peaks[0][0]=0;
+  Waveform_arythmetics::peaks[1][0]=2;
+  Waveform_arythmetics::peaks[0][1]=10;
+  Waveform_arythmetics::peaks[1][1]=12;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE((Waveform_arythmetics::alfa==72000 ||Waveform_arythmetics::alfa==-72000));
+
+  Waveform_arythmetics::peaks[0][0]=0;
+  Waveform_arythmetics::peaks[1][0]=8;
+  Waveform_arythmetics::peaks[0][1]=10;
+  Waveform_arythmetics::peaks[1][1]=18;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  REQUIRE(Waveform_arythmetics::alfa==(-72000));
+}
 
 TEST_CASE( "Calculate phase swift on the boundary conditions")
 {
@@ -682,41 +682,26 @@ TEST_CASE( "Calculate phase swift on the boundary conditions")
   REQUIRE(Waveform_arythmetics::alfa==(-72000));
 }
 
-//TEST_CASE( "Calculate Amplitude")
-//{
-//  Waveform_arythmetics::peaks[0][0]=2;
-//  Waveform_arythmetics::peaks[0][1]=7;
-//  Waveform_arythmetics::peaks[1][0]=1;
-//  Waveform_arythmetics::peaks[1][1]=6;
-//
-//  Waveform_arythmetics::filtered_buffer[0][0]=0;
-//  Waveform_arythmetics::filtered_buffer[0][1]=2;
-//  Waveform_arythmetics::filtered_buffer[0][2]=8;//
-//  Waveform_arythmetics::filtered_buffer[0][3]=2;
-//  Waveform_arythmetics::filtered_buffer[0][4]=4;
-//  Waveform_arythmetics::filtered_buffer[0][5]=4;
-//  Waveform_arythmetics::filtered_buffer[0][6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][7]=8;//
-//  Waveform_arythmetics::filtered_buffer[0][8]=2;
-//  Waveform_arythmetics::filtered_buffer[0][9]=4;
-//
-//  Waveform_arythmetics::filtered_buffer[1][0]=0;
-//  Waveform_arythmetics::filtered_buffer[1][1]=10;//
-//  Waveform_arythmetics::filtered_buffer[1][2]=4;
-//  Waveform_arythmetics::filtered_buffer[1][3]=2;
-//  Waveform_arythmetics::filtered_buffer[1][4]=6;
-//  Waveform_arythmetics::filtered_buffer[1][5]=7;
-//  Waveform_arythmetics::filtered_buffer[1][6]=10;//
-//  Waveform_arythmetics::filtered_buffer[1][7]=1;
-//  Waveform_arythmetics::filtered_buffer[1][8]=2;
-//  Waveform_arythmetics::filtered_buffer[1][9]=0;
-//
-//  Waveform_arythmetics::Calc_Amplitude();
-//
-//  REQUIRE(Waveform_arythmetics::amplitude1==3);
-//  REQUIRE(Waveform_arythmetics::amplitude2==4);
-//
-//}
+TEST_CASE( "Calculate Amplitude from 2 peaks")
+{
+  Waveform_arythmetics::peaks[0][0]=2;
+  Waveform_arythmetics::peaks[1][0]=8;
+  Waveform_arythmetics::minimas[0][0]=5;
+  Waveform_arythmetics::minimas[1][0]=4;
+
+  Waveform_arythmetics::filtered_buffer[0][2]=8;
+  Waveform_arythmetics::filtered_buffer[0][5]=2;
+
+  Waveform_arythmetics::filtered_buffer[1][4]=1;//
+  Waveform_arythmetics::filtered_buffer[1][8]=6;//
+
+  Waveform_arythmetics::Calc_Amplitude();
+
+  REQUIRE(Waveform_arythmetics::amplitude1==3);
+  REQUIRE(Waveform_arythmetics::amplitude2==2);
+}
+
+//TODO test case with real values or at least with feasible imaginary and check if inductance etc is OK
 
 TEST_CASE( "Gets index of rising edge for oscilloscope")
 {

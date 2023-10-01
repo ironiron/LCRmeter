@@ -392,6 +392,7 @@ int main(void)
       Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
 						 Adc::size_of_adc_buffer, 3); //TODO with 1 it's to chaotic can proccessing be improved?
       Waveform_arythmetics::Find_Peaks ();
+      Waveform_arythmetics::Calc_Frequency();
       Waveform_arythmetics::Calc_Alfa ();
       Waveform_arythmetics::Calc_Amplitude ();
 
@@ -407,26 +408,33 @@ int main(void)
 //      sprintf (buf, "res=%1.9f", LCR_math::resistance);
 //      oled.Set_Cursor (0, 20), oled.Write_String (buf);
 //
-//      sprintf (buf, "a1=%ld", Waveform_arythmetics::amplitude1);
-//      oled.Set_Cursor (0, 30), oled.Write_String (buf);
-//      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
-//      oled.Set_Cursor (60, 30), oled.Write_String (buf);
-//      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
-//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
-//      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
-//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
+      sprintf (buf, "a1=%ld", Waveform_arythmetics::amplitude1);
+      oled.Set_Cursor (0, 30), oled.Write_String (buf);
+      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
+      oled.Set_Cursor (60, 30), oled.Write_String (buf);
+      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
+      oled.Set_Cursor (0, 40), oled.Write_String (buf);
+      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
+      oled.Set_Cursor (60, 40), oled.Write_String (buf);
 //
 //      sprintf (buf, "V1p=%ld", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
 //      oled.Set_Cursor (60, 50), oled.Write_String (buf);
 //
-      sprintf (buf, "P1=%ld", Waveform_arythmetics::peak1);
-      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
-      oled.Set_Cursor (60, 0), oled.Write_String (buf);
-      sprintf (buf, "P2=%ld", Waveform_arythmetics::peak2);
-      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-      sprintf (buf, "mp2=%ld", Waveform_arythmetics::minor_peak2);
-      oled.Set_Cursor (60, 10), oled.Write_String (buf);
+//      sprintf (buf, "P1=%ld", Waveform_arythmetics::peak1);
+//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
+//      sprintf (buf, "mp1=%ld", Waveform_arythmetics::minor_peak1);
+//      oled.Set_Cursor (60, 0), oled.Write_String (buf);
+//      sprintf (buf, "P2=%ld", Waveform_arythmetics::peak2);
+//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
+//      sprintf (buf, "mp2=%ld", Waveform_arythmetics::minor_peak2);
+//      oled.Set_Cursor (60, 10), oled.Write_String (buf);
+
+            sprintf (buf, "min=%d", Waveform_arythmetics::nbr_of_minimas[0]);
+            oled.Set_Cursor (0, 0), oled.Write_String (buf);
+            sprintf (buf, "max=%d",  Waveform_arythmetics::nbr_of_peaks[0]);
+            oled.Set_Cursor (0, 10), oled.Write_String (buf);
+            sprintf (buf, "ind=%d", Waveform_arythmetics::minimas[0][0]);
+            oled.Set_Cursor (0, 20), oled.Write_String (buf);
 
 
 //      int edge = Waveform_arythmetics::peak1-60;
@@ -443,6 +451,26 @@ int main(void)
                 x[1]=Waveform_arythmetics::filtered_buffer[0][i]&0xff;
                 x[2]=Waveform_arythmetics::filtered_buffer[1][i]>>8;
                 x[3]=Waveform_arythmetics::filtered_buffer[1][i]&0xff;
+//                if(i==Waveform_arythmetics::peaks[0][0] && i!=0)
+//                {
+//                    x[0]=0x0f;
+//                    x[1]=0x8f;
+//                }
+//                if(i==Waveform_arythmetics::minimas[0][0] && i!=0)
+//                {
+//                    x[0]=0;
+//                    x[1]=5;
+//                }
+//                if(i==Waveform_arythmetics::peaks[1][0] && i!=0)
+//                {
+//                    x[2]=0x0f;
+//                    x[3]=0x8f;
+//                }
+//                if(i==Waveform_arythmetics::minimas[1][0] && i!=0)
+//                {
+//                    x[2]=0;
+//                    x[3]=5;
+//                }
                 HAL_UART_Transmit(u1, &x[0], 4, 1000);
 
       		}
