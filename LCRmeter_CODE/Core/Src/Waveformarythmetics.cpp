@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <algorithm>
 
-
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
 { 0 };
 uint32_t Waveform_arythmetics::buffer_size = 0;
@@ -266,28 +265,41 @@ void Waveform_arythmetics::Find_Peaks(void)
         //////////////////////////////////////////////////////////////////////
         for (unsigned int i = 0; i < nbr_of_peaks[signal]; i++)
         {
-            uint32_t i1 = peaks[signal][i];
-            uint32_t i2 = peaks[signal][i];
-            for (; filtered_buffer[signal][i1] == filtered_buffer[signal][i2];
-                    i2++)
+            uint32_t i1 = peaks[signal][i];        //beginning index
+            uint32_t i2 = peaks[signal][i];        //end index after loop
+            uint32_t temp_mid = i1;
+            for (; i2 <= temp_mid + hysteresis_samples; i2++)
             {
+                if (filtered_buffer[signal][i2] == filtered_buffer[signal][i1])
+                {
+                    temp_mid = i2;
+                }
+
             }
-            peaks[signal][i] = ((i2 - i1 - 1) / 2) + i1;
+            i2 = temp_mid;
+            peaks[signal][i] = ((i2 - i1) / 2) + i1;
         }
 
         for (unsigned int i = 0; i < nbr_of_minimas[signal]; i++)
         {
-            uint32_t i1 = minimas[signal][i];
-            uint32_t i2 = minimas[signal][i];
-            for (; filtered_buffer[signal][i1] == filtered_buffer[signal][i2];
-                    i2++)
+            uint32_t i1 = minimas[signal][i];        //beginning index
+            uint32_t i2 = minimas[signal][i];        //end index after loop
+            uint32_t temp_mid = i1;
+            for (; i2 <= temp_mid + hysteresis_samples; i2++)
             {
+                if (filtered_buffer[signal][i2] == filtered_buffer[signal][i1])
+                {
+                    temp_mid = i2;
+                }
+
             }
-            minimas[signal][i] = ((i2 - i1 - 1) / 2) + i1;
+            i2 = temp_mid;
+            minimas[signal][i] = ((i2 - i1) / 2) + i1;
         }
         //////////////////////////////////////////////////////////////////////
         //Handling boundary conditions so that peaks and minimas are ignored
         //////////////////////////////////////////////////////////////////////
+        // beginning of the buffer hysteresis
         if (peaks[signal][0] <= hysteresis_samples && nbr_of_peaks[signal] != 0)
         {
             for (unsigned int i = 0; i < nbr_of_peaks[signal] - 1; i++)
@@ -296,6 +308,7 @@ void Waveform_arythmetics::Find_Peaks(void)
             }
             nbr_of_peaks[signal]--;
         }
+        // end of buffer hysteresis
         if (nbr_of_peaks[signal] != 0
                 && peaks[signal][nbr_of_peaks[signal] - 1]
                         >= buffer_size - hysteresis_samples)
@@ -303,6 +316,7 @@ void Waveform_arythmetics::Find_Peaks(void)
             nbr_of_peaks[signal]--;
         }
 
+        // same as above but with minimas
         if (minimas[signal][0] <= hysteresis_samples
                 && nbr_of_minimas[signal] != 0)
         {

@@ -16,6 +16,7 @@
 #include <testing.hpp>
 #include <stdint.h>
 #include "sine.hpp"
+#include "real_data.hpp"
 
 
 TEST_CASE( "calculating moving mean")
@@ -525,7 +526,128 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
   REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==0);
 }
 
+//TODO check peak not clear - eg. 10-11-10-11-11-9-8-7...
 
+TEST_CASE( "detect unstable peaks")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::hysteresis_samples=2;
+
+  Waveform_arythmetics::filtered_buffer[0][0]=0;
+  Waveform_arythmetics::filtered_buffer[0][1]=6;
+  Waveform_arythmetics::filtered_buffer[0][2]=6;
+  Waveform_arythmetics::filtered_buffer[0][3]=8;
+  Waveform_arythmetics::filtered_buffer[0][4]=7;//here
+  Waveform_arythmetics::filtered_buffer[0][5]=8;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=2;
+  Waveform_arythmetics::filtered_buffer[0][8]=2;
+  Waveform_arythmetics::filtered_buffer[0][9]=2;
+
+  Waveform_arythmetics::filtered_buffer[1][0]=4;
+  Waveform_arythmetics::filtered_buffer[1][1]=6;
+  Waveform_arythmetics::filtered_buffer[1][2]=6;
+  Waveform_arythmetics::filtered_buffer[1][3]=8;
+  Waveform_arythmetics::filtered_buffer[1][4]=7;
+  Waveform_arythmetics::filtered_buffer[1][5]=8;//here
+  Waveform_arythmetics::filtered_buffer[1][6]=7;
+  Waveform_arythmetics::filtered_buffer[1][7]=8;
+  Waveform_arythmetics::filtered_buffer[1][8]=0;
+  Waveform_arythmetics::filtered_buffer[1][9]=0;
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::nbr_of_peaks[0]==1);
+  REQUIRE(Waveform_arythmetics::nbr_of_peaks[1]==1);
+  REQUIRE(Waveform_arythmetics::peaks[0][0]==4);
+  REQUIRE(Waveform_arythmetics::peaks[1][0]==5);
+}
+
+TEST_CASE( "detect unstable minimas")
+{
+  Waveform_arythmetics::buffer_size=10;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::hysteresis_samples=2;
+
+  Waveform_arythmetics::filtered_buffer[0][0]=10;
+  Waveform_arythmetics::filtered_buffer[0][1]=4;
+  Waveform_arythmetics::filtered_buffer[0][2]=4;
+  Waveform_arythmetics::filtered_buffer[0][3]=1;
+  Waveform_arythmetics::filtered_buffer[0][4]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][5]=1;
+  Waveform_arythmetics::filtered_buffer[0][6]=6;
+  Waveform_arythmetics::filtered_buffer[0][7]=6;
+  Waveform_arythmetics::filtered_buffer[0][8]=6;
+  Waveform_arythmetics::filtered_buffer[0][9]=6;
+
+  Waveform_arythmetics::filtered_buffer[1][0]=6;
+  Waveform_arythmetics::filtered_buffer[1][1]=4;
+  Waveform_arythmetics::filtered_buffer[1][2]=4;
+  Waveform_arythmetics::filtered_buffer[1][3]=1;
+  Waveform_arythmetics::filtered_buffer[1][4]=2;
+  Waveform_arythmetics::filtered_buffer[1][5]=1;//here
+  Waveform_arythmetics::filtered_buffer[1][6]=2;
+  Waveform_arythmetics::filtered_buffer[1][7]=1;
+  Waveform_arythmetics::filtered_buffer[1][8]=10;
+  Waveform_arythmetics::filtered_buffer[1][9]=10;
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==1);
+  REQUIRE(Waveform_arythmetics::nbr_of_minimas[1]==1);
+  REQUIRE(Waveform_arythmetics::minimas[0][0]==4);
+  REQUIRE(Waveform_arythmetics::minimas[1][0]==5);
+}
+
+TEST_CASE( "Find peak based on real data.")
+{
+  Waveform_arythmetics::buffer_size=real_data_length;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=2000;
+  Waveform_arythmetics::hysteresis_samples=10;
+
+  for (unsigned int j = 0; j < 2; j++)
+    {
+        for (unsigned int i = 0; i < real_data_length; i++)
+        {
+            Waveform_arythmetics::filtered_buffer[j][i] = real_data[i][j];
+        }
+    }
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::nbr_of_peaks[0]>0);
+  REQUIRE(Waveform_arythmetics::peaks[0][0]>=126);
+  REQUIRE(Waveform_arythmetics::peaks[0][0]<=129);
+}
+
+TEST_CASE( "Find peaks and minimas based on real data.")
+{
+  Waveform_arythmetics::buffer_size=real_data_length;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage=2000;
+  Waveform_arythmetics::hysteresis_samples=10;
+
+  for (unsigned int j = 0; j < 2; j++)
+    {
+        for (unsigned int i = 0; i < real_data_length; i++)
+        {
+            Waveform_arythmetics::filtered_buffer[j][i] = real_data[i][j];
+        }
+    }
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::nbr_of_peaks[0]==2);
+  REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==2);
+  REQUIRE(Waveform_arythmetics::peaks[0][0]==126);
+  REQUIRE(Waveform_arythmetics::peaks[0][1]==303);
+  REQUIRE(Waveform_arythmetics::minimas[0][0]==35);
+  REQUIRE(Waveform_arythmetics::minimas[0][1]==214);
+}
 
 TEST_CASE( "Gets frequency")
 {

@@ -1,0 +1,5 @@
+- 8mhz is only 1.9 kHz why, check it later
+- find some menu library online
+- oscilloscope mode - add scale or sth
+- osscilloscope add dynamic ADC frequency
+- check one oled display with 2 objects in cpp is it still working?

@@ -74,7 +74,7 @@ public:
   static uint32_t peaks[nbr_of_signals][max_peaks];
   static uint32_t minimas[nbr_of_signals][max_peaks];
 
-  static uint_fast16_t hysteresis_samples;//thounsds parts.
+  static uint_fast16_t hysteresis_samples;
 
   static uint32_t nbr_of_peaks[nbr_of_signals] ;
   static uint32_t nbr_of_minimas[nbr_of_signals]  ;

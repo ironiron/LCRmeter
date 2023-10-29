@@ -1,0 +1,3 @@
+add protection diode on VCC output
+add separate VCC input on 5v, or sth? from USB probably?, and then check if power comes from usb or batterry
+22 ohm usb resistor might be reduced to only 0r jumper

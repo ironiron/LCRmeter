@@ -30,6 +30,8 @@
  *
  * After calculating, One can read results from static class members.
  *
+ * All inputs and outputs are in SI units.
+ *
  * \note No getters nor setters provided! Make sure nothing writes data
  *  to class members.
  * \note This class is made solely for LCRmeter project!
