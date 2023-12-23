@@ -188,6 +188,8 @@ ADC_HandleTypeDef adc;
 ////}///
 ///////////
 
+//typedef reg_access<std::uint8_t, std::uint8_t, mcal::reg::portb, pdir> port_dir_type;
+
 volatile unsigned int b1=0;
 volatile unsigned int b2=0;
 volatile unsigned int b3=0;
