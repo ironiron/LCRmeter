@@ -70,23 +70,18 @@ public:
   static uint32_t peak1;
   ///max value in ADC2
   static uint32_t peak2;
-
+//TODO add comments
   static uint32_t peaks[nbr_of_signals][max_peaks];
   static uint32_t minimas[nbr_of_signals][max_peaks];
+  static uint32_t nbr_of_peaks[nbr_of_signals] ;
+  static uint32_t nbr_of_minimas[nbr_of_signals];
 
   static uint_fast16_t hysteresis_samples;
-
-  static uint32_t nbr_of_peaks[nbr_of_signals] ;
-  static uint32_t nbr_of_minimas[nbr_of_signals]  ;
 
   ///phase swift with resolution of 0.001 degrees
   static int32_t alfa; //TODO alfa is with resolution 330 or sth? why
   ///frequency  with resolution of 1 Hz
   static uint32_t frequency;
-  /// 2nd max value in ADC1 0 if not found
-  static uint32_t minor_peak1;
-  /// 2nd max value in ADC2 0 if not found
-  static uint32_t minor_peak2;
   /// value of the 0 point of input sine
   static uint32_t mid_voltage;
   //TODO fix units!

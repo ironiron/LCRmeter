@@ -60,7 +60,10 @@ void USB_LP_CAN1_RX0_IRQHandler(void);
 //void I2C1_EV_IRQHandler(void);
 //void I2C1_ER_IRQHandler(void);
 /* USER CODE BEGIN EFP */
-
+void EXTI2_IRQHandler(void);
+void EXTI3_IRQHandler(void);
+void EXTI4_IRQHandler(void);
+void EXTI9_5_IRQHandler(void);
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

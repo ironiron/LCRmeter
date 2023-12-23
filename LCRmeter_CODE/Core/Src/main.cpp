@@ -121,17 +121,6 @@ void I2C1_ER_IRQHandler(void)
 	error_flag = 1;
 }
 
-void EXTI3_IRQHandler(void)
-{
-	/* USER CODE BEGIN EXTI2_IRQn 0 */
-	yolo++;
-	/* USER CODE END EXTI2_IRQn 0 */
-	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
-	/* USER CODE BEGIN EXTI2_IRQn 1 */
-
-	/* USER CODE END EXTI2_IRQn 1 */
-}
-
 }
 
 
@@ -140,38 +129,69 @@ void EXTI3_IRQHandler(void)
 
 ADC_HandleTypeDef adc;
 
-#if 0
-template<typename port_type,
-typename bval_type,
-const port_type port,
-const bval_type bval>
-class led_template
-{
-public:
-	led_template ()
-	{
-// Set the port pin value to low.
-		// *reinterpret_cast<volatile bval_type*> (port) &=
-		//static_cast<bval_type> (~bval);
-// Set the port pin direction to output.
-		//*reinterpret_cast<volatile bval_type*> (pdir) |= bval;
-	}
-	static void
-	toggle ()
-	{
-// Toggle the LED.
-		*reinterpret_cast<volatile bval_type*> (port) ^= bval;
-	}
-private:
-	static constexpr port_type pdir = port - 1U;
-};
+//#if 1
+//template<typename port_type,
+//typename bval_type,
+//const port_type port,
+//const bval_type bval>
+//class led_template
+//{
+//public:
+//	led_template (){}
+//	static void
+//	Toggle ()
+//	{
+//		*reinterpret_cast<volatile bval_type*> (port) ^= bval;
+//	}
+//    static void
+//    Reset ()
+//    {
+//        *reinterpret_cast<volatile bval_type*> (port) &=static_cast<bval_type> (~bval);
+//    }
+//};
+//
+//namespace
+//{
+////	const led_template<uint32_t, uint32_t, reinterpret_cast<volatile uint32_t *>(&(GPIOC->ODR)), (1<<13)> led_c13;
+//	const led_template<uint32_t, uint32_t, ((GPIOC->ODR)), (1<<13)> led_c13;
+//}
+//
+//#endif
 
-namespace
-{
-	const led_template<uint32_t, uint32_t, &uint32_t(GPIOC->ODR), (1<<13)> led_c13;
-}
+////////////
+//template<typename port_type,
+//typename bval_type,
+//const port_type port,
+//const bval_type bval>
+//class button_template
+//{
+//public:
+//    button_template (){}
+////    static void
+////    Toggle ()
+////    {
+////        *reinterpret_cast<volatile bval_type*> (port) ^= bval;
+////    }
+//    static bool
+//    State ()
+//    {
+//        return (*reinterpret_cast<bval_type*> (port) & static_cast<bval_type> (bval));
+//    }
+//};
+//
+////namespace
+////{
+//    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<4)> button_OK;
+//    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<3)> button_DOWN;
+//    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<2)> button_UP;
+//    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<5)> button_BACK;
+////}///
+///////////
 
-#endif
+volatile unsigned int b1=0;
+volatile unsigned int b2=0;
+volatile unsigned int b3=0;
+volatile unsigned int b4=0;
 
 static void Init(void)
 {
@@ -239,6 +259,50 @@ int main(void)
 	oled.Fill(SSD1306::BLACK);
 	oled.Update_Screen();
 	delay_ms(500);
+
+	while(1)
+	{
+	    oled.Set_Cursor(0, 0);
+	        sprintf (buf, "%d", ((GPIOA->IDR)>>2) & 0x01);
+	        oled.Write_String (buf);
+	    oled.Set_Cursor(0, 15);
+	        sprintf (buf, "%d", ((GPIOA->IDR)>>3) & 0x01);
+	        oled.Write_String (buf);
+	    oled.Set_Cursor(0, 30);
+	        sprintf (buf, "%d", ((GPIOA->IDR)>>4) & 0x01);
+	        oled.Write_String (buf);
+	    oled.Set_Cursor(0, 45);
+	        sprintf (buf, "%d", ((GPIOA->IDR)>>5) & 0x01);
+	        oled.Write_String (buf);
+	        /////////////
+//	        oled.Set_Cursor(20, 0);
+//	            sprintf (buf, "|%d", button_UP.State());
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(20, 15);
+//	            sprintf (buf, "|%d", button_DOWN.State());
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(20, 30);
+//	            sprintf (buf, "|%d", button_OK.State());
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(20, 45);
+//	            sprintf (buf, "|%d", button_BACK.State() );
+//	            oled.Write_String (buf);
+	        /////////////
+	        oled.Set_Cursor(60, 0);
+	            sprintf (buf, "b1=%d", b1);
+	            oled.Write_String (buf);
+	        oled.Set_Cursor(60, 15);
+	            sprintf (buf, "b2=%d", b2);
+	            oled.Write_String (buf);
+	        oled.Set_Cursor(60, 30);
+	            sprintf (buf, "b3=%d",b3);
+	            oled.Write_String (buf);
+	        oled.Set_Cursor(60, 45);
+	            sprintf (buf, "b4=%d",b4 );
+	            oled.Write_String (buf);
+	            oled.Update_Screen();
+	            HAL_Delay(100);
+	}
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /////DAC
@@ -637,9 +701,18 @@ static void MX_GPIO_Init(void)
 
 
 
-	/* EXTI interrupt init*/
-	HAL_NVIC_SetPriority(EXTI3_IRQn, 2, 0);
-	HAL_NVIC_EnableIRQ (EXTI3_IRQn);
+    /* EXTI interrupt init for buttons*/
+    HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+    HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
+    HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+
+    HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

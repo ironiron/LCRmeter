@@ -27,8 +27,6 @@ uint32_t Waveform_arythmetics::nbr_of_minimas[nbr_of_signals];
 uint32_t Waveform_arythmetics::peak2 = 0;
 int32_t Waveform_arythmetics::alfa = 0;
 uint32_t Waveform_arythmetics::frequency = 0;
-uint32_t Waveform_arythmetics::minor_peak1 = 0;
-uint32_t Waveform_arythmetics::minor_peak2 = 0;
 uint32_t Waveform_arythmetics::mid_voltage = 0; /////////////////////////TODO make const, or add documenttation
 uint32_t Waveform_arythmetics::amplitude1 = 0;
 uint32_t Waveform_arythmetics::amplitude2 = 0;
