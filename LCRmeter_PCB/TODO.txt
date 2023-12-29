@@ -1,4 +1,0 @@
-add protection diode on VCC output
-add separate VCC input on 5v, or sth? from USB probably?, and then check if power comes from usb or batterry
-22 ohm usb resistor might be reduced to only 0r jumper
-connect negative terminal to GND instead of 1V5, as it's to complicated unneccesarry (but 1v5 may stay)
