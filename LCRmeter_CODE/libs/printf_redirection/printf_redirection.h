@@ -16,7 +16,7 @@
 #define ITM_PRINTF
 #define UART_PRINTF
 
-#include "stm32f1xx_hal.h"
+#include "stm32g4xx_hal.h"
 
 int _write(int file, char *ptr, int len);
 UART_HandleTypeDef* UART_printf_init(void);

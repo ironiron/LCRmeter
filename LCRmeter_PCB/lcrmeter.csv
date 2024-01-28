@@ -1,33 +1,46 @@
-"Id";"Designator";"Package";"Quantity";"Designation";"Supplier and ref";
-1;"J5";"BNC TE CONNECTIVITY 5-1634503";1;"OSCILLOSCOPE";;;
-2;"BT1,BT2";"BatteryHolder_Keystone_2466_1xAAA";2;"Batt";;;
-3;"C1,C2";"C_0805_2012Metric_Pad1.15x1.40mm_HandSolder";2;"20pF";;;
-4;"C3,C4,C5,C6,C7,C9,C10,C12,C13,C14,C15";"C_0603_1608Metric_Pad1.05x0.95mm_HandSolder";11;"100n";;;
-5;"C8";"C_0603_1608Metric_Pad1.05x0.95mm_HandSolder";1;"10u";;;
-6;"C11";"C_0805_2012Metric_Pad1.15x1.40mm_HandSolder";1;"2u2";;;
-7;"D2,D3,D4,D5";"SOT-23";4;"BAT54S";;;
-8;"J1";"PinHeader_1x04_P2.54mm_Vertical";1;"LCR_input";;;
-9;"J2";"PinSocket_1x04_P2.54mm_Vertical";1;"LCR_input";;;
-10;"J3";"PinHeader_1x06_P2.54mm_Vertical";1;"Conn_01x06";;;
-11;"J4";"USB_Micro-B_Molex_47346-0001";1;"USB_B_Micro";;;
-12;"J6";"PinSocket_1x06_P2.54mm_Vertical";1;"misc";;;
-13;"J7";"PinHeader_1x06_P2.54mm_Vertical";1;"misc";;;
-14;"L2";"L_0805_2012Metric_Pad1.15x1.40mm_HandSolder";1;"10u";;;
-15;"R1";"R_0805_2012Metric_Pad1.15x1.40mm_HandSolder";1;"100";;;
-16;"R2,R3,R4,R5,R6,R9,R10,R11,R12,R13,R17,R18,R20,R22,R23";"R_0603_1608Metric_Pad1.05x0.95mm_HandSolder";15;"10k";;;
-17;"R7,R8";"R_0805_2012Metric_Pad1.15x1.40mm_HandSolder";2;"3k3";;;
-18;"R14,R16";"R_0805_2012Metric_Pad1.15x1.40mm_HandSolder";2;"22";;;
-19;"R15";"R_0805_2012Metric_Pad1.15x1.40mm_HandSolder";1;"1k5";;;
-20;"SW2";"SW_SPST_REED_CT05-XXXX-G1";1;"+";;;
-21;"SW3";"SW_SPST_REED_CT05-XXXX-G1";1;"-";;;
-22;"SW4";"SW_SPST_REED_CT05-XXXX-G1";1;"ok";;;
-23;"SW5";"SW_SPST_REED_CT05-XXXX-G1";1;"back";;;
-24;"U1";"TSSOP-8_4.4x3mm_P0.65mm";1;"MCP47";;;
-25;"U2";"LQFP-48_7x7mm_P0.5mm";1;"STM32F103C8Tx";;;
-26;"U3";"OLED_128x64";1;"OLED";;;
-27;"U4";"SOIC-14_3.9x8.7mm_P1.27mm";1;"74HC14";;;
-28;"Y1";"Crystal_HC49-U_Vertical";1;"8Mhz";;;
-29;"SW1";"PinHeader_1x03_P2.54mm_Vertical";1;"power";;;
-30;"R19";"R_0805_2012Metric_Pad1.15x1.40mm_HandSolder";1;"20k";;;
-31;"U5";"SOT-23-5";1;"MCP6001-OT";;;
-32;"R21";"R_2010_5025Metric_Pad1.52x2.65mm_HandSolder";1;"0";;;
+"Source:","D:\Projekty\reszta\LCRmeter\LCRmeter_PCB\lcrmeter.kicad_sch"
+"Date:","28/01/2024 16:37:20"
+"Tool:","Eeschema 7.0.9"
+"Generator:","D:\Programs\kicadv7\bin\scripting\plugins/bom_csv_grouped_by_value.py"
+"Component Count:","70"
+
+"Collated Components:"
+
+"Item","Qty","Reference(s)","Value","LibPart","Footprint","Datasheet","DNP","Description","Height","Manufacturer_Name","Manufacturer_Part_Number","Mouser Part Number","Mouser Price/Stock"
+"1","1","BT1","Batt","Device:Battery_Cell","Battery:BatteryHolder_Keystone_2468_2xAAA","~","","","","","","",""
+"2","5","C3, C4, C5, C7, C9","100n","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder","~","","","","","","",""
+"3","3","C8, C18, C19","10u","Device:C","Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder","~","","","","","","",""
+"4","5","C10, C12, C13, C14, C15","100n","Device:C_Small","Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder","~","","","","","","",""
+"5","1","C11","2u2","Device:C","Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder","~","","","","","","",""
+"6","3","D2, D3, D4","BAT54S","lcrmeter-rescue:BAT54S-Diode","Package_TO_SOT_SMD:SOT-23","https://www.diodes.com/assets/Datasheets/ds11005.pdf","","","","","","",""
+"7","1","D6","BAT54CW","Device:D_Schottky_Dual_CommonCathode_AAK_Parallel","Package_TO_SOT_SMD:SOT-23","~","","","","","","",""
+"8","1","IC1","TPS2116DRLR","library_loader:TPS2116DRLR","Library_Loader:SOTFL50P160X60-8N","https://www.ti.com/lit/gpn/tps2116","","d","0.6","Texas Instruments","TPS2116DRLR","595-TPS2116DRLR","https://www.mouser.co.uk/ProductDetail/Texas-Instruments/TPS2116DRLR?qs=aP1CjGhiNiGo3XAyXcVPaQ%3D%3D"
+"9","1","J1","LCR_input","lcrmeter-rescue:Conn_01x04_Male","Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical","","","","","","","",""
+"10","1","J2","LCR_input","lcrmeter-rescue:Conn_01x04_Female","Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical","","","","","","","",""
+"11","1","J3","Prog_interface","Connector_Generic:Conn_01x06","Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical","~","","","","","","",""
+"12","1","J4","USB_B_Micro","lcrmeter-rescue:USB_B_Micro-Connector","Connector_USB:USB_Micro-B_Molex_47346-0001","","","","","","","",""
+"13","1","J6","misc","lcrmeter-rescue:Conn_01x06_Male-Connector","Connector_PinSocket_2.54mm:PinSocket_1x06_P2.54mm_Vertical","","","","","","","",""
+"14","1","J7","misc","lcrmeter-rescue:Conn_01x06_Female-Connector","Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical","","","","","","","",""
+"15","1","L2","10u","Device:L","Inductor_SMD:L_0805_2012Metric_Pad1.15x1.40mm_HandSolder","~","","","","","","",""
+"16","1","Q1","NX7002BKR","Transistor_FET:2N7002","Package_TO_SOT_SMD:SOT-23","https://www.onsemi.com/pub/Collateral/NDS7002A-D.PDF","","","","","","",""
+"17","1","R1","100","Device:R","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"18","1","R2","10k","Device:R_Small","Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder","~","","","","","","",""
+"19","6","R3, R7, R8, R17, R20, R21","0","Device:R","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"20","8","R4, R5, R6, R9, R10, R11, R12, R13","10k","Device:R","Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder","~","","","","","","",""
+"21","4","R14, R15, R16, R24","1k5","Device:R_Small","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"22","1","R18","2k","Device:R","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"23","1","R19","500","Device:R","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"24","2","R22, R23","10k","Device:R","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"25","1","R25","2k2","Device:R_Small","Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder","~","","","","","","",""
+"26","1","SW1","power","lcrmeter-rescue:switch_2_pos_small","Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical","","","","","","","",""
+"27","1","SW2","up","lcrmeter-rescue:SW_Push","Button_Switch_SMD:SW_SPST_REED_CT05-XXXX-G1","","","","","","","",""
+"28","1","SW3","down","lcrmeter-rescue:SW_Push","Button_Switch_SMD:SW_SPST_REED_CT05-XXXX-G1","","","","","","","",""
+"29","1","SW4","ok","lcrmeter-rescue:SW_Push","Button_Switch_SMD:SW_SPST_REED_CT05-XXXX-G1","","","","","","","",""
+"30","1","SW5","back","lcrmeter-rescue:SW_Push","Button_Switch_SMD:SW_SPST_REED_CT05-XXXX-G1","","","","","","","",""
+"31","2","TP3, TP4","TestPoint","Connector:TestPoint","TestPoint:TestPoint_Pad_1.0x1.0mm","~","","","","","","",""
+"32","3","U1, U2, U7","74LVC1G66","74xGxx:74LVC1G66","Package_TO_SOT_SMD:SOT-23-5","http://www.ti.com/lit/ds/symlink/sn74lvc1g66.pdf","","","","","","",""
+"33","1","U3","OLED","lcrmeter-rescue:OLED-Mylibrary","footprints:OLED_128x64","","","","","","","",""
+"34","1","U4","74HC14","74xx:74HC14","Package_SO:SOIC-14_3.9x8.7mm_P1.27mm","http://www.ti.com/lit/gpn/sn74HC14","","","","","","",""
+"35","3","U5, U8, U10","MCP6001-OT","Amplifier_Operational:MCP6001-OT","Package_TO_SOT_SMD:SOT-23-5","http://ww1.microchip.com/downloads/en/DeviceDoc/21733j.pdf","","","","","","",""
+"36","1","U6","STM32G473C_B-C-E_Tx","MCU_ST_STM32G4:STM32G473C_B-C-E_Tx","Package_QFP:LQFP-48_7x7mm_P0.5mm","https://www.st.com/resource/en/datasheet/stm32g473cb.pdf","","","","","","",""
+"37","1","U9","LM1117MP-3.3","Regulator_Linear:LM1117MP-3.3","Package_TO_SOT_SMD:SOT-223-3_TabPin2","http://www.ti.com/lit/ds/symlink/lm1117.pdf","","","","","","",""

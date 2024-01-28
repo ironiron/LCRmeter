@@ -15,7 +15,7 @@
 #define FAKES_PWM_HARDWARE_HPP_
 
 #include <Pwm.hpp>
-#include "stm32f1xx_hal.h"
+#include "stm32g4xx_hal.h"
 
 template < class  T, typename width,uint8_t chn>
   void Pwm<T,width,chn>::Initialise (void)

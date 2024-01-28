@@ -28,6 +28,6 @@
  *******************************************************************************
  */
 
-#include "stm32f1xx_hal.h"
+#include "stm32g4xx_hal.h"
 
 #define SSD1306_I2C_Typedef I2C_HandleTypeDef
