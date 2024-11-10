@@ -1,7 +1,7 @@
-Currently MCP47FEB is used on PCB, however part of development process was done with MCP4725, so the libs stayed in filesystem for potential future use.
 
-I2C1 -> DAC
 I2C2 -> OLED display
+
+DAC1 -> PA4 -> measuring
 
 ## CubeMX and Code generation
 
@@ -18,3 +18,12 @@ Instead use dummy project inside 'generator/' folder and copy-paste code.
 - Hardware holds hardware related files
 - Core holds main.cpp and essential program files
 - Drivers - mainly HAL library
+
+
+
+
+
+
+85-1,5v on dac
+127-2v on dac
+182 - 1.88v

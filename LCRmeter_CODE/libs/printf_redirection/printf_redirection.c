@@ -42,9 +42,10 @@ UART_HandleTypeDef* UART_printf_init(void)
       __HAL_RCC_USART1_CLK_ENABLE();
       __HAL_RCC_GPIOA_CLK_ENABLE();
 
-      GPIO_InitStruct.Pin = GPIO_PIN_9;
+      GPIO_InitStruct.Pin = GPIO_PIN_10;
       GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
       GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+      GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
       HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 
@@ -56,6 +57,8 @@ UART_HandleTypeDef* UART_printf_init(void)
     huart1.Init.Mode = UART_MODE_TX;
     huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+    huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_SWAP_INIT;
+      huart1.AdvancedInit.Swap = UART_ADVFEATURE_SWAP_ENABLE;
     if (HAL_HalfDuplex_Init(&huart1) == HAL_OK)
     {
         return & huart1;

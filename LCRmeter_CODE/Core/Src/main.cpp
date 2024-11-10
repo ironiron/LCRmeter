@@ -65,6 +65,7 @@ I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim6;
 
 
 
@@ -96,9 +97,406 @@ static void MX_CORDIC_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM6_Init(void);
 
 
 ADC_HandleTypeDef adc;
+
+//Not tested might be some problems
+static constexpr uint8_t sine_table[]=
+{
+  128,131,134,137,140,143,146,149,
+  152,156,159,162,165,168,171,174,
+  176,179,182,185,188,191,193,196,
+  199,201,204,206,209,211,213,216,
+  218,220,222,224,226,228,230,232,
+  234,235,237,239,240,242,243,244,
+  246,247,248,249,250,251,251,252,
+  253,253,254,254,254,255,255,255,
+  255,255,255,255,254,254,253,253,
+  252,252,251,250,249,248,247,246,
+  245,244,242,241,239,238,236,235,
+  233,231,229,227,225,223,221,219,
+  217,215,212,210,207,205,202,200,
+  197,195,192,189,186,184,181,178,
+  175,172,169,166,163,160,157,154,
+  151,148,145,142,138,135,132,129,
+  126,123,120,117,113,110,107,104,
+  101,98,95,92,89,86,83,80,
+  77,74,71,69,66,63,60,58,
+  55,53,50,48,45,43,40,38,
+  36,34,32,30,28,26,24,22,
+  20,19,17,16,14,13,11,10,
+  9,8,7,6,5,4,3,3,
+  2,2,1,1,0,0,0,0,
+  0,0,0,1,1,1,2,2,
+  3,4,4,5,6,7,8,9,
+  11,12,13,15,16,18,20,21,
+  23,25,27,29,31,33,35,37,
+  39,42,44,46,49,51,54,56,
+  59,62,64,67,70,73,76,79,
+  81,84,87,90,93,96,99,103,
+  106,109,112,115,118,121,124
+};
+static constexpr uint8_t sine_table33[]=
+{
+        132  -20,
+        137  -20,
+        142  -20,
+        146  -20,
+        150  -20,
+        153  -20,
+        156  -20,
+        157  -20,
+        159  -20,
+        159  -20,
+        159  -20,
+        157  -20,
+        156  -20,
+        153  -20,
+        150  -20,
+        146  -20,
+        142  -20,
+        137  -20,
+        132  -20,
+        127  -20,
+        122  -20,
+        117  -20,
+        112  -20,
+        108  -20,
+        104  -20,
+        101  -20,
+        98   -20,
+        97   -20,
+        95   -20,
+        95   -20,
+        95   -20,
+        97   -20,
+        98   -20,
+        101  -20,
+        104  -20,
+        108  -20,
+        112  -20,
+        117  -20,
+        122  -20,
+        127  -20
+
+
+};
+static constexpr uint8_t sine_table22[]=
+{
+        128
+        ,130
+        ,131
+        ,132
+        ,134
+        ,135
+        ,136
+        ,138
+        ,139
+        ,140
+        ,142
+        ,143
+        ,144
+        ,145
+        ,147
+        ,148
+        ,149
+        ,151
+        ,152
+        ,153
+        ,154
+        ,155
+        ,157
+        ,158
+        ,159
+        ,160
+        ,161
+        ,162
+        ,164
+        ,165
+        ,166
+        ,167
+        ,168
+        ,169
+        ,170
+        ,171
+        ,172
+        ,173
+        ,174
+        ,175
+        ,175
+        ,176
+        ,177
+        ,178
+        ,179
+        ,180
+        ,180
+        ,181
+        ,182
+        ,182
+        ,183
+        ,184
+        ,184
+        ,185
+        ,185
+        ,186
+        ,187
+        ,187
+        ,187
+        ,188
+        ,188
+        ,189
+        ,189
+        ,189
+        ,190
+        ,190
+        ,190
+        ,190
+        ,190
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,191
+        ,190
+        ,190
+        ,190
+        ,190
+        ,190
+        ,189
+        ,189
+        ,189
+        ,188
+        ,188
+        ,187
+        ,187
+        ,187
+        ,186
+        ,185
+        ,185
+        ,184
+        ,184
+        ,183
+        ,182
+        ,182
+        ,181
+        ,180
+        ,180
+        ,179
+        ,178
+        ,177
+        ,176
+        ,175
+        ,175
+        ,174
+        ,173
+        ,172
+        ,171
+        ,170
+        ,169
+        ,168
+        ,167
+        ,166
+        ,165
+        ,164
+        ,162
+        ,161
+        ,160
+        ,159
+        ,158
+        ,157
+        ,155
+        ,154
+        ,153
+        ,152
+        ,151
+        ,149
+        ,148
+        ,147
+        ,145
+        ,144
+        ,143
+        ,142
+        ,140
+        ,139
+        ,138
+        ,136
+        ,135
+        ,134
+        ,132
+        ,131
+        ,130
+        ,128
+        ,127
+        ,126
+        ,124
+        ,123
+        ,122
+        ,120
+        ,119
+        ,118
+        ,116
+        ,115
+        ,114
+        ,112
+        ,111
+        ,110
+        ,109
+        ,107
+        ,106
+        ,105
+        ,103
+        ,102
+        ,101
+        ,100
+        ,99
+        ,97
+        ,96
+        ,95
+        ,94
+        ,93
+        ,92
+        ,90
+        ,89
+        ,88
+        ,87
+        ,86
+        ,85
+        ,84
+        ,83
+        ,82
+        ,81
+        ,80
+        ,79
+        ,79
+        ,78
+        ,77
+        ,76
+        ,75
+        ,74
+        ,74
+        ,73
+        ,72
+        ,72
+        ,71
+        ,70
+        ,70
+        ,69
+        ,69
+        ,68
+        ,67
+        ,67
+        ,67
+        ,66
+        ,66
+        ,65
+        ,65
+        ,65
+        ,64
+        ,64
+        ,64
+        ,64
+        ,64
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,63
+        ,64
+        ,64
+        ,64
+        ,64
+        ,64
+        ,65
+        ,65
+        ,65
+        ,66
+        ,66
+        ,67
+        ,67
+        ,67
+        ,68
+        ,69
+        ,69
+        ,70
+        ,70
+        ,71
+        ,72
+        ,72
+        ,73
+        ,74
+        ,74
+        ,75
+        ,76
+        ,77
+        ,78
+        ,79
+        ,79
+        ,80
+        ,81
+        ,82
+        ,83
+        ,84
+        ,85
+        ,86
+        ,87
+        ,88
+        ,89
+        ,90
+        ,92
+        ,93
+        ,94
+        ,95
+        ,96
+        ,97
+        ,99
+        ,100
+        ,101
+        ,102
+        ,103
+        ,105
+        ,106
+        ,107
+        ,109
+        ,110
+        ,111
+        ,112
+        ,114
+        ,115
+        ,116
+        ,118
+        ,119
+        ,120
+        ,122
+        ,123
+        ,124
+        ,126
+        ,127
+        ,128
+        ,130
+        ,131
+        ,132
+        ,134
+        ,135
+        ,136
+        ,138
+        ,139
+        ,140
+
+};
 
 //#if 1
 //template<typename port_type,
@@ -180,10 +578,11 @@ static void Init(void)
 	  MX_ADC4_Init();
 	  MX_ADC5_Init();
 	  MX_CORDIC_Init();
-	  MX_USB_Device_Init();
+//	  MX_USB_Device_Init();
 	  MX_I2C1_Init();
 	  MX_TIM1_Init();
 	  MX_TIM2_Init();
+	    MX_TIM6_Init();
 }
 
 int main(void)
@@ -194,7 +593,7 @@ int main(void)
 	uint8_t display_buffer[100];
 	uint32_t error = 0;
 
-//	UART_HandleTypeDef* u1=UART_printf_init();
+	UART_HandleTypeDef* u1=UART_printf_init();
 	printf("hola!! \n");
 
 //	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
@@ -214,78 +613,143 @@ int main(void)
 	oled.Update_Screen();
 	delay_ms(500);
 
+
+//	  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+//	  __HAL_RCC_DMA1_CLK_ENABLE();
+
+	  /* DMA interrupt init */
+	  /* DMA1_Channel1_IRQn interrupt configuration */
+//	  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+//	  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+	//Button tests!!!
+//	while(1)
+//	{
+//	    oled.Set_Cursor(0, 0);
+//	        sprintf (buf, "%d", ((GPIOA->IDR)>>2) & 0x01);
+//	        oled.Write_String (buf);
+//	    oled.Set_Cursor(0, 15);
+//	        sprintf (buf, "%d", ((GPIOA->IDR)>>3) & 0x01);
+//	        oled.Write_String (buf);
+//	    oled.Set_Cursor(0, 30);
+//	        sprintf (buf, "%d", ((GPIOA->IDR)>>4) & 0x01);
+//	        oled.Write_String (buf);
+//	    oled.Set_Cursor(0, 45);
+//	        sprintf (buf, "%d", ((GPIOA->IDR)>>5) & 0x01);
+//	        oled.Write_String (buf);
+//	        /////////////
+////	        oled.Set_Cursor(20, 0);
+////	            sprintf (buf, "|%d", button_UP.State());
+////	            oled.Write_String (buf);
+////	        oled.Set_Cursor(20, 15);
+////	            sprintf (buf, "|%d", button_DOWN.State());
+////	            oled.Write_String (buf);
+////	        oled.Set_Cursor(20, 30);
+////	            sprintf (buf, "|%d", button_OK.State());
+////	            oled.Write_String (buf);
+////	        oled.Set_Cursor(20, 45);
+////	            sprintf (buf, "|%d", button_BACK.State() );
+////	            oled.Write_String (buf);
+//	        /////////////
+//	        oled.Set_Cursor(60, 0);
+//	            sprintf (buf, "b1=%d", b1);
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(60, 15);
+//	            sprintf (buf, "b2=%d", b2);
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(60, 30);
+//	            sprintf (buf, "b3=%d",b3);
+//	            oled.Write_String (buf);
+//	        oled.Set_Cursor(60, 45);
+//	            sprintf (buf, "b4=%d",b4 );
+//	            oled.Write_String (buf);
+//	            oled.Update_Screen();
+//	            HAL_Delay(100);
+//	}
+//
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  /////DAC built in
+
+
+	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table33, sizeof(sine_table33)/sizeof(sine_table33[0]), DAC_ALIGN_8B_R);
+//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table22, sizeof(sine_table22)/sizeof(sine_table22[0]), DAC_ALIGN_8B_R);
+//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table22, 10, DAC_ALIGN_8B_R);
+	printf("starting DMA %d\n",ret);
+//	auto ret = HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+//	printf("starting DMA %d\n",ret);
+    if (HAL_TIM_Base_Start(&htim6) != HAL_OK)
+    {
+        printf("AAAA\n");
+      /* Counter enable error */
+      Error_Handler();
+    }
+
+
+
+int kk=0;
 	while(1)
 	{
-	    oled.Set_Cursor(0, 0);
-	        sprintf (buf, "%d", ((GPIOA->IDR)>>2) & 0x01);
-	        oled.Write_String (buf);
-	    oled.Set_Cursor(0, 15);
-	        sprintf (buf, "%d", ((GPIOA->IDR)>>3) & 0x01);
-	        oled.Write_String (buf);
-	    oled.Set_Cursor(0, 30);
-	        sprintf (buf, "%d", ((GPIOA->IDR)>>4) & 0x01);
-	        oled.Write_String (buf);
-	    oled.Set_Cursor(0, 45);
-	        sprintf (buf, "%d", ((GPIOA->IDR)>>5) & 0x01);
-	        oled.Write_String (buf);
-	        /////////////
-//	        oled.Set_Cursor(20, 0);
-//	            sprintf (buf, "|%d", button_UP.State());
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(20, 15);
-//	            sprintf (buf, "|%d", button_DOWN.State());
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(20, 30);
-//	            sprintf (buf, "|%d", button_OK.State());
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(20, 45);
-//	            sprintf (buf, "|%d", button_BACK.State() );
-//	            oled.Write_String (buf);
-	        /////////////
-	        oled.Set_Cursor(60, 0);
-	            sprintf (buf, "b1=%d", b1);
-	            oled.Write_String (buf);
-	        oled.Set_Cursor(60, 15);
-	            sprintf (buf, "b2=%d", b2);
-	            oled.Write_String (buf);
-	        oled.Set_Cursor(60, 30);
-	            sprintf (buf, "b3=%d",b3);
-	            oled.Write_String (buf);
-	        oled.Set_Cursor(60, 45);
-	            sprintf (buf, "b4=%d",b4 );
-	            oled.Write_String (buf);
-	            oled.Update_Screen();
-	            HAL_Delay(100);
-	}
+////	   auto state =  HAL_DAC_GetState(hdac1);
+//	        printf("state  %d\n",hdac1.State);
+////	    state =  HAL_DAC_GetError(hdac1);
+//	        printf("ErrorCode  %d\n",hdac1.ErrorCode);
+
+//	    int sd;
+//	     kk++;
+//	     if(kk>2)
+//	     {
+//	         kk=0;
+//	     }
 //
+//	     switch(kk)
+//	     {
+//	         case 0:
+//	             sd=179;
+//	             break;
+//	         case 1:
+//	             sd=0xff;
+//	             break;
+//	         default:
+//	             sd=0;
+//
+//	     }
+
+	    auto value = HAL_DAC_GetValue(&hdac1, DAC_CHANNEL_1);
+	    printf(" value %d --> %d\n",value,value>>4);
+	    HAL_Delay(100);
+//	    HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_8B_R, sd);
+	}
+
+
+
+
 //  //////////////////////////////////////////////////////////////////////////////////////////////
 //  /////DAC
+
+//  HAL_NVIC_SetPriority (DMA1_Channel6_IRQn, 2, 1);
+//  HAL_NVIC_EnableIRQ (DMA1_Channel6_IRQn);
 //
-////  HAL_NVIC_SetPriority (DMA1_Channel6_IRQn, 2, 1);
-////  HAL_NVIC_EnableIRQ (DMA1_Channel6_IRQn);
-////
-////  __HAL_RCC_DMA1_CLK_ENABLE();
-////  DMA dma (DMA1_Channel6);
-////
-////  //DMA1_Channel6->CCR|=14;
-////  I2C i2c_dma (I2C1, &dma);
-////  i2c_dma.Initialise ();
-////  i2c_dma.Enable_DMA ();
-////  i2c_dma.Enable ();
-////
-////  MCP47FEB dac(i2c_dma);
-////  error = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
-////	oled.Set_Cursor(0, 0);
-////	sprintf (buf, "dac.error1=%lu", error);
-////	oled.Write_String (buf);
-////  error = dac.Set_Continuous (sine_table, sine_table_lenght);
-////	oled.Set_Cursor(0, 20);
-////	sprintf (buf, "dac.error2=%lu", error);
-////	oled.Write_String (buf);
-////  dac.Enable_Output ();
-////  oled.Update_Screen();
+//  __HAL_RCC_DMA1_CLK_ENABLE();
+//  DMA dma (DMA1_Channel6);
 //
+//  //DMA1_Channel6->CCR|=14;
+//  I2C i2c_dma (I2C1, &dma);
+//  i2c_dma.Initialise ();
+//  i2c_dma.Enable_DMA ();
+//  i2c_dma.Enable ();
 //
+//  MCP47FEB dac(i2c_dma);
+//  error = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
+//	oled.Set_Cursor(0, 0);
+//	sprintf (buf, "dac.error1=%lu", error);
+//	oled.Write_String (buf);
+//  error = dac.Set_Continuous (sine_table, sine_table_lenght);
+//	oled.Set_Cursor(0, 20);
+//	sprintf (buf, "dac.error2=%lu", error);
+//	oled.Write_String (buf);
+//  dac.Enable_Output ();
+//  oled.Update_Screen();
+
+
 ////////////////////////////////////////////////////
 ////OSCILLOSCOPE
 ///////////////////////////////////////////////////////////////////////////////
@@ -925,7 +1389,7 @@ static void MX_DAC1_Init(void)
   sConfig.DAC_DMADoubleDataMode = DISABLE;
   sConfig.DAC_SignedFormat = DISABLE;
   sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_DISABLE;
-  sConfig.DAC_Trigger = DAC_TRIGGER_T2_TRGO;
+  sConfig.DAC_Trigger = DAC_TRIGGER_T6_TRGO;
   sConfig.DAC_Trigger2 = DAC_TRIGGER_NONE;
   sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
   sConfig.DAC_ConnectOnChipPeripheral = DAC_CHIPCONNECT_EXTERNAL;
@@ -1109,11 +1573,12 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
+  htim2.Init.Prescaler = 170-1;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4.294967295E9;
+  htim2.Init.Period = 1000-1;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+//  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
@@ -1123,30 +1588,64 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+//  if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 53600;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+//  sConfigOC.Pulse = 53600;
+//  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+//  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+//  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
   HAL_TIM_MspPostInit(&htim2);
 
 }
+
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 17-1;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 99;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+
+  /* USER CODE END TIM6_Init 2 */
+
+}
+
 
 /**
   * Enable DMA controller clock
@@ -1269,6 +1768,7 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
 	/* USER CODE BEGIN 6 */
+    printf("Wrong parameters value: file %s on line %d\r\n", file, line);
 	/* User can add his own implementation to report the file name and line number,
 	 tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 	/* USER CODE END 6 */

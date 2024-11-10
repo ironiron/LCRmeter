@@ -49,8 +49,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -82,8 +80,6 @@ void Error_Handler(void);
 #define EN_PATH_1_GPIO_Port GPIOB
 #define RES_CALIBRATION_Pin GPIO_PIN_15
 #define RES_CALIBRATION_GPIO_Port GPIOB
-#define PWM_OUT_Pin GPIO_PIN_10
-#define PWM_OUT_GPIO_Port GPIOA
 #define BUTTON_OK_Pin GPIO_PIN_4
 #define BUTTON_OK_GPIO_Port GPIOB
 #define BUTTON_OK_EXTI_IRQn EXTI4_IRQn
