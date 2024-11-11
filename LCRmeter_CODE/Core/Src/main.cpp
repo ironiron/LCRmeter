@@ -602,25 +602,17 @@ int main(void)
 //	pwm.Set_Duty(80);
 //	pwm.Enable();
 //
-	SSD1306 oled(&hi2c1, 64);
-	oled.Initialize();
-	oled.Set_Brightness(0xff);
+//	SSD1306 oled(&hi2c1, 64);
+//	oled.Initialize();
+//	oled.Set_Brightness(0xff);
+//
+//	oled.Fill(SSD1306::WHITE);
+//	oled.Update_Screen();
+//	delay_ms(1000);
+//	oled.Fill(SSD1306::BLACK);
+//	oled.Update_Screen();
+//	delay_ms(500);
 
-	oled.Fill(SSD1306::WHITE);
-	oled.Update_Screen();
-	delay_ms(1000);
-	oled.Fill(SSD1306::BLACK);
-	oled.Update_Screen();
-	delay_ms(500);
-
-
-//	  __HAL_RCC_DMAMUX1_CLK_ENABLE();
-//	  __HAL_RCC_DMA1_CLK_ENABLE();
-
-	  /* DMA interrupt init */
-	  /* DMA1_Channel1_IRQn interrupt configuration */
-//	  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-//	  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 	//Button tests!!!
 //	while(1)
 //	{
@@ -671,11 +663,7 @@ int main(void)
 
 
 	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table33, sizeof(sine_table33)/sizeof(sine_table33[0]), DAC_ALIGN_8B_R);
-//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table22, sizeof(sine_table22)/sizeof(sine_table22[0]), DAC_ALIGN_8B_R);
-//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table22, 10, DAC_ALIGN_8B_R);
 	printf("starting DMA %d\n",ret);
-//	auto ret = HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
-//	printf("starting DMA %d\n",ret);
     if (HAL_TIM_Base_Start(&htim6) != HAL_OK)
     {
         printf("AAAA\n");
@@ -683,71 +671,39 @@ int main(void)
       Error_Handler();
     }
 
+//////////////////
 
+    //TODO ADC and DAC not working together need to investigate whenever it's HW or SW issue
+     auto retval = HAL_ADC_Start(&hadc2);
+      if (retval != 0)
+      {
+          printf("AAAA111\n");
+          printf("retval = %d\n",retval);
+      }
+      retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+              Adc::size_of_adc_buffer);
+      if (retval != 0)
+      {
+          printf("AAA22222A\n");
+                   printf("retval = %d\n",retval);
+      }
 
-int kk=0;
-	while(1)
-	{
-////	   auto state =  HAL_DAC_GetState(hdac1);
-//	        printf("state  %d\n",hdac1.State);
-////	    state =  HAL_DAC_GetError(hdac1);
-//	        printf("ErrorCode  %d\n",hdac1.ErrorCode);
+        Waveform_arythmetics::mid_voltage = 2000;
+        Waveform_arythmetics::hysteresis_samples=10;
+        Waveform_arythmetics::user_point_time = 21;
 
-//	    int sd;
-//	     kk++;
-//	     if(kk>2)
-//	     {
-//	         kk=0;
-//	     }
-//
-//	     switch(kk)
-//	     {
-//	         case 0:
-//	             sd=179;
-//	             break;
-//	         case 1:
-//	             sd=0xff;
-//	             break;
-//	         default:
-//	             sd=0;
-//
-//	     }
+      while(1)
+      {
+          HAL_Delay(1000);
+          Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
+                           Adc::size_of_adc_buffer, 1); //TODO with 1 it's to chaotic can proccessing be improved?
+          for(int i=0;i< Adc::size_of_adc_buffer;i++)
+          {
+              printf("%d\n",Waveform_arythmetics::filtered_buffer[0][i]);
+          }
+          Adc::Resume_DMA();
+      }
 
-	    auto value = HAL_DAC_GetValue(&hdac1, DAC_CHANNEL_1);
-	    printf(" value %d --> %d\n",value,value>>4);
-	    HAL_Delay(100);
-//	    HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_8B_R, sd);
-	}
-
-
-
-
-//  //////////////////////////////////////////////////////////////////////////////////////////////
-//  /////DAC
-
-//  HAL_NVIC_SetPriority (DMA1_Channel6_IRQn, 2, 1);
-//  HAL_NVIC_EnableIRQ (DMA1_Channel6_IRQn);
-//
-//  __HAL_RCC_DMA1_CLK_ENABLE();
-//  DMA dma (DMA1_Channel6);
-//
-//  //DMA1_Channel6->CCR|=14;
-//  I2C i2c_dma (I2C1, &dma);
-//  i2c_dma.Initialise ();
-//  i2c_dma.Enable_DMA ();
-//  i2c_dma.Enable ();
-//
-//  MCP47FEB dac(i2c_dma);
-//  error = dac.Set_Vref (MCP47FEB::Vref::VREF_BUFFERED);
-//	oled.Set_Cursor(0, 0);
-//	sprintf (buf, "dac.error1=%lu", error);
-//	oled.Write_String (buf);
-//  error = dac.Set_Continuous (sine_table, sine_table_lenght);
-//	oled.Set_Cursor(0, 20);
-//	sprintf (buf, "dac.error2=%lu", error);
-//	oled.Write_String (buf);
-//  dac.Enable_Output ();
-//  oled.Update_Screen();
 
 
 ////////////////////////////////////////////////////
@@ -1074,7 +1030,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -1131,7 +1087,7 @@ static void MX_ADC2_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -1656,11 +1612,14 @@ static void MX_DMA_Init(void)
   /* DMA controller clock enable */
   __HAL_RCC_DMAMUX1_CLK_ENABLE();
   __HAL_RCC_DMA1_CLK_ENABLE();
+  __HAL_RCC_DMA2_CLK_ENABLE();
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+//  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+//  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  HAL_NVIC_SetPriority(DMA2_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel1_IRQn);
   /* DMA1_Channel2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);

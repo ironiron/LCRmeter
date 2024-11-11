@@ -491,7 +491,7 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef* hdac)
 
     /* DAC1 DMA Init */
     /* DAC1_CH1 Init */
-    hdma_dac1_ch1.Instance = DMA1_Channel1;
+    hdma_dac1_ch1.Instance = DMA2_Channel1;
     hdma_dac1_ch1.Init.Request = DMA_REQUEST_DAC1_CHANNEL1;
     hdma_dac1_ch1.Init.Direction = DMA_MEMORY_TO_PERIPH;
     hdma_dac1_ch1.Init.PeriphInc = DMA_PINC_DISABLE;
@@ -499,7 +499,7 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef* hdac)
     hdma_dac1_ch1.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     hdma_dac1_ch1.Init.MemDataAlignment = DMA_PDATAALIGN_WORD;
     hdma_dac1_ch1.Init.Mode = DMA_CIRCULAR;
-    hdma_dac1_ch1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+    hdma_dac1_ch1.Init.Priority = DMA_PRIORITY_LOW;
     if (HAL_DMA_Init(&hdma_dac1_ch1) != HAL_OK)
     {
       Error_Handler();
