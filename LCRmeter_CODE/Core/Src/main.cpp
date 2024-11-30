@@ -140,361 +140,114 @@ static constexpr uint8_t sine_table[]=
 };
 static constexpr uint8_t sine_table33[]=
 {
-        132  -20,
-        137  -20,
-        142  -20,
-        146  -20,
-        150  -20,
-        153  -20,
-        156  -20,
-        157  -20,
-        159  -20,
-        159  -20,
-        159  -20,
-        157  -20,
-        156  -20,
-        153  -20,
-        150  -20,
-        146  -20,
-        142  -20,
-        137  -20,
-        132  -20,
-        127  -20,
-        122  -20,
-        117  -20,
-        112  -20,
-        108  -20,
-        104  -20,
-        101  -20,
-        98   -20,
-        97   -20,
-        95   -20,
-        95   -20,
-        95   -20,
-        97   -20,
-        98   -20,
-        101  -20,
-        104  -20,
-        108  -20,
-        112  -20,
-        117  -20,
-        122  -20,
-        127  -20
-
-
+          132  ,
+            137  ,
+          142  ,
+            146  ,
+          150  ,
+            153  ,
+          156  ,
+            157  ,
+          159  ,
+            159  ,
+          159  ,
+            157  ,
+          156  ,
+            153  ,
+          150  ,
+            146  ,
+          142  ,
+            137  ,
+          132  ,
+            127  ,
+          122  ,
+            117  ,
+          112  ,
+            108  ,
+          104  ,
+            101  ,
+          98   ,
+            97   ,
+          95   ,
+            95   ,
+          95   ,
+            97   ,
+          98   ,
+            101  ,
+          104  ,
+            108  ,
+          112  ,
+            117  ,
+          122,
+        127
 };
-static constexpr uint8_t sine_table22[]=
+
+static constexpr uint8_t sine_table44[]=
 {
-        128
-        ,130
-        ,131
-        ,132
-        ,134
-        ,135
-        ,136
-        ,138
-        ,139
-        ,140
-        ,142
-        ,143
-        ,144
-        ,145
-        ,147
-        ,148
-        ,149
-        ,151
-        ,152
-        ,153
-        ,154
-        ,155
-        ,157
-        ,158
-        ,159
-        ,160
-        ,161
-        ,162
-        ,164
-        ,165
-        ,166
-        ,167
-        ,168
-        ,169
-        ,170
-        ,171
-        ,172
-        ,173
-        ,174
-        ,175
-        ,175
-        ,176
-        ,177
-        ,178
-        ,179
-        ,180
-        ,180
-        ,181
-        ,182
-        ,182
-        ,183
-        ,184
-        ,184
-        ,185
-        ,185
-        ,186
-        ,187
-        ,187
-        ,187
-        ,188
-        ,188
-        ,189
-        ,189
-        ,189
-        ,190
-        ,190
-        ,190
-        ,190
-        ,190
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,191
-        ,190
-        ,190
-        ,190
-        ,190
-        ,190
-        ,189
-        ,189
-        ,189
-        ,188
-        ,188
-        ,187
-        ,187
-        ,187
-        ,186
-        ,185
-        ,185
-        ,184
-        ,184
-        ,183
-        ,182
-        ,182
-        ,181
-        ,180
-        ,180
-        ,179
-        ,178
-        ,177
-        ,176
-        ,175
-        ,175
-        ,174
-        ,173
-        ,172
-        ,171
-        ,170
-        ,169
-        ,168
-        ,167
-        ,166
-        ,165
-        ,164
-        ,162
-        ,161
-        ,160
-        ,159
-        ,158
-        ,157
-        ,155
-        ,154
-        ,153
-        ,152
-        ,151
-        ,149
-        ,148
-        ,147
-        ,145
-        ,144
-        ,143
-        ,142
-        ,140
-        ,139
-        ,138
-        ,136
-        ,135
-        ,134
-        ,132
-        ,131
-        ,130
-        ,128
-        ,127
-        ,126
-        ,124
-        ,123
-        ,122
-        ,120
-        ,119
-        ,118
-        ,116
-        ,115
-        ,114
-        ,112
-        ,111
-        ,110
-        ,109
-        ,107
-        ,106
-        ,105
-        ,103
-        ,102
-        ,101
-        ,100
-        ,99
-        ,97
-        ,96
-        ,95
-        ,94
-        ,93
-        ,92
-        ,90
-        ,89
-        ,88
-        ,87
-        ,86
-        ,85
-        ,84
-        ,83
-        ,82
-        ,81
-        ,80
-        ,79
-        ,79
-        ,78
-        ,77
-        ,76
-        ,75
-        ,74
-        ,74
-        ,73
-        ,72
-        ,72
-        ,71
-        ,70
-        ,70
-        ,69
-        ,69
-        ,68
-        ,67
-        ,67
-        ,67
-        ,66
-        ,66
-        ,65
-        ,65
-        ,65
-        ,64
-        ,64
-        ,64
-        ,64
-        ,64
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,63
-        ,64
-        ,64
-        ,64
-        ,64
-        ,64
-        ,65
-        ,65
-        ,65
-        ,66
-        ,66
-        ,67
-        ,67
-        ,67
-        ,68
-        ,69
-        ,69
-        ,70
-        ,70
-        ,71
-        ,72
-        ,72
-        ,73
-        ,74
-        ,74
-        ,75
-        ,76
-        ,77
-        ,78
-        ,79
-        ,79
-        ,80
-        ,81
-        ,82
-        ,83
-        ,84
-        ,85
-        ,86
-        ,87
-        ,88
-        ,89
-        ,90
-        ,92
-        ,93
-        ,94
-        ,95
-        ,96
-        ,97
-        ,99
-        ,100
-        ,101
-        ,102
-        ,103
-        ,105
-        ,106
-        ,107
-        ,109
-        ,110
-        ,111
-        ,112
-        ,114
-        ,115
-        ,116
-        ,118
-        ,119
-        ,120
-        ,122
-        ,123
-        ,124
-        ,126
-        ,127
-        ,128
-        ,130
-        ,131
-        ,132
-        ,134
-        ,135
-        ,136
-        ,138
-        ,139
-        ,140
+        132  ,
+//        137  ,
+        142  ,
+//        146  ,
+        150  ,
+//        153  ,
+        156  ,
+//        157  ,
+        159  ,
+//        159  ,
+        159  ,
+//        157  ,
+        156  ,
+//        153  ,
+        150  ,
+//        146  ,
+        142  ,
+//        137  ,
+        132  ,
+//        127  ,
+        122  ,
+//        117  ,
+        112  ,
+//        108  ,
+        104  ,
+//        101  ,
+        98   ,
+//        97   ,
+        95   ,
+//        95   ,
+        95   ,
+//        97   ,
+        98   ,
+//        101  ,
+        104  ,
+//        108  ,
+        112  ,
+//        117  ,
+        122
+//        127
+};
+
+static constexpr uint8_t sine_table22[]=
+{ 128, 130, 131, 132, 134, 135, 136, 138, 139, 140, 142, 143, 144, 145, 147,
+        148, 149, 151, 152, 153, 154, 155, 157, 158, 159, 160, 161, 162, 164,
+        165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 175, 176, 177,
+        178, 179, 180, 180, 181, 182, 182, 183, 184, 184, 185, 185, 186, 187,
+        187, 187, 188, 188, 189, 189, 189, 190, 190, 190, 190, 190, 191, 191,
+        191, 191, 191, 191, 191, 191, 191, 191, 191, 190, 190, 190, 190, 190,
+        189, 189, 189, 188, 188, 187, 187, 187, 186, 185, 185, 184, 184, 183,
+        182, 182, 181, 180, 180, 179, 178, 177, 176, 175, 175, 174, 173, 172,
+        171, 170, 169, 168, 167, 166, 165, 164, 162, 161, 160, 159, 158, 157,
+        155, 154, 153, 152, 151, 149, 148, 147, 145, 144, 143, 142, 140, 139,
+        138, 136, 135, 134, 132, 131, 130, 128, 127, 126, 124, 123, 122, 120,
+        119, 118, 116, 115, 114, 112, 111, 110, 109, 107, 106, 105, 103, 102,
+        101, 100, 99, 97, 96, 95, 94, 93, 92, 90, 89, 88, 87, 86, 85, 84, 83,
+        82, 81, 80, 79, 79, 78, 77, 76, 75, 74, 74, 73, 72, 72, 71, 70, 70, 69,
+        69, 68, 67, 67, 67, 66, 66, 65, 65, 65, 64, 64, 64, 64, 64, 63, 63, 63,
+        63, 63, 63, 63, 63, 63, 63, 63, 64, 64, 64, 64, 64, 65, 65, 65, 66, 66,
+        67, 67, 67, 68, 69, 69, 70, 70, 71, 72, 72, 73, 74, 74, 75, 76, 77, 78,
+        79, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 93, 94, 95, 96,
+        97, 99, 100, 101, 102, 103, 105, 106, 107, 109, 110, 111, 112, 114, 115,
+        116, 118, 119, 120, 122, 123, 124, 126, 127, 128, 130, 131, 132, 134,
+        135, 136, 138, 139, 140
 
 };
 
@@ -671,16 +424,20 @@ int main(void)
       Error_Handler();
     }
 
+    HAL_Delay(1000);
 //////////////////
+//    while(1)
+//    {
+//
+//    }
 
-    //TODO ADC and DAC not working together need to investigate whenever it's HW or SW issue
-     auto retval = HAL_ADC_Start(&hadc2);
-      if (retval != 0)
-      {
-          printf("AAAA111\n");
-          printf("retval = %d\n",retval);
-      }
-      retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+//     auto retval = HAL_ADC_Start(&hadc2);
+//      if (retval != 0)
+//      {
+//          printf("AAAA111\n");
+//          printf("retval = %d\n",retval);
+//      }
+      auto retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
               Adc::size_of_adc_buffer);
       if (retval != 0)
       {
@@ -688,18 +445,41 @@ int main(void)
                    printf("retval = %d\n",retval);
       }
 
-        Waveform_arythmetics::mid_voltage = 2000;
-        Waveform_arythmetics::hysteresis_samples=10;
-        Waveform_arythmetics::user_point_time = 21;
+      //FIXME ADC 2 seems to not work
 
       while(1)
       {
           HAL_Delay(1000);
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
                            Adc::size_of_adc_buffer, 1); //TODO with 1 it's to chaotic can proccessing be improved?
+
+//          Waveform_arythmetics::mid_voltage = 2000;
+//          Waveform_arythmetics::hysteresis_samples=10;
+//          Waveform_arythmetics::user_point_time = 21;
+//                Waveform_arythmetics::Find_Peaks ();
+//                Waveform_arythmetics::Calc_Frequency();
+//                Waveform_arythmetics::Calc_Alfa ();
+//                Waveform_arythmetics::Calc_Amplitude ();
+//
+//  //              bool ind=LCR_math::Calculate (
+//  //            Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
+//  //            Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
+//  //            double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
+//  //
+//  //              printf("cap=%1.9f", LCR_math::capacitance);
+//  //              printf("ind=%1.9f", LCR_math::inductance);
+//  //              printf("res=%1.9f", LCR_math::resistance);
+//                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
+//                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
+//                printf("f=%ld\n", Waveform_arythmetics::frequency);
+//                printf("a=%ld\n", Waveform_arythmetics::alfa);
+//                printf("min=%d\n", Waveform_arythmetics::nbr_of_minimas[0]);
+//                printf("max=%d\n",  Waveform_arythmetics::nbr_of_peaks[0]);
+//                printf("ind=%d\n", Waveform_arythmetics::minimas[0][0]);
+
           for(int i=0;i< Adc::size_of_adc_buffer;i++)
           {
-              printf("%d\n",Waveform_arythmetics::filtered_buffer[0][i]);
+              printf("%d, %d\n",Waveform_arythmetics::filtered_buffer[0][i],Waveform_arythmetics::filtered_buffer[1][i]);
           }
           Adc::Resume_DMA();
       }
@@ -1030,7 +810,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -1087,7 +867,7 @@ static void MX_ADC2_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_92CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
   sConfig.OffsetNumber = ADC_OFFSET_NONE;
   sConfig.Offset = 0;
@@ -1347,6 +1127,7 @@ static void MX_DAC1_Init(void)
   sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_DISABLE;
   sConfig.DAC_Trigger = DAC_TRIGGER_T6_TRGO;
   sConfig.DAC_Trigger2 = DAC_TRIGGER_NONE;
+//  sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE;
   sConfig.DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE;
   sConfig.DAC_ConnectOnChipPeripheral = DAC_CHIPCONNECT_EXTERNAL;
   sConfig.DAC_UserTrimming = DAC_TRIMMING_FACTORY;
@@ -1584,7 +1365,7 @@ static void MX_TIM6_Init(void)
   htim6.Instance = TIM6;
   htim6.Init.Prescaler = 17-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 99;
+  htim6.Init.Period = 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
   {

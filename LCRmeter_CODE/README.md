@@ -17,6 +17,7 @@ as is now - shorting it with inductor, it creates a flat line. (also starting AD
 
 For now let's use only ADC 1&2. if bandwidth is not wide enough then let's use ADC 3,4 as well. 
 
+
 ## CubeMX and Code generation
 
 Since Cube does not support main with .cpp extension LCRmeter.ioc should not be used. 
