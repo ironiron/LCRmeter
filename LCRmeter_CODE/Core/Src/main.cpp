@@ -102,6 +102,8 @@ static void MX_TIM6_Init(void);
 
 ADC_HandleTypeDef adc;
 
+//volatile int xD=0;
+
 //Not tested might be some problems
 static constexpr uint8_t sine_table[]=
 {
@@ -317,6 +319,24 @@ volatile unsigned int b2=0;
 volatile unsigned int b3=0;
 volatile unsigned int b4=0;
 
+volatile unsigned int a1=0;
+volatile unsigned int a2=0;
+
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
+{
+    if(hadc->Instance == ADC1)
+    {
+        a1++;
+    }
+    if(hadc->Instance == ADC2)
+    {
+        a2++;
+    }
+//    printf("---%d\n",hadc->ErrorCode);
+//    ADC_CLEAR_ERRORCODE(hadc);
+//    CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));
+}
+
 static void Init(void)
 {
 	HAL_Init();
@@ -414,6 +434,20 @@ int main(void)
   //////////////////////////////////////////////////////////////////////////////////////////////
   /////DAC built in
 
+	auto lam = [](DMA_HandleTypeDef* d){
+	        printf("DMA has finished \n");
+	        printf("DMA has finished \n");
+	        printf("DMA has finished \n");
+	};
+
+	auto lam1 = [](DMA_HandleTypeDef* d){
+	        printf("Derrrrrr \n");
+	        printf("Derrrrrr \n");
+	        printf("Derrrrrr \n");
+	};
+
+	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_CPLT_CB_ID , lam);
+	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_ERROR_CB_ID , lam1);
 
 	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table33, sizeof(sine_table33)/sizeof(sine_table33[0]), DAC_ALIGN_8B_R);
 	printf("starting DMA %d\n",ret);
@@ -431,13 +465,13 @@ int main(void)
 //
 //    }
 
-//     auto retval = HAL_ADC_Start(&hadc2);
-//      if (retval != 0)
-//      {
-//          printf("AAAA111\n");
-//          printf("retval = %d\n",retval);
-//      }
-      auto retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+     auto retval = HAL_ADC_Start(&hadc2);
+      if (retval != 0)
+      {
+          printf("AAAA111\n");
+          printf("retval = %d\n",retval);
+      }
+       retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
               Adc::size_of_adc_buffer);
       if (retval != 0)
       {
@@ -449,7 +483,11 @@ int main(void)
 
       while(1)
       {
-          HAL_Delay(1000);
+        while (xD == 0)
+        {
+
+        }
+        xD = 0;
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
                            Adc::size_of_adc_buffer, 1); //TODO with 1 it's to chaotic can proccessing be improved?
 
@@ -476,12 +514,32 @@ int main(void)
 //                printf("min=%d\n", Waveform_arythmetics::nbr_of_minimas[0]);
 //                printf("max=%d\n",  Waveform_arythmetics::nbr_of_peaks[0]);
 //                printf("ind=%d\n", Waveform_arythmetics::minimas[0][0]);
-
+          printf("-------------------------------------\n");
+          printf("a1= %d \n",a1);
+          printf("a2= %d \n",a2);
+//          Adc::Resume_DMA();
+//          ADC1->CR |= ADC_CR_ADSTART;
+          retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+                 Adc::size_of_adc_buffer);
+         if (retval != 0)
+         {
+             printf("AAA22222A\n");
+                      printf("retval = %d\n",retval);
+         }
+//          LL_ADC_REG_StartConversion(*hadc1.Instance);
           for(int i=0;i< Adc::size_of_adc_buffer;i++)
           {
+
               printf("%d, %d\n",Waveform_arythmetics::filtered_buffer[0][i],Waveform_arythmetics::filtered_buffer[1][i]);
+              if(Waveform_arythmetics::filtered_buffer[0][i] == 0 )
+              {
+                  printf("i= %d (from back = %d\n",i, Adc::size_of_adc_buffer - i);
+                  break;
+              }
           }
-          Adc::Resume_DMA();
+          printf("hadc1---%d\n",hadc1.ErrorCode);
+          printf("hadc2---%d\n",hadc2.ErrorCode);
+
       }
 
 
@@ -788,8 +846,8 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc1.Init.DMAContinuousRequests = ENABLE;
-  hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
@@ -856,7 +914,7 @@ static void MX_ADC2_Init(void)
   hadc2.Init.NbrOfConversion = 1;
   hadc2.Init.DiscontinuousConvMode = DISABLE;
   hadc2.Init.DMAContinuousRequests = DISABLE;
-  hadc2.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc2.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc2.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc2) != HAL_OK)
   {
@@ -1363,7 +1421,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 17-1;
+  htim6.Init.Prescaler = 15-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

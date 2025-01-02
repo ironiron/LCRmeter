@@ -9,6 +9,11 @@ therefore measuring inductance of few microhenrys is impossible.
 
 Sinewave should have up to few kiloherz, but with current hardware only 80-500 Hz is achievable.
 
+# Limitations
+
+Acievable frequency of sinewave for LCR measurments pins is 141,67 kHz, when 2 ADCs are enabled (If ADC is disabled it can go faster).
+Up to 2.2V LCR is working corectlly, otherwise op-amps have problems with driving sinewave.
+
 
 ![PCB bottom view](LCRmeter_PCB/pdfs_pictures/lcrmeter_bottom.png "PCB bottom view")
 
