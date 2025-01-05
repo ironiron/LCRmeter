@@ -15,7 +15,7 @@
 #include <catch.hpp>
 #include <testing.hpp>
 #include <stdint.h>
-#include "sine.hpp"
+//#include "sine.hpp"
 #include "real_data.hpp"
 
 
@@ -404,6 +404,75 @@ TEST_CASE( "Finds series of minimas and maximas")
   REQUIRE(Waveform_arythmetics::peaks[0][1]==9);
   REQUIRE(Waveform_arythmetics::peaks[0][2]==17);
 }
+
+
+
+//TODO if number of peaks is more than size of array this lib will silently corrupt memory! Handle it otherwise make sure there's no more peaks
+//TEST_CASE( "if found more than max number of peaks/minimas, the result is silently truncated")
+//{
+//  Waveform_arythmetics::buffer_size=47;
+//  Waveform_arythmetics::user_point_time=10;//microseconds
+//  Waveform_arythmetics::mid_voltage=5;
+//  Waveform_arythmetics::hysteresis_samples=1;
+//
+//
+//  Waveform_arythmetics::filtered_buffer[0][0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][7]=2;//here
+//  Waveform_arythmetics::filtered_buffer[0][8+0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][8+1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][8+2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][8+3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][8+4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][8+5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][8+6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][8+7]=2;//here
+//  Waveform_arythmetics::filtered_buffer[0][16+0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][16+1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][16+2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][16+3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][16+4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][16+5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][16+6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][16+7]=2;//here
+//  Waveform_arythmetics::filtered_buffer[0][24+0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][24+1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][24+2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][24+3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][24+4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][24+5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][24+6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][24+7]=2;//here
+//  Waveform_arythmetics::filtered_buffer[0][32+0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][32+1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][32+2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][32+3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][32+4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][32+5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][32+6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][32+7]=2;//here
+//  Waveform_arythmetics::filtered_buffer[0][40+0]=9;
+//  Waveform_arythmetics::filtered_buffer[0][40+1]=9;
+//  Waveform_arythmetics::filtered_buffer[0][40+2]=0;
+//  Waveform_arythmetics::filtered_buffer[0][40+3]=0;//here
+//  Waveform_arythmetics::filtered_buffer[0][40+4]=9;
+//  Waveform_arythmetics::filtered_buffer[0][40+5]=9;
+//  Waveform_arythmetics::filtered_buffer[0][40+6]=2;
+//  Waveform_arythmetics::filtered_buffer[0][40+7]=2;//here
+//
+//
+//  Waveform_arythmetics::Find_Peaks();
+//
+//  REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==10);
+//  REQUIRE(Waveform_arythmetics::minimas[0][9]==32+7);
+////  REQUIRE(Waveform_arythmetics::minimas[0][9]==32+7);
+//}
+
 
 
 TEST_CASE( "Find center of peak and minimas")

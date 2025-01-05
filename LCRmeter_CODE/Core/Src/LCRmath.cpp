@@ -18,7 +18,7 @@ double LCR_math::loss_angle = 0;
 double LCR_math::inductance = 0;
 double LCR_math::resistance = 0;
 double LCR_math::capacitance = 0;
-double LCR_math::series_resistance = 150;
+double LCR_math::series_resistance = 100;
 
 bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
 			  uint32_t frequency)
@@ -34,33 +34,42 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
       pow (amplitude1 - (amplitude2 * cos (radians)), 2)
 	  + pow (amplitude2 * sin (radians), 2));
   //current
-  current = voltage_rs / series_resistance;
-
+  current = voltage_rs / series_resistance;//fixme add handling of voltage_rs equal 0
+  loss_angle = pi / 2
+  - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
   if (angle < 0)
     {
       //loss angle in radians
-      loss_angle = pi / 2
-	  - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
+//      loss_angle = pi / 2
+//	  - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
       loss_angle = pi - loss_angle; //do not why
-      voltage_lcr = amplitude2 * cos (loss_angle);
-      reactance = voltage_lcr / current;
-      inductance = reactance / 2 / frequency / 3.14159;
+//      voltage_lcr = amplitude2 * cos (loss_angle);
+//      reactance = voltage_lcr / current;
+//      inductance = reactance / 2 / frequency / 3.14159;
       //ESR
       isinductive = true;
     }
   else
     {
       //loss angle in radians
-      loss_angle = pi / 2
-	  - (radians
-	      + acos ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs));
+//      loss_angle = pi / 2
+//	  - (radians
+//	      + acos ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs));
+
       //loss_angle=pi-loss_angle;//do not why
-      voltage_lcr = amplitude2 * cos (loss_angle);
-      reactance = voltage_lcr / current;
-      capacitance = 1 / reactance / 2 / frequency / 3.14159;
+//      voltage_lcr = amplitude2 * cos (loss_angle);
+//      reactance = voltage_lcr / current;
+//      capacitance = 1 / reactance / 2 / frequency / 3.14159;
       isinductive = false;
     }
+//  resistance = amplitude2 / current;
+
+  voltage_lcr = amplitude2 * cos (loss_angle);
+  reactance = voltage_lcr / current;
+  inductance = reactance / 2 / frequency / 3.14159;
+  capacitance = 1 / reactance / 2 / frequency / 3.14159;
   resistance = amplitude2 * sin (loss_angle) / current;
+
   loss_angle = Rad_to_Deg (loss_angle);
   return isinductive;
 }

@@ -17,17 +17,17 @@
 uint16_t Waveform_arythmetics::filtered_buffer[2][max_buffer_size] =
 { 0 };
 uint32_t Waveform_arythmetics::buffer_size = 0;
-uint32_t Waveform_arythmetics::user_point_time = 0;
-uint32_t Waveform_arythmetics::point_time = 0;
+float Waveform_arythmetics::user_point_time = 0;
+float Waveform_arythmetics::point_time = 0;
 uint32_t Waveform_arythmetics::peak1 = 0;
 uint32_t Waveform_arythmetics::peaks[nbr_of_signals][max_peaks];
 uint32_t Waveform_arythmetics::minimas[nbr_of_signals][max_peaks];
 uint32_t Waveform_arythmetics::nbr_of_peaks[nbr_of_signals];
 uint32_t Waveform_arythmetics::nbr_of_minimas[nbr_of_signals];
 uint32_t Waveform_arythmetics::peak2 = 0;
-int32_t Waveform_arythmetics::alfa = 0;
+float Waveform_arythmetics::alfa = 0;
 uint32_t Waveform_arythmetics::frequency = 0;
-uint32_t Waveform_arythmetics::mid_voltage = 0; /////////////////////////TODO make const, or add documenttation
+uint32_t Waveform_arythmetics::mid_voltage[nbr_of_signals]; /////////////////////////TODO make const, or add documenttation
 uint32_t Waveform_arythmetics::amplitude1 = 0;
 uint32_t Waveform_arythmetics::amplitude2 = 0;
 
@@ -36,6 +36,7 @@ uint_fast16_t Waveform_arythmetics::hysteresis_samples = 0;
 void Waveform_arythmetics::Calc_Moving_Average(uint32_t *buffer, uint32_t size,
         uint8_t step)
 {
+    uint32_t average[2] = {0,0};
     if (step == 0)
     {
         return;
@@ -56,8 +57,15 @@ void Waveform_arythmetics::Calc_Moving_Average(uint32_t *buffer, uint32_t size,
         filtered_buffer[1][j] = (uint32_t) temp2 / step;
         temp1 = 0;
         temp2 = 0;
+        average[0] += filtered_buffer[0][j];
+        average[1] += filtered_buffer[1][j];
     }
     buffer_size = size / step; //update end of buffer
+    //update mid voltage for correct waveform detection
+    average[0] = average[0]/buffer_size;
+    average[1] = average[1]/buffer_size;
+    mid_voltage[0] = average[0];
+    mid_voltage[1] = average[1];
 }
 
 void Waveform_arythmetics::Find_Peaks(void)
@@ -86,7 +94,7 @@ void Waveform_arythmetics::Find_Peaks(void)
 
         for (uint32_t index = 0; index < buffer_size; index++)
         {
-            if (filtered_buffer[signal][index] > mid_voltage)
+            if (filtered_buffer[signal][index] > mid_voltage[signal])
             {
                 if (hysteresis_counter < 0)
                 {
@@ -108,7 +116,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                     {
                         hysteresis_counter = 0;
                         level = ABOVE;
-                        if (nbr_of_minimas[signal] < max_peaks)
+                        if (nbr_of_minimas[signal] +1< max_peaks)
                         {
                             if (is_first_minimum == true)
                             {
@@ -156,7 +164,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                     {
                         hysteresis_counter = 0;
                         level = BELOW;
-                        if (nbr_of_peaks[signal] < max_peaks)
+                        if (nbr_of_peaks[signal]+1 < max_peaks)
                         {
                             if (is_first_peak == true)
                             {
@@ -394,7 +402,8 @@ void Waveform_arythmetics::Calc_Frequency(void)
     }
 }
 
-void Waveform_arythmetics::Calc_Alfa(void)
+//fixme alpha takes indexes arbitrarty, but the waveform capture starts at random moments, so dependidngon case, it can falsly detect minus, instead of plus sign and vice-versa!!!
+bool Waveform_arythmetics::Calc_Alfa(void)
 {
     uint32_t i1=0;
     uint32_t i2=0;
@@ -409,13 +418,13 @@ void Waveform_arythmetics::Calc_Alfa(void)
     }
     else if (nbr_of_minimas[0]>0)
     {
-       i1=peaks[0][0];
+       i1=minimas[0][0];
        above1=false;
     }
     else
     {
-        alfa=0xfffffff;
-        return;
+        alfa=123456789;
+        return true;
     }
 
     if (nbr_of_peaks[1]>0)
@@ -425,25 +434,27 @@ void Waveform_arythmetics::Calc_Alfa(void)
     }
     else if (nbr_of_minimas[1]>0)
     {
-       i2=peaks[1][0];
+       i2=minimas[1][0];
        above2=false;
     }
     else
     {
-        alfa=0xfffffff;
-        return;
+        alfa=123456789;
+        return true;
     }
 
-    int32_t diff = abs(int32_t(i1 - i2));
+    uint32_t diff = abs(int32_t(i1 - i2));
     if (above1 != above2) //one side no matter upper or lower TODO check name
     {
         diff *= 2; //we got only half of a way (one peak or one minima)
     }
-    alfa = int32_t(diff) * int32_t(point_time) * int32_t(frequency) * 360 / 1000;
+    printf("++++++++++\n diff = %d\n++++++++++++++++++++++++++\n",diff);
+    alfa = (diff) * (point_time) * (frequency) * 360 / 1000;
     if (alfa > 180000)
     {
         alfa = alfa - 360000;
     }
+    return false;
 }
 
 void Waveform_arythmetics::Calc_Amplitude(void)

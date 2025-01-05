@@ -479,7 +479,9 @@ int main(void)
                    printf("retval = %d\n",retval);
       }
 
-      //FIXME ADC 2 seems to not work
+//      Waveform_arythmetics::mid_voltage = 2000;
+      Waveform_arythmetics::hysteresis_samples=3;
+      Waveform_arythmetics::user_point_time = 0.3529411;
 
       while(1)
       {
@@ -489,34 +491,73 @@ int main(void)
         }
         xD = 0;
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
-                           Adc::size_of_adc_buffer, 1); //TODO with 1 it's to chaotic can proccessing be improved?
+                           Adc::size_of_adc_buffer, 1);
 
-//          Waveform_arythmetics::mid_voltage = 2000;
-//          Waveform_arythmetics::hysteresis_samples=10;
-//          Waveform_arythmetics::user_point_time = 21;
-//                Waveform_arythmetics::Find_Peaks ();
-//                Waveform_arythmetics::Calc_Frequency();
-//                Waveform_arythmetics::Calc_Alfa ();
-//                Waveform_arythmetics::Calc_Amplitude ();
+
+                Waveform_arythmetics::Find_Peaks ();
+                Waveform_arythmetics::Calc_Frequency();
+                auto al_good  = Waveform_arythmetics::Calc_Alfa ();
+                Waveform_arythmetics::Calc_Amplitude ();
+
+
+                unsigned long int avg1=0;
+                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[0];i++)
+                {
+                    printf("peak%d = %d\n",i,Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
+                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]];
+                }
+                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[0];
+                printf("peak average is %ld\n",avg1);
+                Waveform_arythmetics::amplitude1 = avg1;
+
+
+                avg1=0;
+                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[1];i++)
+                {
+                    printf("peak%d = %d\n",i,Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
+                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]];
+                }
+                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[1];
+                printf("peak average is %ld\n",avg1);
+                Waveform_arythmetics::amplitude2 = avg1;
 //
-//  //              bool ind=LCR_math::Calculate (
-//  //            Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
-//  //            Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-//  //            double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
-//  //
-//  //              printf("cap=%1.9f", LCR_math::capacitance);
-//  //              printf("ind=%1.9f", LCR_math::inductance);
-//  //              printf("res=%1.9f", LCR_math::resistance);
-//                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
-//                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
-//                printf("f=%ld\n", Waveform_arythmetics::frequency);
-//                printf("a=%ld\n", Waveform_arythmetics::alfa);
-//                printf("min=%d\n", Waveform_arythmetics::nbr_of_minimas[0]);
-//                printf("max=%d\n",  Waveform_arythmetics::nbr_of_peaks[0]);
-//                printf("ind=%d\n", Waveform_arythmetics::minimas[0][0]);
+                bool ind=LCR_math::Calculate (
+              Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
+              Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
+              double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
+  //
+
+                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
+                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
+                printf("f=%ld\n", Waveform_arythmetics::frequency);
+                printf("a=%f\n", Waveform_arythmetics::alfa);
+                printf("nbr_of_minimas[0]=%ld\n", Waveform_arythmetics::nbr_of_minimas[0]);
+                printf("nbr_of_peaks[0]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[0]);
+                printf("nbr_of_minimas[1]=%ld\n", Waveform_arythmetics::nbr_of_minimas[1]);
+                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+
+        printf("minimas=%ld\n", Waveform_arythmetics::minimas[0][0]);
+
+        printf("cap=%1.9f\n", LCR_math::capacitance);
+        printf("ind=%1.9f\n", LCR_math::inductance);
+        printf("res=%1.9f\n", LCR_math::resistance);
+        printf("loss angle=%1.9f degs\n", LCR_math::loss_angle);
+        printf("al_good %d \n", al_good);
+
+
+        printf("Waveform_arythmetics::mid_voltage[0] = %ld\n",
+                Waveform_arythmetics::mid_voltage[0]);
+        printf("Waveform_arythmetics::mid_voltage[1] = %ld\n",
+                Waveform_arythmetics::mid_voltage[1]);
+
           printf("-------------------------------------\n");
           printf("a1= %d \n",a1);
           printf("a2= %d \n",a2);
+
+
+
+
+          HAL_Delay(1000);
 //          Adc::Resume_DMA();
 //          ADC1->CR |= ADC_CR_ADSTART;
           retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
@@ -537,8 +578,8 @@ int main(void)
                   break;
               }
           }
-          printf("hadc1---%d\n",hadc1.ErrorCode);
-          printf("hadc2---%d\n",hadc2.ErrorCode);
+          printf("hadc1---%ld\n",hadc1.ErrorCode);
+          printf("hadc2---%ld\n",hadc2.ErrorCode);
 
       }
 
@@ -1421,7 +1462,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 15-1;
+  htim6.Init.Prescaler = 170-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

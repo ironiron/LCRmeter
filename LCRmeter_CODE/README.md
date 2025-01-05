@@ -6,7 +6,12 @@ DAC1 -> PA4 -> measuring
 DMA1 -> ADC
 DMA2 -> DAC1 //todo add double buffer mode to improve bus latency.
 
+# what is working
+
+The resistive load when connected to 0V works fine there's +- 3 ohm variance on result, however the alpha resolution is to small.
+It has 16 degrees which is far to small. with dual ADC it can be moved to 8 degs. but it still not good. I guess frequency must be reduced (now it's ca. 121 KHz)
 Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average (TIM6 pres is 15)
+
 
 #TODO 
 

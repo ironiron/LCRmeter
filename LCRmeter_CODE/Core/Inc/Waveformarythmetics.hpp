@@ -57,9 +57,9 @@ private:
 
 public:
   ///length of time of 1 point in buffer in microseconds
-  static uint32_t user_point_time;
+  static float user_point_time;
   ///length of time of 1 point in buffer after averaging in microseconds
-  static uint32_t point_time;
+  static float point_time;
   ///Two dim. array that contain filtered ADC1 readings in 1st row and ADC2 in 2nd,
   static uint16_t filtered_buffer[nbr_of_signals][max_buffer_size];
 
@@ -79,11 +79,11 @@ public:
   static uint_fast16_t hysteresis_samples;
 
   ///phase swift with resolution of 0.001 degrees
-  static int32_t alfa; //TODO alfa is with resolution 330 or sth? why
+  static float alfa; //TODO alfa is with resolution 330 or sth? why
   ///frequency  with resolution of 1 Hz
   static uint32_t frequency;
   /// value of the 0 point of input sine
-  static uint32_t mid_voltage;
+  static uint32_t mid_voltage[nbr_of_signals];
   //TODO fix units!
   /// amplitude in ADC1
   static uint32_t amplitude1;
@@ -111,7 +111,7 @@ public:
 
   /** Calculates phase swift based on #peak1, #peak2, #frequency and #point_time variables
    */
-  static void Calc_Alfa (void);
+  static bool Calc_Alfa (void);
 
   /** Calculates amplitudes from #peak1, #peak2 and #filtered_buffer
    */

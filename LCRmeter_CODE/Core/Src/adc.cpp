@@ -31,7 +31,7 @@ volatile uint32_t volt_temp[2] =
 { 0 };
 
 uint32_t vref = 3300;
-double adc_freq = 12.0;
+constexpr double adc_freq = 170/4;
 enum CurrentState
 {
 	NOT_INITIALISED, LCR, OSCILLOSCOPE, VOLT_TEMP
@@ -322,16 +322,17 @@ int Get_Temperature(void)
 //	return temp;
 }
 
+//todo check if it works
 uint32_t Update_Vref(void)
 {
-//	uint32_t temp = 1200 * 4095 / volt_temp[1];
-//	vref = temp;
-//	return temp;
+	uint32_t temp = 1200 * 4095 / volt_temp[1];
+	vref = temp;
+	return temp;
 }
 
 uint32_t Adc_To_Milivolts(uint32_t adc)
 {
-//	return adc * vref / 4095;
+	return adc * vref / 4095;
 }
 
 } //namespace
