@@ -15,12 +15,11 @@
 #include <catch.hpp>
 #include <testing.hpp>
 #include <stdint.h>
-//#include "sine.hpp"
 #include "real_data.hpp"
-
 
 TEST_CASE( "calculating moving mean")
 {
+
   uint32_t buf[10]={10 | (3<<16),
 		      5 | (5<<16),
 		      2 | (2<<16),
@@ -74,8 +73,10 @@ TEST_CASE( "calculating moving mean")
 
 TEST_CASE( "Finds peaks")
 {
+
   Waveform_arythmetics::buffer_size=10;
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
   Waveform_arythmetics::filtered_buffer[0][0]=6;
@@ -112,9 +113,11 @@ TEST_CASE( "Finds peaks")
 
 TEST_CASE( "Finds more than one peak")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -152,9 +155,10 @@ TEST_CASE( "Finds more than one peak")
 
 TEST_CASE( "Finds peaks 2nd scenario")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -192,9 +196,10 @@ TEST_CASE( "Finds peaks 2nd scenario")
 
 TEST_CASE( "Finds several peaks with different amplitude")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -234,9 +239,10 @@ TEST_CASE( "Finds several peaks with different amplitude")
 
 TEST_CASE( "Finds one peak and ignore boundary peaks")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -273,9 +279,10 @@ TEST_CASE( "Finds one peak and ignore boundary peaks")
 
 TEST_CASE( "Finds one minimum and ignore boundary peaks")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -296,42 +303,13 @@ TEST_CASE( "Finds one minimum and ignore boundary peaks")
   REQUIRE(Waveform_arythmetics::minimas[0][0]==7);
 }
 
-//TODO add frequncy calculate function
-
-//TODO implement this later
-//TODO check how catch2 can disable tests
-//TEST_CASE( "Finds one peak and ignore boundary peaks - 2nd scenario")
-//{
-//  Waveform_arythmetics::buffer_size=10;
-//  Waveform_arythmetics::user_point_time=10;//microseconds
-//  Waveform_arythmetics::mid_voltage=5;
-//  Waveform_arythmetics::hysteresis_samples=3;
-//
-////peak undetectable, since fluctuation is too big
-//  Waveform_arythmetics::filtered_buffer[0][0]=14;
-//  Waveform_arythmetics::filtered_buffer[0][1]=14;
-//  Waveform_arythmetics::filtered_buffer[0][2]=13;
-//  Waveform_arythmetics::filtered_buffer[0][3]=13;
-//  Waveform_arythmetics::filtered_buffer[0][4]=15;//not a proper peak
-//  Waveform_arythmetics::filtered_buffer[0][5]=0;
-//  Waveform_arythmetics::filtered_buffer[0][6]=0;
-//  Waveform_arythmetics::filtered_buffer[0][7]=0;
-//  Waveform_arythmetics::filtered_buffer[0][8]=0;
-//  Waveform_arythmetics::filtered_buffer[0][9]=0;
-//
-//  Waveform_arythmetics::Find_Peaks();
-//
-//  REQUIRE(Waveform_arythmetics::nbr_of_peaks[0]==0);
-//}
-
-
-
-
 TEST_CASE( "Finds one minimum")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -367,9 +345,11 @@ TEST_CASE( "Finds one minimum")
 
 TEST_CASE( "Finds series of minimas and maximas")
 {
+
   Waveform_arythmetics::buffer_size=20;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
 
@@ -408,78 +388,89 @@ TEST_CASE( "Finds series of minimas and maximas")
 
 
 //TODO if number of peaks is more than size of array this lib will silently corrupt memory! Handle it otherwise make sure there's no more peaks
-//TEST_CASE( "if found more than max number of peaks/minimas, the result is silently truncated")
-//{
-//  Waveform_arythmetics::buffer_size=47;
-//  Waveform_arythmetics::user_point_time=10;//microseconds
-//  Waveform_arythmetics::mid_voltage=5;
-//  Waveform_arythmetics::hysteresis_samples=1;
-//
-//
-//  Waveform_arythmetics::filtered_buffer[0][0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][7]=2;//here
-//  Waveform_arythmetics::filtered_buffer[0][8+0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][8+1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][8+2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][8+3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][8+4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][8+5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][8+6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][8+7]=2;//here
-//  Waveform_arythmetics::filtered_buffer[0][16+0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][16+1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][16+2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][16+3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][16+4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][16+5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][16+6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][16+7]=2;//here
-//  Waveform_arythmetics::filtered_buffer[0][24+0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][24+1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][24+2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][24+3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][24+4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][24+5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][24+6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][24+7]=2;//here
-//  Waveform_arythmetics::filtered_buffer[0][32+0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][32+1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][32+2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][32+3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][32+4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][32+5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][32+6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][32+7]=2;//here
-//  Waveform_arythmetics::filtered_buffer[0][40+0]=9;
-//  Waveform_arythmetics::filtered_buffer[0][40+1]=9;
-//  Waveform_arythmetics::filtered_buffer[0][40+2]=0;
-//  Waveform_arythmetics::filtered_buffer[0][40+3]=0;//here
-//  Waveform_arythmetics::filtered_buffer[0][40+4]=9;
-//  Waveform_arythmetics::filtered_buffer[0][40+5]=9;
-//  Waveform_arythmetics::filtered_buffer[0][40+6]=2;
-//  Waveform_arythmetics::filtered_buffer[0][40+7]=2;//here
-//
-//
-//  Waveform_arythmetics::Find_Peaks();
-//
-//  REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==10);
-//  REQUIRE(Waveform_arythmetics::minimas[0][9]==32+7);
-////  REQUIRE(Waveform_arythmetics::minimas[0][9]==32+7);
-//}
+TEST_CASE( "if found more than max number of peaks/minimas, the result is silently truncated")
+{
+
+  Waveform_arythmetics::buffer_size=48;
+  Waveform_arythmetics::user_point_time=10;//microseconds
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::hysteresis_samples=1;
+
+
+  Waveform_arythmetics::filtered_buffer[0][0]=9;
+  Waveform_arythmetics::filtered_buffer[0][1]=9;
+  Waveform_arythmetics::filtered_buffer[0][2]=0;
+  Waveform_arythmetics::filtered_buffer[0][3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][4]=9;
+  Waveform_arythmetics::filtered_buffer[0][5]=9;
+  Waveform_arythmetics::filtered_buffer[0][6]=2;
+  Waveform_arythmetics::filtered_buffer[0][7]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][8+0]=9;
+  Waveform_arythmetics::filtered_buffer[0][8+1]=9;
+  Waveform_arythmetics::filtered_buffer[0][8+2]=0;
+  Waveform_arythmetics::filtered_buffer[0][8+3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][8+4]=9;
+  Waveform_arythmetics::filtered_buffer[0][8+5]=9;
+  Waveform_arythmetics::filtered_buffer[0][8+6]=2;
+  Waveform_arythmetics::filtered_buffer[0][8+7]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][16+0]=9;
+  Waveform_arythmetics::filtered_buffer[0][16+1]=9;
+  Waveform_arythmetics::filtered_buffer[0][16+2]=0;
+  Waveform_arythmetics::filtered_buffer[0][16+3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][16+4]=9;
+  Waveform_arythmetics::filtered_buffer[0][16+5]=9;
+  Waveform_arythmetics::filtered_buffer[0][16+6]=2;
+  Waveform_arythmetics::filtered_buffer[0][16+7]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][24+0]=9;
+  Waveform_arythmetics::filtered_buffer[0][24+1]=9;
+  Waveform_arythmetics::filtered_buffer[0][24+2]=0;
+  Waveform_arythmetics::filtered_buffer[0][24+3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][24+4]=9;
+  Waveform_arythmetics::filtered_buffer[0][24+5]=9;
+  Waveform_arythmetics::filtered_buffer[0][24+6]=2;
+  Waveform_arythmetics::filtered_buffer[0][24+7]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][32+0]=9;
+  Waveform_arythmetics::filtered_buffer[0][32+1]=9;
+  Waveform_arythmetics::filtered_buffer[0][32+2]=0;
+  Waveform_arythmetics::filtered_buffer[0][32+3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][32+4]=9;
+  Waveform_arythmetics::filtered_buffer[0][32+5]=9;
+  Waveform_arythmetics::filtered_buffer[0][32+6]=2;
+  Waveform_arythmetics::filtered_buffer[0][32+7]=2;//here
+  Waveform_arythmetics::filtered_buffer[0][40+0]=9;
+  Waveform_arythmetics::filtered_buffer[0][40+1]=9;
+  Waveform_arythmetics::filtered_buffer[0][40+2]=0;
+  Waveform_arythmetics::filtered_buffer[0][40+3]=0;//here
+  Waveform_arythmetics::filtered_buffer[0][40+4]=9;
+  Waveform_arythmetics::filtered_buffer[0][40+5]=9;
+  Waveform_arythmetics::filtered_buffer[0][40+6]=2;
+  Waveform_arythmetics::filtered_buffer[0][40+7]=2;//here
+
+
+  Waveform_arythmetics::Find_Peaks();
+
+  REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==10);
+  REQUIRE(Waveform_arythmetics::minimas[0][0]==3);
+  REQUIRE(Waveform_arythmetics::minimas[0][1]==7);
+  REQUIRE(Waveform_arythmetics::minimas[0][2]==8+3);
+  REQUIRE(Waveform_arythmetics::minimas[0][3]==8+7);
+  REQUIRE(Waveform_arythmetics::minimas[0][4]==16+3);
+  REQUIRE(Waveform_arythmetics::minimas[0][5]==16+7);
+  REQUIRE(Waveform_arythmetics::minimas[0][6]==24+3);
+  REQUIRE(Waveform_arythmetics::minimas[0][7]==24+7);
+  REQUIRE(Waveform_arythmetics::minimas[0][8]==32+3);
+  REQUIRE(Waveform_arythmetics::minimas[0][9]==32+7);
+}
 
 
 
 TEST_CASE( "Find center of peak and minimas")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
   Waveform_arythmetics::filtered_buffer[0][0]=7;
@@ -514,9 +505,11 @@ TEST_CASE( "Find center of peak and minimas")
 
 TEST_CASE( "Find center of peak that is close to boundary condition")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=3;
 
   Waveform_arythmetics::filtered_buffer[0][0]=7;
@@ -538,9 +531,11 @@ TEST_CASE( "Find center of peak that is close to boundary condition")
 
 TEST_CASE( "Find center of minimum that is close to boundary condition")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=3;
 
   Waveform_arythmetics::filtered_buffer[0][0]=4;
@@ -562,9 +557,11 @@ TEST_CASE( "Find center of minimum that is close to boundary condition")
 
 TEST_CASE( "ignore minimas and peak with no clear distinction.")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=1;
 
   Waveform_arythmetics::filtered_buffer[0][0]=7;
@@ -595,13 +592,13 @@ TEST_CASE( "ignore minimas and peak with no clear distinction.")
   REQUIRE(Waveform_arythmetics::nbr_of_minimas[0]==0);
 }
 
-//TODO check peak not clear - eg. 10-11-10-11-11-9-8-7...
-
 TEST_CASE( "detect unstable peaks")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
   Waveform_arythmetics::hysteresis_samples=2;
 
   Waveform_arythmetics::filtered_buffer[0][0]=0;
@@ -636,9 +633,10 @@ TEST_CASE( "detect unstable peaks")
 
 TEST_CASE( "detect unstable minimas")
 {
+
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
   Waveform_arythmetics::hysteresis_samples=2;
 
   Waveform_arythmetics::filtered_buffer[0][0]=10;
@@ -673,9 +671,11 @@ TEST_CASE( "detect unstable minimas")
 
 TEST_CASE( "Find peak based on real data.")
 {
+
   Waveform_arythmetics::buffer_size=real_data_length;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=2000;
+  Waveform_arythmetics::mid_voltage[0]=2000;
+  Waveform_arythmetics::mid_voltage[1]=2000;
   Waveform_arythmetics::hysteresis_samples=10;
 
   for (unsigned int j = 0; j < 2; j++)
@@ -695,9 +695,11 @@ TEST_CASE( "Find peak based on real data.")
 
 TEST_CASE( "Find peaks and minimas based on real data.")
 {
+
   Waveform_arythmetics::buffer_size=real_data_length;
   Waveform_arythmetics::user_point_time=10;//microseconds
-  Waveform_arythmetics::mid_voltage=2000;
+  Waveform_arythmetics::mid_voltage[0]=2000;
+  Waveform_arythmetics::mid_voltage[1]=2000;
   Waveform_arythmetics::hysteresis_samples=10;
 
   for (unsigned int j = 0; j < 2; j++)
@@ -770,7 +772,7 @@ TEST_CASE( "Gets frequency from one peak and one minimum")
 
 }
 
-TEST_CASE( "gets 0 frequncy if cannot detect")
+TEST_CASE( "gets 0 frequency if cannot detect")
 {
   Waveform_arythmetics::buffer_size=10;
   Waveform_arythmetics::point_time=10;//microseconds
@@ -793,8 +795,41 @@ TEST_CASE( "Calculate phase swift")
   Waveform_arythmetics::frequency=10000;
   Waveform_arythmetics::point_time=10;
 
-  Waveform_arythmetics::nbr_of_peaks[0]=1;
-  Waveform_arythmetics::nbr_of_peaks[1]=1;
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::nbr_of_peaks[1]=2;
+  Waveform_arythmetics::nbr_of_minimas[0]=0;
+  Waveform_arythmetics::nbr_of_minimas[1]=0;
+  Waveform_arythmetics::peaks[0][0]=100;
+  Waveform_arythmetics::peaks[1][0]=101;//Initial values: 10 points per full period(100us).
+  Waveform_arythmetics::peaks[0][1]=110;
+  Waveform_arythmetics::peaks[1][1]=0;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  //exactly 36 degs.
+  REQUIRE(Waveform_arythmetics::alfa > 35.95);
+  REQUIRE(Waveform_arythmetics::alfa < 36.05);
+
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=1;
+  Waveform_arythmetics::peaks[0][0]=32;
+  Waveform_arythmetics::peaks[1][0]=100;//Initial values: 100 points per full period(100us).
+  Waveform_arythmetics::peaks[0][1]=132;
+
+  Waveform_arythmetics::Calc_Alfa();
+
+  //115.2
+  REQUIRE(Waveform_arythmetics::alfa>-115.3);
+  REQUIRE(Waveform_arythmetics::alfa<-115.1);
+}
+
+TEST_CASE( "Calculate phase swift and if 180 deg assumes negative sign")
+{
+  Waveform_arythmetics::frequency=10000;
+  Waveform_arythmetics::point_time=10;
+
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::nbr_of_peaks[1]=2;
   Waveform_arythmetics::nbr_of_minimas[0]=0;
   Waveform_arythmetics::nbr_of_minimas[1]=0;
   Waveform_arythmetics::peaks[0][0]=100;
@@ -804,24 +839,19 @@ TEST_CASE( "Calculate phase swift")
 
   Waveform_arythmetics::Calc_Alfa();
 
-  REQUIRE((Waveform_arythmetics::alfa==180000 || Waveform_arythmetics::alfa==-180000));
-
-  Waveform_arythmetics::frequency=10000;
-  Waveform_arythmetics::point_time=1;
-  Waveform_arythmetics::peaks[0][0]=132;
-  Waveform_arythmetics::peaks[1][0]=100;//Initial values: 100 points per full period(100us).
-
-  Waveform_arythmetics::Calc_Alfa();
-
-  REQUIRE(Waveform_arythmetics::alfa==(115200));
+  REQUIRE(Waveform_arythmetics::alfa <-179.99);
+  REQUIRE(Waveform_arythmetics::alfa >-180.01);
 }
 
 TEST_CASE( "Calculate phase swift and decide sign (+/-)")
 {
   Waveform_arythmetics::frequency=10000;
   Waveform_arythmetics::point_time=10;
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
 
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::nbr_of_peaks[1]=2;
   Waveform_arythmetics::peaks[0][0]=0;
   Waveform_arythmetics::peaks[1][0]=2;
   Waveform_arythmetics::peaks[0][1]=10;
@@ -829,7 +859,8 @@ TEST_CASE( "Calculate phase swift and decide sign (+/-)")
 
   Waveform_arythmetics::Calc_Alfa();
 
-  REQUIRE((Waveform_arythmetics::alfa==72000 ||Waveform_arythmetics::alfa==-72000));
+  REQUIRE(Waveform_arythmetics::alfa >71.99);
+  REQUIRE(Waveform_arythmetics::alfa <72.01);
 
   Waveform_arythmetics::peaks[0][0]=0;
   Waveform_arythmetics::peaks[1][0]=8;
@@ -838,39 +869,74 @@ TEST_CASE( "Calculate phase swift and decide sign (+/-)")
 
   Waveform_arythmetics::Calc_Alfa();
 
-  REQUIRE(Waveform_arythmetics::alfa==(-72000));
+  REQUIRE(Waveform_arythmetics::alfa <-71.99);
+  REQUIRE(Waveform_arythmetics::alfa >-72.01);
 }
 
 TEST_CASE( "Calculate phase swift on the boundary conditions")
 {
   Waveform_arythmetics::frequency=100000;
   Waveform_arythmetics::point_time=1;
-  Waveform_arythmetics::mid_voltage=5;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::nbr_of_peaks[1]=2;
 
   //Initial values: 10 points per full period(1us).
   Waveform_arythmetics::peaks[0][0]=10;
   Waveform_arythmetics::peaks[1][0]=14;
   Waveform_arythmetics::Calc_Alfa();
-  REQUIRE(Waveform_arythmetics::alfa==144000);
+  REQUIRE(Waveform_arythmetics::alfa >143.99);
+  REQUIRE(Waveform_arythmetics::alfa <144.01);
 
   Waveform_arythmetics::peaks[0][0]=10;
   Waveform_arythmetics::peaks[1][0]=11;
   Waveform_arythmetics::Calc_Alfa();
-  REQUIRE(Waveform_arythmetics::alfa==36000);
+  REQUIRE(Waveform_arythmetics::alfa >35.99);
+  REQUIRE(Waveform_arythmetics::alfa <36.01);
 
   Waveform_arythmetics::peaks[0][0]=10;
   Waveform_arythmetics::peaks[1][0]=16;
   Waveform_arythmetics::Calc_Alfa();
-  REQUIRE(Waveform_arythmetics::alfa==-144000);
+  REQUIRE(Waveform_arythmetics::alfa <-143.99);
+  REQUIRE(Waveform_arythmetics::alfa >-144.01);
+}
 
-  Waveform_arythmetics::peaks[0][0]=0;
-  Waveform_arythmetics::peaks[1][0]=8;
-  Waveform_arythmetics::peaks[0][1]=10;
-  Waveform_arythmetics::peaks[1][1]=18;
 
+TEST_CASE( "Phase swift is 0 when peaks are in same location")
+{
+  Waveform_arythmetics::frequency=100000;
+  Waveform_arythmetics::point_time=1;
+  Waveform_arythmetics::mid_voltage[0]=5;
+  Waveform_arythmetics::mid_voltage[1]=5;
+  Waveform_arythmetics::nbr_of_peaks[0]=2;
+  Waveform_arythmetics::nbr_of_peaks[1]=2;
+
+  //Initial values: 10 points per full period(1us).
+  Waveform_arythmetics::peaks[0][0]=54;
+  Waveform_arythmetics::peaks[1][0]=54;
   Waveform_arythmetics::Calc_Alfa();
+  REQUIRE(Waveform_arythmetics::alfa ==0.0f);
+}
 
-  REQUIRE(Waveform_arythmetics::alfa==(-72000));
+TEST_CASE( "Correctly calculates phase shift even if 1 peak is shifted out of detected range")
+{
+    Waveform_arythmetics::frequency=10000;
+    Waveform_arythmetics::point_time=10;
+    Waveform_arythmetics::mid_voltage[0]=5;
+    Waveform_arythmetics::mid_voltage[1]=5;
+    Waveform_arythmetics::nbr_of_peaks[0]=2;
+    Waveform_arythmetics::nbr_of_peaks[1]=2;
+
+    Waveform_arythmetics::peaks[1][0]=0;
+    Waveform_arythmetics::peaks[0][0]=8;
+    Waveform_arythmetics::peaks[1][1]=10;
+    Waveform_arythmetics::peaks[0][1]=18;
+
+    Waveform_arythmetics::Calc_Alfa();
+
+    REQUIRE(Waveform_arythmetics::alfa >71.99);
+    REQUIRE(Waveform_arythmetics::alfa <72.01);
 }
 
 TEST_CASE( "Calculate Amplitude from 2 peaks")
@@ -892,10 +958,9 @@ TEST_CASE( "Calculate Amplitude from 2 peaks")
   REQUIRE(Waveform_arythmetics::amplitude2==2);
 }
 
-//TODO test case with real values or at least with feasible imaginary and check if inductance etc is OK
-
 TEST_CASE( "Gets index of rising edge for oscilloscope")
 {
+
   Waveform_arythmetics::filtered_buffer[0][0]=8;
   Waveform_arythmetics::filtered_buffer[0][1]=5;
   Waveform_arythmetics::filtered_buffer[0][2]=3;
@@ -915,6 +980,7 @@ TEST_CASE( "Gets index of rising edge for oscilloscope")
 
 TEST_CASE( "Gets index of falling edge for oscilloscope")
 {
+
   Waveform_arythmetics::filtered_buffer[0][0]=8;
   Waveform_arythmetics::filtered_buffer[0][1]=5;
   Waveform_arythmetics::filtered_buffer[0][2]=3;
@@ -934,6 +1000,7 @@ TEST_CASE( "Gets index of falling edge for oscilloscope")
 
 TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 time")
 {
+
   Waveform_arythmetics::filtered_buffer[0][0]=10;
   Waveform_arythmetics::filtered_buffer[0][1]=10;
   Waveform_arythmetics::filtered_buffer[0][2]=10;
@@ -950,10 +1017,3 @@ TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 
 
   REQUIRE(retval==8);
 }
-//
-//
-//TEST_CASE( "Checks everything for 0 value case")
-//{
-////TODO in the future
-//
-//}

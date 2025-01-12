@@ -48,7 +48,7 @@ class Waveform_arythmetics
 {
 private:
   //size of buffer used for conditioning
-  static const uint32_t max_buffer_size=10000;
+  static constexpr uint32_t max_buffer_size=10000;
   /// Will ignore data on buffer boundaries to avoid processing not reliable data.
   static const uint_least8_t boundary_ignore_percentage=5;
 
@@ -95,7 +95,7 @@ public:
    * @param size of array
    * @param step of moving mean, if 0 function does nothing
    */
-  static void Calc_Moving_Average (uint32_t *buffer, uint32_t size,
+  static void Calc_Moving_Average (const uint32_t *buffer, uint32_t size,
 				   uint8_t step);
 
   static bool Get_Indexes(uint32_t *first, uint32_t *second);
@@ -110,8 +110,9 @@ public:
   static void Calc_Frequency(void);
 
   /** Calculates phase swift based on #peak1, #peak2, #frequency and #point_time variables
+   * @Note! At least 2 peaks on each signals are required, otherwise alfa=0 is returned!
    */
-  static bool Calc_Alfa (void);
+  static void Calc_Alfa (void);
 
   /** Calculates amplitudes from #peak1, #peak2 and #filtered_buffer
    */

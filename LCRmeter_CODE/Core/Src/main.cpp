@@ -183,6 +183,664 @@ static constexpr uint8_t sine_table33[]=
           122,
         127
 };
+//127 offset, amplitude - 32
+static constexpr uint8_t sine_table_80samples[]=
+{
+        130 ,
+        132 ,
+        134 ,
+        137 ,
+        139 ,
+        142 ,
+        144 ,
+        146 ,
+        148 ,
+        150 ,
+        151 ,
+        153 ,
+        154 ,
+        156 ,
+        157 ,
+        157 ,
+        158 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        158 ,
+        157 ,
+        157 ,
+        156 ,
+        154 ,
+        153 ,
+        151 ,
+        150 ,
+        148 ,
+        146 ,
+        144 ,
+        142 ,
+        139 ,
+        137 ,
+        134 ,
+        132 ,
+        130 ,
+        127 ,
+        124 ,
+        122 ,
+        120 ,
+        117 ,
+        115 ,
+        112 ,
+        110 ,
+        108 ,
+        106 ,
+        104 ,
+        103 ,
+        101 ,
+        100 ,
+        98  ,
+        97  ,
+        97  ,
+        96  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        96  ,
+        97  ,
+        97  ,
+        98  ,
+        100 ,
+        101 ,
+        103 ,
+        104 ,
+        106 ,
+        108 ,
+        110 ,
+        112 ,
+        115 ,
+        117 ,
+        120 ,
+        122 ,
+        124 ,
+        127
+
+};
+//127 offset, amplitude - 32
+static constexpr uint8_t sine_table_160samples[]=
+{
+        128 ,
+        130 ,
+        131 ,
+        132 ,
+        133 ,
+        134 ,
+        136 ,
+        137 ,
+        138 ,
+        139 ,
+        140 ,
+        142 ,
+        143 ,
+        144 ,
+        145 ,
+        146 ,
+        147 ,
+        148 ,
+        149 ,
+        150 ,
+        150 ,
+        151 ,
+        152 ,
+        153 ,
+        154 ,
+        154 ,
+        155 ,
+        156 ,
+        156 ,
+        157 ,
+        157 ,
+        157 ,
+        158 ,
+        158 ,
+        158 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        159 ,
+        158 ,
+        158 ,
+        158 ,
+        157 ,
+        157 ,
+        157 ,
+        156 ,
+        156 ,
+        155 ,
+        154 ,
+        154 ,
+        153 ,
+        152 ,
+        151 ,
+        150 ,
+        150 ,
+        149 ,
+        148 ,
+        147 ,
+        146 ,
+        145 ,
+        144 ,
+        143 ,
+        142 ,
+        140 ,
+        139 ,
+        138 ,
+        137 ,
+        136 ,
+        134 ,
+        133 ,
+        132 ,
+        131 ,
+        130 ,
+        128 ,
+        127 ,
+        126 ,
+        124 ,
+        123 ,
+        122 ,
+        121 ,
+        120 ,
+        118 ,
+        117 ,
+        116 ,
+        115 ,
+        114 ,
+        112 ,
+        111 ,
+        110 ,
+        109 ,
+        108 ,
+        107 ,
+        106 ,
+        105 ,
+        104 ,
+        104 ,
+        103 ,
+        102 ,
+        101 ,
+        100 ,
+        100 ,
+        99  ,
+        98  ,
+        98  ,
+        97  ,
+        97  ,
+        97  ,
+        96  ,
+        96  ,
+        96  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        95  ,
+        96  ,
+        96  ,
+        96  ,
+        97  ,
+        97  ,
+        97  ,
+        98  ,
+        98  ,
+        99  ,
+        100 ,
+        100 ,
+        101 ,
+        102 ,
+        103 ,
+        104 ,
+        104 ,
+        105 ,
+        106 ,
+        107 ,
+        108 ,
+        109 ,
+        110 ,
+        111 ,
+        112 ,
+        114 ,
+        115 ,
+        116 ,
+        117 ,
+        118 ,
+        120 ,
+        121 ,
+        122 ,
+        123 ,
+        124 ,
+        126 ,
+        127
+
+
+};
+//127 offset, amplitude - 64
+static constexpr uint8_t sine_table_400samples[]=
+{
+        128 ,
+        129 ,
+        130 ,
+        131 ,
+        132 ,
+        133 ,
+        134 ,
+        135 ,
+        136 ,
+        137 ,
+        138 ,
+        139 ,
+        140 ,
+        141 ,
+        142 ,
+        143 ,
+        144 ,
+        145 ,
+        146 ,
+        147 ,
+        148 ,
+        149 ,
+        150 ,
+        151 ,
+        151 ,
+        152 ,
+        153 ,
+        154 ,
+        155 ,
+        156 ,
+        157 ,
+        158 ,
+        159 ,
+        160 ,
+        160 ,
+        161 ,
+        162 ,
+        163 ,
+        164 ,
+        165 ,
+        165 ,
+        166 ,
+        167 ,
+        168 ,
+        169 ,
+        169 ,
+        170 ,
+        171 ,
+        172 ,
+        172 ,
+        173 ,
+        174 ,
+        174 ,
+        175 ,
+        176 ,
+        176 ,
+        177 ,
+        178 ,
+        178 ,
+        179 ,
+        179 ,
+        180 ,
+        180 ,
+        181 ,
+        182 ,
+        182 ,
+        183 ,
+        183 ,
+        184 ,
+        184 ,
+        184 ,
+        185 ,
+        185 ,
+        186 ,
+        186 ,
+        187 ,
+        187 ,
+        187 ,
+        188 ,
+        188 ,
+        188 ,
+        188 ,
+        189 ,
+        189 ,
+        189 ,
+        189 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        191 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        190 ,
+        189 ,
+        189 ,
+        189 ,
+        189 ,
+        188 ,
+        188 ,
+        188 ,
+        188 ,
+        187 ,
+        187 ,
+        187 ,
+        186 ,
+        186 ,
+        185 ,
+        185 ,
+        184 ,
+        184 ,
+        184 ,
+        183 ,
+        183 ,
+        182 ,
+        182 ,
+        181 ,
+        180 ,
+        180 ,
+        179 ,
+        179 ,
+        178 ,
+        178 ,
+        177 ,
+        176 ,
+        176 ,
+        175 ,
+        174 ,
+        174 ,
+        173 ,
+        172 ,
+        172 ,
+        171 ,
+        170 ,
+        169 ,
+        169 ,
+        168 ,
+        167 ,
+        166 ,
+        165 ,
+        165 ,
+        164 ,
+        163 ,
+        162 ,
+        161 ,
+        160 ,
+        160 ,
+        159 ,
+        158 ,
+        157 ,
+        156 ,
+        155 ,
+        154 ,
+        153 ,
+        152 ,
+        151 ,
+        151 ,
+        150 ,
+        149 ,
+        148 ,
+        147 ,
+        146 ,
+        145 ,
+        144 ,
+        143 ,
+        142 ,
+        141 ,
+        140 ,
+        139 ,
+        138 ,
+        137 ,
+        136 ,
+        135 ,
+        134 ,
+        133 ,
+        132 ,
+        131 ,
+        130 ,
+        129 ,
+        128 ,
+        127 ,
+        126 ,
+        125 ,
+        124 ,
+        123 ,
+        122 ,
+        121 ,
+        120 ,
+        119 ,
+        118 ,
+        117 ,
+        116 ,
+        115 ,
+        114 ,
+        113 ,
+        112 ,
+        111 ,
+        110 ,
+        109 ,
+        108 ,
+        107 ,
+        106 ,
+        105 ,
+        104 ,
+        103 ,
+        103 ,
+        102 ,
+        101 ,
+        100 ,
+        99  ,
+        98  ,
+        97  ,
+        96  ,
+        95  ,
+        94  ,
+        94  ,
+        93  ,
+        92  ,
+        91  ,
+        90  ,
+        89  ,
+        89  ,
+        88  ,
+        87  ,
+        86  ,
+        85  ,
+        85  ,
+        84  ,
+        83  ,
+        82  ,
+        82  ,
+        81  ,
+        80  ,
+        80  ,
+        79  ,
+        78  ,
+        78  ,
+        77  ,
+        76  ,
+        76  ,
+        75  ,
+        75  ,
+        74  ,
+        74  ,
+        73  ,
+        72  ,
+        72  ,
+        71  ,
+        71  ,
+        70  ,
+        70  ,
+        70  ,
+        69  ,
+        69  ,
+        68  ,
+        68  ,
+        67  ,
+        67  ,
+        67  ,
+        66  ,
+        66  ,
+        66  ,
+        66  ,
+        65  ,
+        65  ,
+        65  ,
+        65  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        63  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        64  ,
+        65  ,
+        65  ,
+        65  ,
+        65  ,
+        66  ,
+        66  ,
+        66  ,
+        66  ,
+        67  ,
+        67  ,
+        67  ,
+        68  ,
+        68  ,
+        69  ,
+        69  ,
+        70  ,
+        70  ,
+        70  ,
+        71  ,
+        71  ,
+        72  ,
+        72  ,
+        73  ,
+        74  ,
+        74  ,
+        75  ,
+        75  ,
+        76  ,
+        76  ,
+        77  ,
+        78  ,
+        78  ,
+        79  ,
+        80  ,
+        80  ,
+        81  ,
+        82  ,
+        82  ,
+        83  ,
+        84  ,
+        85  ,
+        85  ,
+        86  ,
+        87  ,
+        88  ,
+        89  ,
+        89  ,
+        90  ,
+        91  ,
+        92  ,
+        93  ,
+        94  ,
+        94  ,
+        95  ,
+        96  ,
+        97  ,
+        98  ,
+        99  ,
+        100 ,
+        101 ,
+        102 ,
+        103 ,
+        103 ,
+        104 ,
+        105 ,
+        106 ,
+        107 ,
+        108 ,
+        109 ,
+        110 ,
+        111 ,
+        112 ,
+        113 ,
+        114 ,
+        115 ,
+        116 ,
+        117 ,
+        118 ,
+        119 ,
+        120 ,
+        121 ,
+        122 ,
+        123 ,
+        124 ,
+        125 ,
+        126 ,
+        127
+
+
+
+};
 
 static constexpr uint8_t sine_table44[]=
 {
@@ -349,7 +1007,7 @@ static void Init(void)
 	  MX_ADC2_Init();
 	  MX_ADC3_Init();
 	  MX_ADC4_Init();
-	  MX_ADC5_Init();
+//	  MX_ADC5_Init();
 	  MX_CORDIC_Init();
 //	  MX_USB_Device_Init();
 	  MX_I2C1_Init();
@@ -449,7 +1107,7 @@ int main(void)
 	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_CPLT_CB_ID , lam);
 	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_ERROR_CB_ID , lam1);
 
-	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table33, sizeof(sine_table33)/sizeof(sine_table33[0]), DAC_ALIGN_8B_R);
+	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400samples, sizeof(sine_table_400samples)/sizeof(sine_table_400samples[0]), DAC_ALIGN_8B_R);
 	printf("starting DMA %d\n",ret);
     if (HAL_TIM_Base_Start(&htim6) != HAL_OK)
     {
@@ -480,7 +1138,7 @@ int main(void)
       }
 
 //      Waveform_arythmetics::mid_voltage = 2000;
-      Waveform_arythmetics::hysteresis_samples=3;
+      Waveform_arythmetics::hysteresis_samples=10;
       Waveform_arythmetics::user_point_time = 0.3529411;
 
       while(1)
@@ -489,6 +1147,7 @@ int main(void)
         {
 
         }
+        printf("\e[1;1H\e[2J");
         xD = 0;
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
                            Adc::size_of_adc_buffer, 1);
@@ -496,54 +1155,66 @@ int main(void)
 
                 Waveform_arythmetics::Find_Peaks ();
                 Waveform_arythmetics::Calc_Frequency();
-                auto al_good  = Waveform_arythmetics::Calc_Alfa ();
+               Waveform_arythmetics::Calc_Alfa ();
                 Waveform_arythmetics::Calc_Amplitude ();
 
+                if(Waveform_arythmetics::nbr_of_peaks[1]<2 || Waveform_arythmetics::nbr_of_peaks[0]<2)
+                {
+                    printf("WARNING!!!!!!! number of peaks too small!!");
+                }
 
                 unsigned long int avg1=0;
                 for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[0];i++)
                 {
-                    printf("peak%d = %d\n",i,Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
+//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[0][i],Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
                     avg1 =avg1+ Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]];
                 }
                 avg1= avg1/Waveform_arythmetics::nbr_of_peaks[0];
-                printf("peak average is %ld\n",avg1);
+//                printf("peak average is %ld\n",avg1);
                 Waveform_arythmetics::amplitude1 = avg1;
 
 
                 avg1=0;
                 for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[1];i++)
                 {
-                    printf("peak%d = %d\n",i,Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
+//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[1][i],Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
                     avg1 =avg1+ Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]];
                 }
                 avg1= avg1/Waveform_arythmetics::nbr_of_peaks[1];
-                printf("peak average is %ld\n",avg1);
+//                printf("peak average is %ld\n",avg1);
                 Waveform_arythmetics::amplitude2 = avg1;
 //
                 bool ind=LCR_math::Calculate (
               Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
               Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-              double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
+              double(Waveform_arythmetics::alfa), Waveform_arythmetics::frequency);
   //
-
-                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
-                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
-                printf("f=%ld\n", Waveform_arythmetics::frequency);
+//
+//                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
+//                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
+//                printf("f=%ld\n", Waveform_arythmetics::frequency);
                 printf("a=%f\n", Waveform_arythmetics::alfa);
-                printf("nbr_of_minimas[0]=%ld\n", Waveform_arythmetics::nbr_of_minimas[0]);
-                printf("nbr_of_peaks[0]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[0]);
-                printf("nbr_of_minimas[1]=%ld\n", Waveform_arythmetics::nbr_of_minimas[1]);
-                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+//                printf("a1=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
+//                printf("a2=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2));
 
-        printf("minimas=%ld\n", Waveform_arythmetics::minimas[0][0]);
+//                printf("nbr_of_minimas[0]=%ld\n", Waveform_arythmetics::nbr_of_minimas[0]);
+//                printf("nbr_of_peaks[0]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[0]);
+//                printf("nbr_of_minimas[1]=%ld\n", Waveform_arythmetics::nbr_of_minimas[1]);
+//                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+//                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+//                printf("peaks[0][0]=%ld\n",  Waveform_arythmetics::peaks[0][0]);
+//                printf("peaks[0][1]=%ld\n",  Waveform_arythmetics::peaks[0][1]);
+//                printf("peaks[1][0]=%ld\n",  Waveform_arythmetics::peaks[1][0]);
+//                printf("peaks[1][1]=%ld\n",  Waveform_arythmetics::peaks[1][1]);
+//                printf("peaks[0][2]=%ld\n",  Waveform_arythmetics::peaks[0][2]);
+//                printf("peaks[1][2]=%ld\n",  Waveform_arythmetics::peaks[1][2]);
 
-        printf("cap=%1.9f\n", LCR_math::capacitance);
-        printf("ind=%1.9f\n", LCR_math::inductance);
-        printf("res=%1.9f\n", LCR_math::resistance);
+//        printf("minimas=%ld\n", Waveform_arythmetics::minimas[0][0]);
+
+        printf("cap=%1.9f F\n", LCR_math::capacitance);
+        printf("ind=%1.9f H\n", LCR_math::inductance);
+        printf("res=%1.9f R\n", LCR_math::resistance);
         printf("loss angle=%1.9f degs\n", LCR_math::loss_angle);
-        printf("al_good %d \n", al_good);
-
 
         printf("Waveform_arythmetics::mid_voltage[0] = %ld\n",
                 Waveform_arythmetics::mid_voltage[0]);
@@ -557,7 +1228,7 @@ int main(void)
 
 
 
-          HAL_Delay(1000);
+
 //          Adc::Resume_DMA();
 //          ADC1->CR |= ADC_CR_ADSTART;
           retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
@@ -567,8 +1238,8 @@ int main(void)
              printf("AAA22222A\n");
                       printf("retval = %d\n",retval);
          }
-//          LL_ADC_REG_StartConversion(*hadc1.Instance);
-          for(int i=0;i< Adc::size_of_adc_buffer;i++)
+
+          for(int i=0;i< Waveform_arythmetics::buffer_size;i++)
           {
 
               printf("%d, %d\n",Waveform_arythmetics::filtered_buffer[0][i],Waveform_arythmetics::filtered_buffer[1][i]);
@@ -580,6 +1251,8 @@ int main(void)
           }
           printf("hadc1---%ld\n",hadc1.ErrorCode);
           printf("hadc2---%ld\n",hadc2.ErrorCode);
+          HAL_Delay(2000);
+          HAL_Delay(10);
 
       }
 
@@ -1462,7 +2135,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 170-1;
+  htim6.Init.Prescaler = 17-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 1;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -1544,6 +2217,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PA8 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
   /*Configure GPIO pins : EN_PATH_1_Pin RES_CALIBRATION_Pin EN_PATH_2_Pin EN_PATH_3_Pin */
   GPIO_InitStruct.Pin = EN_PATH_1_Pin|RES_CALIBRATION_Pin|EN_PATH_2_Pin|EN_PATH_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -1557,6 +2236,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(USB_EN_GPIO_Port, &GPIO_InitStruct);
+
+
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI1_IRQn, 2, 0);

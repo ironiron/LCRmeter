@@ -296,6 +296,11 @@
 								<option id="gnu.cpp.compiler.option.warnings.wundef.1527781771" name="An undefined identifier is evaluated in an #if directive (-Wundef)" superClass="gnu.cpp.compiler.option.warnings.wundef" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.weffcpp.1083761154" name="Effective C++ guidelines (-Weffc++)" superClass="gnu.cpp.compiler.option.warnings.weffcpp" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.wfloatequal.1340090358" name="Direct float equal check (-Wfloat-equal)" superClass="gnu.cpp.compiler.option.warnings.wfloatequal" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.debugging.other.1470620561" name="Other debugging flags" superClass="gnu.cpp.compiler.option.debugging.other" useByScannerDiscovery="false" value="" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.otherExcludedFromScannerDiscovery.2038018252" name="Other flags (excluded from discovery)" superClass="gnu.cpp.compiler.option.other.otherExcludedFromScannerDiscovery" useByScannerDiscovery="false" value="" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.debugging.sanitundef.449226729" name="Sanitize undefined behavior (-fsanitize=undefined)" superClass="gnu.cpp.compiler.option.debugging.sanitundef" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.debugging.sanitleak.248236819" name="Sanitize memory leak (-fsanitize=leak)" superClass="gnu.cpp.compiler.option.debugging.sanitleak" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.debugging.sanitaddress.683093096" name="Sanitize address (-fsanitize=address)" superClass="gnu.cpp.compiler.option.debugging.sanitaddress" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.314668833" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release.926126424" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release">
@@ -326,10 +331,16 @@
 								<option id="gnu.c.compiler.option.warnings.wswitchdef.245112017" name="A switch statement does not have a default case (-Wswitch-default)" superClass="gnu.c.compiler.option.warnings.wswitchdef" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.wundef.448748643" name="An undefined identifier is evaluated in an #if directive (-Wundef)" superClass="gnu.c.compiler.option.warnings.wundef" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.warnings.wfloatequal.2070756808" name="Direct float equal check (-Wfloat-equal)" superClass="gnu.c.compiler.option.warnings.wfloatequal" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.misc.otherExcludedFromScannerDiscovery.1401730450" name="Other flags (excluded from discovery)" superClass="gnu.c.compiler.option.misc.otherExcludedFromScannerDiscovery" useByScannerDiscovery="false" value="" valueType="string"/>
+								<option id="gnu.c.compiler.option.debugging.sanitaddress.1059811299" name="Sanitize address (-fsanitize=address)" superClass="gnu.c.compiler.option.debugging.sanitaddress" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.debugging.sanitleak.618027785" name="Sanitize memory leak (-fsanitize=leak)" superClass="gnu.c.compiler.option.debugging.sanitleak" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.debugging.sanitundef.2111405493" name="Sanitize undefined behavior (-fsanitize=undefined)" superClass="gnu.c.compiler.option.debugging.sanitundef" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.722978938" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.1781134022" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.943682209" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="gnu.cpp.link.option.other.1043105881" name="Other options (-Xlinker [option])" superClass="gnu.cpp.link.option.other" valueType="stringList"/>
+								<option id="gnu.cpp.link.option.flags.13074187" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1102867902" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

@@ -103,6 +103,7 @@ void SSD1306::Update_Screen(void)
 
 void SSD1306::Fill(SSD1306::Color color)
 {
+    //todo this loop here can be simplified, use fill
     if (color == Color::BLACK)
     {
         for (auto &b : buffer)
