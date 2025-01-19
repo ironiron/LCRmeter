@@ -33,6 +33,14 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
   voltage_rs = sqrt (
       pow (amplitude1 - (amplitude2 * cos (radians)), 2)
 	  + pow (amplitude2 * sin (radians), 2));
+  if(voltage_rs == 0)
+  {
+      inductance = NAN;
+      capacitance = NAN;
+      resistance = NAN;
+      isinductive = false;
+      return isinductive;
+  }
   //current
   current = voltage_rs / series_resistance;//fixme add handling of voltage_rs equal 0
 
