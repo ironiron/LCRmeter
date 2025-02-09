@@ -67,3 +67,42 @@ TEST_CASE( "calculate values for capacitive load")
   REQUIRE(LCR_math::capacitance<0.000087);
   REQUIRE(LCR_math::capacitance>0.000086);
 }
+
+TEST_CASE( "calculate values for ideal resistive load")
+{
+  double amplitude1=2;
+  double amplitude2=1;
+  double phase_swift=0;
+  uint32_t frequency=12500;
+  LCR_math::series_resistance=100;
+  bool retvalue;
+
+  retvalue=LCR_math::Calculate(amplitude1,amplitude2,phase_swift,frequency);
+
+  REQUIRE(retvalue==false);
+  REQUIRE(LCR_math::loss_angle>89.5);
+  REQUIRE(LCR_math::loss_angle<90.5);
+  REQUIRE(LCR_math::resistance<100.5);
+  REQUIRE(LCR_math::resistance>99.5);
+}
+
+
+TEST_CASE( "calculate capacitance value, from real measurment (excel)")
+{
+  double amplitude1=2.005787546;
+  double amplitude2=1.851062271;
+  double phase_swift=49.156506;
+  uint32_t frequency=12480;
+  LCR_math::series_resistance=100;
+  bool retvalue;
+
+  retvalue=LCR_math::Calculate(amplitude1,amplitude2,phase_swift,frequency);
+
+  REQUIRE(retvalue==false);
+  REQUIRE(LCR_math::loss_angle>0);//sanity check
+  REQUIRE(LCR_math::loss_angle<90);
+  REQUIRE(LCR_math::resistance>0);
+  REQUIRE(LCR_math::capacitance<0.000000190); //should be around 145nF
+  REQUIRE(LCR_math::capacitance>0.000000110); //ca. 25% tol. in this case should be enough for now.
+}
+

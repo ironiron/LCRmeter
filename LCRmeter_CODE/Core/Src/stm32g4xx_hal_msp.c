@@ -24,7 +24,7 @@
 
 /* USER CODE END Includes */
 extern DMA_HandleTypeDef hdma_adc1;
-
+extern DMA_HandleTypeDef hdma_adc3;
 extern DMA_HandleTypeDef hdma_dac1_ch1;
 
 /* Private typedef -----------------------------------------------------------*/
@@ -209,28 +209,50 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
   /** Initializes the peripherals clocks
   */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
-    PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler();
-    }
+      PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
+          PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
+          if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+          {
+            Error_Handler();
+          }
 
-    /* Peripheral clock enable */
-    HAL_RCC_ADC345_CLK_ENABLED++;
-    if(HAL_RCC_ADC345_CLK_ENABLED==1){
-      __HAL_RCC_ADC345_CLK_ENABLE();
-    }
+          /* Peripheral clock enable */
+          HAL_RCC_ADC345_CLK_ENABLED++;
+          if(HAL_RCC_ADC345_CLK_ENABLED==1){
+            __HAL_RCC_ADC345_CLK_ENABLE();
+          }
 
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**ADC3 GPIO Configuration
-    PB0     ------> ADC3_IN12
-    PB13     ------> ADC3_IN5
-    */
-    GPIO_InitStruct.Pin = OSCILLOSCOPE_IN_Pin|ADC_1b_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+          __HAL_RCC_GPIOB_CLK_ENABLE();
+          /**ADC3 GPIO Configuration
+          PB0     ------> ADC3_IN12
+          PB13     ------> ADC3_IN5
+          */
+          GPIO_InitStruct.Pin = OSCILLOSCOPE_IN_Pin|ADC_1b_Pin;
+          GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+          GPIO_InitStruct.Pull = GPIO_NOPULL;
+          HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+          /* ADC3 DMA Init */
+          /* ADC3 Init */
+          hdma_adc3.Instance = DMA1_Channel3;
+          hdma_adc3.Init.Request = DMA_REQUEST_ADC3;
+          hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
+          hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
+          hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
+          hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+          hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+          hdma_adc3.Init.Mode = DMA_NORMAL;
+          hdma_adc3.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+          if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
+          {
+            Error_Handler();
+          }
+
+          __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc3);
+
+          /* ADC3 interrupt Init */
+          HAL_NVIC_SetPriority(ADC3_IRQn, 0, 0);
+          HAL_NVIC_EnableIRQ(ADC3_IRQn);
 
   /* USER CODE BEGIN ADC3_MspInit 1 */
 
@@ -723,6 +745,17 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 
   /* USER CODE END TIM6_MspInit 1 */
   }
+  else if(htim_base->Instance==TIM20)
+  {
+  /* USER CODE BEGIN TIM20_MspInit 0 */
+
+  /* USER CODE END TIM20_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM20_CLK_ENABLE();
+  /* USER CODE BEGIN TIM20_MspInit 1 */
+
+  /* USER CODE END TIM20_MspInit 1 */
+  }
 }
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
@@ -784,6 +817,17 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE BEGIN TIM2_MspDeInit 1 */
 
   /* USER CODE END TIM2_MspDeInit 1 */
+  }
+  else if(htim_base->Instance==TIM20)
+  {
+  /* USER CODE BEGIN TIM20_MspDeInit 0 */
+
+  /* USER CODE END TIM20_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM20_CLK_DISABLE();
+  /* USER CODE BEGIN TIM20_MspDeInit 1 */
+
+  /* USER CODE END TIM20_MspDeInit 1 */
   }
 
 }

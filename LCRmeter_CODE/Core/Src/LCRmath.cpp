@@ -11,6 +11,7 @@
  */
 
 #include "LCRmath.hpp"
+#include "cstdio"
 #include <cmath>
 
 double LCR_math::reactance = 0;
@@ -57,7 +58,12 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
     }
   else
     {
-      loss_angle = (radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 ;
+//      loss_angle = (radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 ;
+      loss_angle =pi /2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs)) ;
+      if(loss_angle<0)
+      {
+          loss_angle = -loss_angle;
+      }
       voltage_lcr = amplitude2 * cos (loss_angle);
       reactance = voltage_lcr / current;
       capacitance = 1/reactance / 2 / frequency / pi;

@@ -15,8 +15,10 @@ Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average
 
 #TODO 
 
-- change ADC_freq to 60Mhz tochieve max sampling time (200ns)
-- check disabled buffer for DAC
+[X] (not worth it - better to use ADC3,4 as well) change ADC_freq to 60Mhz tochieve max sampling time (200ns)
+[X] check disabled buffer for DAC
+- add buffer for averaging samples over time for measurment
+
 
 #ADC
 

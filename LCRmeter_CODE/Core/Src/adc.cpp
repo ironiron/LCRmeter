@@ -74,6 +74,7 @@ void Deinitialize(void)
 void Resume_DMA(void)
 {
 	DMA1_Channel2->CCR &= ~DMA_CCR_EN;
+	DMA1_Channel2->CCR |=(DMA_IT_TC | DMA_IT_HT | DMA_IT_TE);
 	DMA1_Channel2->CNDTR = Adc::size_of_adc_buffer;
 	DMA1_Channel2->CCR |= DMA_CCR_EN;
 }
