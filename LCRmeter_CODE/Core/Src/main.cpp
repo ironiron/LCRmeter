@@ -223,7 +223,7 @@ static void Init(void)
 	  MX_TIM2_Init();
 	    MX_TIM6_Init();
 	    MX_TIM20_Init();
-	    MX_TIM15_Init();
+//	    MX_TIM15_Init();
 }
 
 int main(void)
@@ -336,12 +336,26 @@ int main(void)
           printf("retval = %d\n",retval);
       }
        retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
-              Adc::size_of_adc_buffer);
+              Adc::size_of_adc_buffer/2-10);
       if (retval != 0)
       {
           printf("AAA22222A\n");
                    printf("retval = %d\n",retval);
       }
+
+//      retval = HAL_ADC_Start(&hadc4);
+//      if (retval != 0)
+//      {
+//          printf("AAAAfsdbfb  cvwes1111\n");
+//          printf("retval = %d\n",retval);
+//      }
+//       retval = HAL_ADCEx_MultiModeStart_DMA(&hadc3, (uint32_t*) &Adc::adc_buffer[Adc::size_of_adc_buffer/2],
+//              Adc::size_of_adc_buffer/2);
+//      if (retval != 0)
+//      {
+//          printf("1232213321  1dsfsdf\n");
+//                   printf("retval = %d\n",retval);
+//      }
 
 
       uint16_t shadwo_cr1 = htim20.Instance->CR1 & 0xfffe;
@@ -354,14 +368,9 @@ int main(void)
       if (HAL_TIM_Base_Start(&htim20) != HAL_OK)
       {
           printf("BBBBBBB\n");
-        /* Counter enable error */
-        Error_Handler();
       }
 
       HAL_Delay(100);
-
-//      TIM15->ARR = 4*Adc::size_of_adc_buffer;
-//      TIM15->CR1 |= TIM_CR1_CEN;
 
 //      Waveform_arythmetics::mid_voltage = 2000;
       Waveform_arythmetics::hysteresis_samples=10;
@@ -376,29 +385,6 @@ int main(void)
         {
 
         }
-
-        printf("tim20---%ld\n",htim20.Instance->CNT);
-        printf("tim20---%ld\n",htim20.Instance->CNT);
-        printf("tim20---%ld\n",htim20.Instance->CNT);
-        printf("tim20---%ld\n",htim20.Instance->CNT);
-        printf("tim20---%ld\n",htim20.Instance->CNT);
-//
-////        printf("\e[1;1H\e[2J");
-//        if (HAL_TIM_Base_Stop(&htim20) != HAL_OK)
-//        {
-//            printf("BBBBBB23424B\n");
-//          /* Counter enable error */
-//          Error_Handler();
-//        }
-//        __HAL_TIM_DISABLE(&htim20);
-//        __HAL_TIM_CLEAR_FLAG(&htim20,0xffffffff);
-//        if (HAL_TIM_Base_Stop(&htim20) != HAL_OK)
-//        {
-//            printf("BBB13BBBB\n");
-//          /* Counter enable error */
-//          Error_Handler();
-//        }
-//        LL_ADC_REG_StopConversion(ADC1);
         printf("xD= %d\n",xD);
         xD = 0;
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
@@ -477,16 +463,21 @@ int main(void)
           printf("a1= %d \n",a1);
           printf("a2= %d \n",a2);
 
-          __HAL_DMA_DISABLE(&tim_dma);
+          retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+                 Adc::size_of_adc_buffer/2);
+         if (retval != 0)
+         {
+             printf("AAA22222A\n");
+                      printf("retval = %d\n",retval);
+         }
 
+          __HAL_DMA_DISABLE(&tim_dma);
           tim_dma.Instance->CMAR =(uint32_t)&shadwo_cr1;
           tim_dma.Instance->CPAR = (uint32_t)&htim20.Instance->CR1;
           tim_dma.Instance->CNDTR = 1;
           __HAL_DMA_ENABLE(&tim_dma);
           __HAL_TIM_ENABLE(&htim20);
 
-
-        printf("tim20---%ld\n",htim20.Instance->CNT);
           for(int i=0;i< Waveform_arythmetics::buffer_size;i++)
           {
               printf("%d, %d\n",Waveform_arythmetics::filtered_buffer[0][i],Waveform_arythmetics::filtered_buffer[1][i]);
@@ -498,14 +489,7 @@ int main(void)
           }
           printf("hadc1---%ld\n",hadc1.ErrorCode);
           printf("hadc2---%ld\n",hadc2.ErrorCode);
-          printf("tim20---%ld\n",htim20.Instance->CNT);
-          printf("tim20---%ld\n",htim20.Instance->CNT);
-          printf("tim20---%ld\n",htim20.Instance->CNT);
-          printf("tim20---%ld\n",htim20.Instance->CNT);
-          printf("tim20---%ld\n",htim20.Instance->CNT);
-//          HAL_Delay(2000);
           HAL_Delay(100);
-
       }
 
 
@@ -814,8 +798,8 @@ static void MX_ADC1_Init(void)
 //  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-  hadc1.Init.DMAContinuousRequests = ENABLE;
-//  hadc1.Init.DMAContinuousRequests = DISABLE;
+//  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -882,8 +866,8 @@ static void MX_ADC2_Init(void)
   hadc2.Init.ContinuousConvMode = ENABLE;
   hadc2.Init.NbrOfConversion = 1;
   hadc2.Init.DiscontinuousConvMode = DISABLE;
-  hadc2.Init.DMAContinuousRequests = ENABLE;
-//  hadc2.Init.DMAContinuousRequests = DISABLE;
+//  hadc2.Init.DMAContinuousRequests = ENABLE;
+  hadc2.Init.DMAContinuousRequests = DISABLE;
   hadc2.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc2.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc2) != HAL_OK)
@@ -944,7 +928,7 @@ static void MX_ADC3_Init(void)
     hadc3.Init.DiscontinuousConvMode = DISABLE;
     hadc3.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO2;
     hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-    hadc3.Init.DMAContinuousRequests = DISABLE;
+    hadc3.Init.DMAContinuousRequests = ENABLE;
     hadc3.Init.Overrun = ADC_OVR_DATA_PRESERVED;
     hadc3.Init.OversamplingMode = DISABLE;
     if (HAL_ADC_Init(&hadc3) != HAL_OK)
@@ -1011,8 +995,8 @@ static void MX_ADC4_Init(void)
   hadc4.Init.ContinuousConvMode = ENABLE;
   hadc4.Init.NbrOfConversion = 1;
   hadc4.Init.DiscontinuousConvMode = DISABLE;
-  hadc4.Init.DMAContinuousRequests = DISABLE;
-  hadc4.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc4.Init.DMAContinuousRequests = ENABLE;
+  hadc4.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc4.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc4) != HAL_OK)
   {
@@ -1412,57 +1396,57 @@ static void MX_TIM6_Init(void)
 
 }
 
-static void MX_TIM15_Init(void)
-{
-
-    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-    TIM_MasterConfigTypeDef sMasterConfig = {0};
-    TIM_OC_InitTypeDef sConfigOC = {0};
-    TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
-
-    htim15.Instance = TIM15;
-    htim15.Init.Prescaler = 0;
-    htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim15.Init.Period = 65535;
-    htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    htim15.Init.RepetitionCounter = 0;
-    htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
-    {
-      Error_Handler();
-    }
-    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    if (HAL_TIM_ConfigClockSource(&htim15, &sClockSourceConfig) != HAL_OK)
-    {
-      Error_Handler();
-    }
-    if (HAL_TIM_OC_Init(&htim15) != HAL_OK)
-    {
-      Error_Handler();
-    }
-    sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1REF;
-    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-
-
-//    tim_dma.Instance = DMA2_Channel1;
-//    tim_dma.Init.Request = DMA_REQUEST_TIM15_UP;
-//    tim_dma.Init.Direction = DMA_MEMORY_TO_PERIPH;
-//    tim_dma.Init.PeriphInc = DMA_PINC_DISABLE;
-//    tim_dma.Init.MemInc = DMA_MINC_ENABLE;
-//    tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-//    tim_dma.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-//    tim_dma.Init.Mode = DMA_CIRCULAR;
-//    tim_dma.Init.Priority = DMA_PRIORITY_LOW;
-//    if (HAL_DMA_Init(&tim_dma) != HAL_OK)
+//static void MX_TIM15_Init(void)
+//{
+//
+//    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+//    TIM_MasterConfigTypeDef sMasterConfig = {0};
+//    TIM_OC_InitTypeDef sConfigOC = {0};
+//    TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+//
+//    htim15.Instance = TIM15;
+//    htim15.Init.Prescaler = 0;
+//    htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
+//    htim15.Init.Period = 65535;
+//    htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+//    htim15.Init.RepetitionCounter = 0;
+//    htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+//    if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
 //    {
 //      Error_Handler();
 //    }
-}
+//    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+//    if (HAL_TIM_ConfigClockSource(&htim15, &sClockSourceConfig) != HAL_OK)
+//    {
+//      Error_Handler();
+//    }
+//    if (HAL_TIM_OC_Init(&htim15) != HAL_OK)
+//    {
+//      Error_Handler();
+//    }
+//    sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1REF;
+//    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+//    if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
+//    {
+//      Error_Handler();
+//    }
+//
+//
+//
+////    tim_dma.Instance = DMA2_Channel1;
+////    tim_dma.Init.Request = DMA_REQUEST_TIM15_UP;
+////    tim_dma.Init.Direction = DMA_MEMORY_TO_PERIPH;
+////    tim_dma.Init.PeriphInc = DMA_PINC_DISABLE;
+////    tim_dma.Init.MemInc = DMA_MINC_ENABLE;
+////    tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+////    tim_dma.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+////    tim_dma.Init.Mode = DMA_CIRCULAR;
+////    tim_dma.Init.Priority = DMA_PRIORITY_LOW;
+////    if (HAL_DMA_Init(&tim_dma) != HAL_OK)
+////    {
+////      Error_Handler();
+////    }
+//}
 
 /**
   * @brief TIM20 Initialization Function
@@ -1483,7 +1467,7 @@ static void MX_TIM20_Init(void)
   htim20.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim20.Init.Period = 4-1;
   htim20.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim20.Init.RepetitionCounter = 1000;
+  htim20.Init.RepetitionCounter = Adc::size_of_adc_buffer / 2;
   htim20.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim20) != HAL_OK)
   {

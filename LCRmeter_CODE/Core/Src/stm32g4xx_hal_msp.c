@@ -111,222 +111,229 @@ static uint32_t HAL_RCC_ADC345_CLK_ENABLED=0;
 */
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(hadc->Instance==ADC1)
-  {
-  /* USER CODE BEGIN ADC1_MspInit 0 */
-
-  /* USER CODE END ADC1_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
-    PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    GPIO_InitTypeDef GPIO_InitStruct =
+    { 0 };
+    RCC_PeriphCLKInitTypeDef PeriphClkInit =
+    { 0 };
+    if (hadc->Instance == ADC1)
     {
-      Error_Handler();
-    }
+        /* USER CODE BEGIN ADC1_MspInit 0 */
 
-    /* Peripheral clock enable */
-    HAL_RCC_ADC12_CLK_ENABLED++;
-    if(HAL_RCC_ADC12_CLK_ENABLED==1){
-      __HAL_RCC_ADC12_CLK_ENABLE();
-    }
+        /* USER CODE END ADC1_MspInit 0 */
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC1 GPIO Configuration
-    PA2     ------> ADC1_IN3
-    */
-    GPIO_InitStruct.Pin = ADC_1_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(ADC_1_GPIO_Port, &GPIO_InitStruct);
-
-    /* ADC1 DMA Init */
-    /* ADC1 Init */
-    hdma_adc1.Instance = DMA1_Channel2;
-    hdma_adc1.Init.Request = DMA_REQUEST_ADC1;
-    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-    hdma_adc1.Init.Mode = DMA_CIRCULAR;
-//    hdma_adc1.Init.Mode = DMA_NORMAL;
-    hdma_adc1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);
-    /* ADC1 interrupt Init */
-    HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
-  /* USER CODE BEGIN ADC1_MspInit 1 */
-
-  /* USER CODE END ADC1_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspInit 0 */
-
-  /* USER CODE END ADC2_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
-    PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    /* Peripheral clock enable */
-    HAL_RCC_ADC12_CLK_ENABLED++;
-    if(HAL_RCC_ADC12_CLK_ENABLED==1){
-      __HAL_RCC_ADC12_CLK_ENABLE();
-    }
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC2 GPIO Configuration
-    PA1     ------> ADC2_IN2
-    */
-    GPIO_InitStruct.Pin = ADC_2_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(ADC_2_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN ADC2_MspInit 1 */
-
-  /* USER CODE END ADC2_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC3)
-  {
-  /* USER CODE BEGIN ADC3_MspInit 0 */
-
-  /* USER CODE END ADC3_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-      PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
-          PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
-          if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-          {
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+        PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
             Error_Handler();
-          }
+        }
 
-          /* Peripheral clock enable */
-          HAL_RCC_ADC345_CLK_ENABLED++;
-          if(HAL_RCC_ADC345_CLK_ENABLED==1){
+        /* Peripheral clock enable */
+        HAL_RCC_ADC12_CLK_ENABLED++;
+        if (HAL_RCC_ADC12_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC12_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC1 GPIO Configuration
+         PA2     ------> ADC1_IN3
+         */
+        GPIO_InitStruct.Pin = ADC_1_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(ADC_1_GPIO_Port, &GPIO_InitStruct);
+
+        /* ADC1 DMA Init */
+        /* ADC1 Init */
+        hdma_adc1.Instance = DMA1_Channel2;
+        hdma_adc1.Init.Request = DMA_REQUEST_ADC1;
+        hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+        hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+        hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+        hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+        hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+//        hdma_adc1.Init.Mode = DMA_CIRCULAR;
+    hdma_adc1.Init.Mode = DMA_NORMAL;
+        hdma_adc1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+        if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        __HAL_LINKDMA(hadc, DMA_Handle, hdma_adc1);
+        /* ADC1 interrupt Init */
+        HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+        /* USER CODE BEGIN ADC1_MspInit 1 */
+
+        /* USER CODE END ADC1_MspInit 1 */
+    }
+    else if (hadc->Instance == ADC2)
+    {
+        /* USER CODE BEGIN ADC2_MspInit 0 */
+
+        /* USER CODE END ADC2_MspInit 0 */
+
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+        PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC12_CLK_ENABLED++;
+        if (HAL_RCC_ADC12_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC12_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC2 GPIO Configuration
+         PA1     ------> ADC2_IN2
+         */
+        GPIO_InitStruct.Pin = ADC_2_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(ADC_2_GPIO_Port, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN ADC2_MspInit 1 */
+
+        /* USER CODE END ADC2_MspInit 1 */
+    }
+    else if (hadc->Instance == ADC3)
+    {
+        /* USER CODE BEGIN ADC3_MspInit 0 */
+
+        /* USER CODE END ADC3_MspInit 0 */
+
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
+        PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC345_CLK_ENABLED++;
+        if (HAL_RCC_ADC345_CLK_ENABLED == 1)
+        {
             __HAL_RCC_ADC345_CLK_ENABLE();
-          }
+        }
 
-          __HAL_RCC_GPIOB_CLK_ENABLE();
-          /**ADC3 GPIO Configuration
-          PB0     ------> ADC3_IN12
-          PB13     ------> ADC3_IN5
-          */
-          GPIO_InitStruct.Pin = OSCILLOSCOPE_IN_Pin|ADC_1b_Pin;
-          GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-          GPIO_InitStruct.Pull = GPIO_NOPULL;
-          HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        /**ADC3 GPIO Configuration
+         PB0     ------> ADC3_IN12
+         PB13     ------> ADC3_IN5
+         */
+        GPIO_InitStruct.Pin = OSCILLOSCOPE_IN_Pin | ADC_1b_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-          /* ADC3 DMA Init */
-          /* ADC3 Init */
-          hdma_adc3.Instance = DMA1_Channel3;
-          hdma_adc3.Init.Request = DMA_REQUEST_ADC3;
-          hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
-          hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
-          hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
-          hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-          hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
-          hdma_adc3.Init.Mode = DMA_NORMAL;
-          hdma_adc3.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-          if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
-          {
+        /* ADC3 DMA Init */
+        /* ADC3 Init */
+        hdma_adc3.Instance = DMA1_Channel3;
+        hdma_adc3.Init.Request = DMA_REQUEST_ADC3;
+        hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
+        hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
+        hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
+        hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+        hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+        hdma_adc3.Init.Mode = DMA_CIRCULAR;
+        hdma_adc3.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+        if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
+        {
             Error_Handler();
-          }
+        }
 
-          __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc3);
+        __HAL_LINKDMA(hadc, DMA_Handle, hdma_adc3);
 
-          /* ADC3 interrupt Init */
-          HAL_NVIC_SetPriority(ADC3_IRQn, 0, 0);
-          HAL_NVIC_EnableIRQ(ADC3_IRQn);
+        /* ADC3 interrupt Init */
+        HAL_NVIC_SetPriority(ADC3_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(ADC3_IRQn);
 
-  /* USER CODE BEGIN ADC3_MspInit 1 */
+        /* USER CODE BEGIN ADC3_MspInit 1 */
 
-  /* USER CODE END ADC3_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC4)
-  {
-  /* USER CODE BEGIN ADC4_MspInit 0 */
-
-  /* USER CODE END ADC4_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
-    PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        /* USER CODE END ADC3_MspInit 1 */
+    }
+    else if (hadc->Instance == ADC4)
     {
-      Error_Handler();
+        /* USER CODE BEGIN ADC4_MspInit 0 */
+
+        /* USER CODE END ADC4_MspInit 0 */
+
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
+        PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC345_CLK_ENABLED++;
+        if (HAL_RCC_ADC345_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC345_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        /**ADC4 GPIO Configuration
+         PB12     ------> ADC4_IN3
+         */
+        GPIO_InitStruct.Pin = ADC_2b_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(ADC_2b_GPIO_Port, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN ADC4_MspInit 1 */
+
+        /* USER CODE END ADC4_MspInit 1 */
     }
-
-    /* Peripheral clock enable */
-    HAL_RCC_ADC345_CLK_ENABLED++;
-    if(HAL_RCC_ADC345_CLK_ENABLED==1){
-      __HAL_RCC_ADC345_CLK_ENABLE();
-    }
-
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**ADC4 GPIO Configuration
-    PB12     ------> ADC4_IN3
-    */
-    GPIO_InitStruct.Pin = ADC_2b_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(ADC_2b_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN ADC4_MspInit 1 */
-
-  /* USER CODE END ADC4_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC5)
-  {
-  /* USER CODE BEGIN ADC5_MspInit 0 */
-
-  /* USER CODE END ADC5_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
-    PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    else if (hadc->Instance == ADC5)
     {
-      Error_Handler();
+        /* USER CODE BEGIN ADC5_MspInit 0 */
+
+        /* USER CODE END ADC5_MspInit 0 */
+
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
+        PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC345_CLK_ENABLED++;
+        if (HAL_RCC_ADC345_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC345_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC5 GPIO Configuration
+         PA8     ------> ADC5_IN1
+         */
+        GPIO_InitStruct.Pin = VDD_DIV_2_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(VDD_DIV_2_GPIO_Port, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN ADC5_MspInit 1 */
+
+        /* USER CODE END ADC5_MspInit 1 */
     }
-
-    /* Peripheral clock enable */
-    HAL_RCC_ADC345_CLK_ENABLED++;
-    if(HAL_RCC_ADC345_CLK_ENABLED==1){
-      __HAL_RCC_ADC345_CLK_ENABLE();
-    }
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC5 GPIO Configuration
-    PA8     ------> ADC5_IN1
-    */
-    GPIO_InitStruct.Pin = VDD_DIV_2_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(VDD_DIV_2_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN ADC5_MspInit 1 */
-
-  /* USER CODE END ADC5_MspInit 1 */
-  }
 
 }
 
