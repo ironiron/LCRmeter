@@ -17,6 +17,7 @@ Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average
 
 - change ADC_freq to 60Mhz tochieve max sampling time (200ns)
 - check disabled buffer for DAC
+- consider adding under sampling on ADC to increase range of frequency for sinewave
 
 #ADC
 

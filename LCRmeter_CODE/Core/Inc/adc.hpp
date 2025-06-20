@@ -89,6 +89,8 @@ double Set_Sampling_time(SamplingTimeClocks sampling_time);
  */
 uint32_t Set_Voltage_Temperature(void);
 
+bool Start_LCR(void);
+
 /**@brief Gets temperature.
  * @note #Set_Voltage_Temperature shall be executed prior to this function.
  * @retval temperature in celsius degrees

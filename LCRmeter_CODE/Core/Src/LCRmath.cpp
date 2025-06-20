@@ -12,6 +12,7 @@
 
 #include "LCRmath.hpp"
 #include <cmath>
+#include <stdio.h>
 
 double LCR_math::reactance = 0;
 double LCR_math::loss_angle = 0;
@@ -48,6 +49,7 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
     {
       radians = - radians;
       loss_angle = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
+
       voltage_lcr = amplitude2 * cos (loss_angle);
       reactance = voltage_lcr / current;
       inductance = reactance / 2 / frequency / pi;
@@ -57,7 +59,10 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
     }
   else
     {
-      loss_angle = (radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 ;
+      loss_angle = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
+//      loss_angle =pi / 2-  (radians +  asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)) ;
+      printf("asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs) = %f\n",Rad_to_Deg(asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)));
+      printf("asin (amplitude2 * sin (radians) / voltage_rs) = %f\n",Rad_to_Deg(asin (amplitude2 * sin (radians) / voltage_rs)));
       voltage_lcr = amplitude2 * cos (loss_angle);
       reactance = voltage_lcr / current;
       capacitance = 1/reactance / 2 / frequency / pi;

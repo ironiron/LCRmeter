@@ -10,7 +10,9 @@
  ******************************************************************************
  */
 
+#include <stdio.h>
 #include <adc.hpp>
+
 
 //ADC_HandleTypeDef hadc1 =
 //{ 0 };
@@ -21,6 +23,9 @@
 //
 //ADC_ChannelConfTypeDef adc_ch =
 //{ 0 };
+
+extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
 
 namespace Adc
 {
@@ -314,6 +319,18 @@ double Set_Sampling_time(SamplingTimeClocks sampling_time)
 //		}
 //	}
 //	return 1 / adc_freq * SampleTime[sampling_time]; //microseconds, assuming ADC clock=12MHz
+}
+
+bool Start_LCR(void)
+{
+    auto retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
+           Adc::size_of_adc_buffer);
+   if (retval != 0)
+   {
+                printf("Start_LCR = %d\n",retval);
+                return true;
+   }
+   return false;
 }
 
 int Get_Temperature(void)

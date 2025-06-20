@@ -33,19 +33,21 @@
  */
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdio.h>
+#include <string>
+#include <vector>
+
 #include "main.h"
 #include "usb_device.h"
 #include "Pwm.hpp"
 #include "delay.h"
-#include <stdio.h>
-#include <Waveformarythmetics.hpp>
+#include "Waveformarythmetics.hpp"
 //#include "sine.hpp"
 #include "SSD1306.hpp"
-#include <string>
-#include <vector>
 #include "adc.hpp"
 #include "LCRmath.hpp"
 #include "sine.hpp"
+#include "MovingAverager.hpp"
 
 
 ADC_HandleTypeDef hadc1;
@@ -210,6 +212,61 @@ static void Init(void)
 	    MX_TIM6_Init();
 }
 
+void Set_DAC_Frequency(int freq)
+{
+    htim6.Instance->CR1 &=~ TIM_CR1_CEN;
+    auto ret = HAL_DAC_Stop_DMA(&hdac1, DAC_CHANNEL_1);
+    printf("stopping DMA %d\n",ret);
+    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    printf("presenting for %d\n",freq);
+
+    switch (freq) {
+        case 0:
+            ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400s_12bit, sizeof(sine_table_400s_12bit)/sizeof(sine_table_400s_12bit[0]), DAC_ALIGN_12B_R);
+
+            break;
+        case 1:
+            ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_200samples_12bit, sizeof(sine_table_200samples_12bit)/sizeof(sine_table_200samples_12bit[0]), DAC_ALIGN_12B_R);
+            break;
+        case 2:
+            ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_80samples_12bit, sizeof(sine_table_80samples_12bit)/sizeof(sine_table_80samples_12bit[0]), DAC_ALIGN_12B_R);
+            break;
+        case 3:
+            ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_40samples_12bit, sizeof(sine_table_40samples_12bit)/sizeof(sine_table_40samples_12bit[0]), DAC_ALIGN_12B_R);
+            break;
+        default:
+            ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400s_12bit, sizeof(sine_table_400s_12bit)/sizeof(sine_table_400s_12bit[0]), DAC_ALIGN_12B_R);
+            break;
+    }
+
+
+    printf("starting DMA %d\n",ret);
+
+    htim6.Instance->CR1|=TIM_CR1_CEN;
+}
+
+void average_amplitude(int signal)
+{
+
+float avg1=0;
+              for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[signal];i++)
+              {
+                    printf("sig %d peak%d at %03d = %d\n",signal,i,Waveform_arythmetics::peaks[signal][i],Waveform_arythmetics::filtered_buffer[signal][Waveform_arythmetics::peaks[signal][i]]);
+                  avg1 =avg1+ Waveform_arythmetics::filtered_buffer[signal][Waveform_arythmetics::peaks[signal][i]];
+              }
+              avg1= (float)avg1/Waveform_arythmetics::nbr_of_peaks[signal];
+                printf("peak average for %d is %f\n",signal, avg1);
+              if (signal == 0)
+              {
+                  Waveform_arythmetics::amplitude1 = avg1 + 0.5;
+              }
+              else
+              {
+                  Waveform_arythmetics::amplitude2 = avg1 + 0.5;
+              }//10639
+}
 int main(void)
 {
 	Init();
@@ -217,6 +274,13 @@ int main(void)
 	char buf[30];
 	uint8_t display_buffer[100];
 	uint32_t error = 0;
+
+    constexpr int max_average=10;
+    MovingAverager<decltype(LCR_math::capacitance), max_average, true> cap;
+    MovingAverager<decltype(LCR_math::inductance), max_average, true> in;
+    MovingAverager<decltype(LCR_math::resistance), max_average, true> res;
+    MovingAverager<decltype(LCR_math::loss_angle), max_average, true> los;
+    MovingAverager<decltype(Waveform_arythmetics::alfa), max_average, true> ang;
 
 	UART_HandleTypeDef* u1=UART_printf_init();
 	printf("hola!! \n");
@@ -301,22 +365,20 @@ int main(void)
 	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_CPLT_CB_ID , lam);
 	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_ERROR_CB_ID , lam1);
 
-	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400s_12bit, sizeof(sine_table_400s_12bit)/sizeof(sine_table_400s_12bit[0]), DAC_ALIGN_12B_R);
-//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400samples, sizeof(sine_table_400samples)/sizeof(sine_table_400samples[0]), DAC_ALIGN_8B_R);
-	printf("starting DMA %d\n",ret);
-    if (HAL_TIM_Base_Start(&htim6) != HAL_OK)
-    {
-        printf("AAAA\n");
-      /* Counter enable error */
-      Error_Handler();
-    }
+	Set_DAC_Frequency(0);
+
+//	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400s_12bit, sizeof(sine_table_400s_12bit)/sizeof(sine_table_400s_12bit[0]), DAC_ALIGN_12B_R);
+////	auto ret = HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t *)sine_table_400samples, sizeof(sine_table_400samples)/sizeof(sine_table_400samples[0]), DAC_ALIGN_8B_R);
+//	printf("starting DMA %d\n",ret);
+//    if (HAL_TIM_Base_Start(&htim6) != HAL_OK)
+//    {
+//        printf("AAAA\n");
+//      /* Counter enable error */
+//      Error_Handler();
+//    }
 
     HAL_Delay(1000);
-//////////////////
-//    while(1)
-//    {
-//
-//    }
+
 
      auto retval = HAL_ADC_Start(&hadc2);
       if (retval != 0)
@@ -324,27 +386,46 @@ int main(void)
           printf("AAAA111\n");
           printf("retval = %d\n",retval);
       }
-       retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
-              Adc::size_of_adc_buffer);
-      if (retval != 0)
-      {
-          printf("AAA22222A\n");
-                   printf("retval = %d\n",retval);
-      }
+      Adc::Start_LCR();
 
 //      Waveform_arythmetics::mid_voltage = 2000;
       Waveform_arythmetics::hysteresis_samples=10;
       Waveform_arythmetics::user_point_time = 0.3529411;
 
 //      float avgC=0;
-
+int test1 = 1;
+int test2 = 0;
       while(1)
       {
         while (xD == 0)
         {
 
         }
-        printf("\e[1;1H\e[2J");
+        printf("*********************************************************\n");
+//        printf("%*s\n", 20, "*");
+
+
+
+        test2++;
+if(test2>60)
+{
+
+    Set_DAC_Frequency(test1);
+            cap.reset();
+            in.reset();
+            res.reset();
+            los.reset();
+            ang.reset();
+    HAL_Delay(1000);
+    test1++;
+    if(test1>3)
+    {
+        test1=0;
+    }
+    test2=0;
+}
+
+
         xD = 0;
           Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
                            Adc::size_of_adc_buffer, 1);
@@ -357,70 +438,71 @@ int main(void)
 
                 if(Waveform_arythmetics::nbr_of_peaks[1]<2 || Waveform_arythmetics::nbr_of_peaks[0]<2)
                 {
-                    printf("WARNING!!!!!!! number of peaks too small!!");
+                    printf("WARNING!!!!!!! number of peaks too small!!\n");
+                    printf("WARNING!!!!!!! number of peaks too small!!\n");
+                    printf("WARNING!!!!!!! number of peaks too small!!\n");
                 }
-
-                unsigned long int avg1=0;
-                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[0];i++)
+                else
                 {
-//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[0][i],Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
-                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]];
+//                    average_amplitude(0);
+//                    average_amplitude(1);
+
+                    //
+                                    bool ind=LCR_math::Calculate (
+                                  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
+                                  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
+                                  double(Waveform_arythmetics::alfa), Waveform_arythmetics::frequency);
+                      //
+                    //
+                                    printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
+                                    printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
+//                                    printf("f=%ld\n", Waveform_arythmetics::frequency);
+                                    printf("a=%f\n", Waveform_arythmetics::alfa);
+                    //                printf("a1=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
+                    //                printf("a2=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2));
+
+                    //                printf("nbr_of_minimas[0]=%ld\n", Waveform_arythmetics::nbr_of_minimas[0]);
+                    //                printf("nbr_of_peaks[0]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[0]);
+                    //                printf("nbr_of_minimas[1]=%ld\n", Waveform_arythmetics::nbr_of_minimas[1]);
+                    //                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+                    //                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
+                    //                printf("peaks[0][0]=%ld\n",  Waveform_arythmetics::peaks[0][0]);
+                    //                printf("peaks[0][1]=%ld\n",  Waveform_arythmetics::peaks[0][1]);
+                    //                printf("peaks[1][0]=%ld\n",  Waveform_arythmetics::peaks[1][0]);
+                    //                printf("peaks[1][1]=%ld\n",  Waveform_arythmetics::peaks[1][1]);
+                    //                printf("peaks[0][2]=%ld\n",  Waveform_arythmetics::peaks[0][2]);
+                    //                printf("peaks[1][2]=%ld\n",  Waveform_arythmetics::peaks[1][2]);
+
+                    //        printf("minimas=%ld\n", Waveform_arythmetics::minimas[0][0]);
+
+                            printf("cap=%1.9f F\n", LCR_math::capacitance);
+                            printf("ind=%1.9f H\n", LCR_math::inductance);
+                            printf("res=%1.9f R\n", LCR_math::resistance);
+                            printf("loss angle=%1.9f degs\n", LCR_math::loss_angle);
+
+
+                            cap.insert(LCR_math::capacitance);
+                            in.insert(LCR_math::inductance);
+                            res.insert(LCR_math::resistance);
+                            los.insert(LCR_math::loss_angle);
+                            ang.insert(Waveform_arythmetics::alfa);
+
+                            printf("avg_cap=%1.9f F\n",cap.average());
+                            printf("avg_ind=%1.9f H\n",in.average());
+                            printf("avg_res=%1.9f R\n",res.average());
+                            printf("avg_los=%1.9f R\n",los.average());
+                            printf("avg_ang=%1.9f R\n",ang.average());
+
+                    //
+                    //        printf("Waveform_arythmetics::mid_voltage[0] = %ld\n",
+                    //                Waveform_arythmetics::mid_voltage[0]);
+                    //        printf("Waveform_arythmetics::mid_voltage[1] = %ld\n",
+                    //                Waveform_arythmetics::mid_voltage[1]);
+                    //
+                    //          printf("-------------------------------------\n");
                 }
-                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[0];
-//                printf("peak average is %ld\n",avg1);
-                Waveform_arythmetics::amplitude1 = avg1;
 
 
-                avg1=0;
-                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[1];i++)
-                {
-//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[1][i],Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
-                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]];
-                }
-                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[1];
-//                printf("peak average is %ld\n",avg1);
-                Waveform_arythmetics::amplitude2 = avg1;
-//
-                bool ind=LCR_math::Calculate (
-              Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
-              Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-              double(Waveform_arythmetics::alfa), Waveform_arythmetics::frequency);
-  //
-//
-//                printf("a1=%ld\n", Waveform_arythmetics::amplitude1);
-//                printf("a2=%ld\n", Waveform_arythmetics::amplitude2);
-//                printf("f=%ld\n", Waveform_arythmetics::frequency);
-                printf("a=%f\n", Waveform_arythmetics::alfa);
-//                printf("a1=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1));
-//                printf("a2=%ld volts\n", Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2));
-
-//                printf("nbr_of_minimas[0]=%ld\n", Waveform_arythmetics::nbr_of_minimas[0]);
-//                printf("nbr_of_peaks[0]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[0]);
-//                printf("nbr_of_minimas[1]=%ld\n", Waveform_arythmetics::nbr_of_minimas[1]);
-//                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
-//                printf("nbr_of_peaks[1]=%ld\n",  Waveform_arythmetics::nbr_of_peaks[1]);
-//                printf("peaks[0][0]=%ld\n",  Waveform_arythmetics::peaks[0][0]);
-//                printf("peaks[0][1]=%ld\n",  Waveform_arythmetics::peaks[0][1]);
-//                printf("peaks[1][0]=%ld\n",  Waveform_arythmetics::peaks[1][0]);
-//                printf("peaks[1][1]=%ld\n",  Waveform_arythmetics::peaks[1][1]);
-//                printf("peaks[0][2]=%ld\n",  Waveform_arythmetics::peaks[0][2]);
-//                printf("peaks[1][2]=%ld\n",  Waveform_arythmetics::peaks[1][2]);
-
-//        printf("minimas=%ld\n", Waveform_arythmetics::minimas[0][0]);
-
-        printf("cap=%1.9f F\n", LCR_math::capacitance);
-        printf("ind=%1.9f H\n", LCR_math::inductance);
-        printf("res=%1.9f R\n", LCR_math::resistance);
-        printf("loss angle=%1.9f degs\n", LCR_math::loss_angle);
-//
-//        printf("Waveform_arythmetics::mid_voltage[0] = %ld\n",
-//                Waveform_arythmetics::mid_voltage[0]);
-//        printf("Waveform_arythmetics::mid_voltage[1] = %ld\n",
-//                Waveform_arythmetics::mid_voltage[1]);
-//
-//          printf("-------------------------------------\n");
-          printf("a1= %d \n",a1);
-          printf("a2= %d \n",a2);
 
 
 
@@ -430,13 +512,7 @@ int main(void)
 
 //          Adc::Resume_DMA();
 //          ADC1->CR |= ADC_CR_ADSTART;
-          retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
-                 Adc::size_of_adc_buffer);
-         if (retval != 0)
-         {
-             printf("AAA22222A\n");
-                      printf("retval = %d\n",retval);
-         }
+          Adc::Start_LCR();
 
 //          for(int i=0;i< Waveform_arythmetics::buffer_size;i++)
 //          {
