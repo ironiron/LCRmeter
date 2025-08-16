@@ -25,6 +25,10 @@
 /* USER CODE END Includes */
 extern DMA_HandleTypeDef hdma_adc1;
 
+extern DMA_HandleTypeDef hdma_adc3;
+
+extern DMA_HandleTypeDef hdma_adc5;
+
 extern DMA_HandleTypeDef hdma_dac1_ch1;
 
 /* Private typedef -----------------------------------------------------------*/
@@ -232,7 +236,25 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN ADC3_MspInit 1 */
+    /* ADC3 DMA Init */
+    /* ADC3 Init */
+    hdma_adc3.Instance = DMA1_Channel3;
+    hdma_adc3.Init.Request = DMA_REQUEST_ADC3;
+    hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_adc3.Init.Mode = DMA_NORMAL;
+    hdma_adc3.Init.Priority = DMA_PRIORITY_HIGH;
+    if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc3);
+
+    /* USER CODE BEGIN ADC3_MspInit 1 */
 
   /* USER CODE END ADC3_MspInit 1 */
   }
@@ -276,34 +298,48 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
   /* USER CODE END ADC5_MspInit 0 */
 
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
-    PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler();
-    }
+      /* USER CODE BEGIN ADC5_MspInit 0 */
 
-    /* Peripheral clock enable */
-    HAL_RCC_ADC345_CLK_ENABLED++;
-    if(HAL_RCC_ADC345_CLK_ENABLED==1){
-      __HAL_RCC_ADC345_CLK_ENABLE();
-    }
+      /* USER CODE END ADC5_MspInit 0 */
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC5 GPIO Configuration
-    PA8     ------> ADC5_IN1
+    /** Initializes the peripherals clocks
     */
-    GPIO_InitStruct.Pin = VDD_DIV_2_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(VDD_DIV_2_GPIO_Port, &GPIO_InitStruct);
+      PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC345;
+      PeriphClkInit.Adc345ClockSelection = RCC_ADC345CLKSOURCE_SYSCLK;
+      if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+      {
+        Error_Handler();
+      }
 
-  /* USER CODE BEGIN ADC5_MspInit 1 */
+      /* Peripheral clock enable */
+      HAL_RCC_ADC345_CLK_ENABLED++;
+      if(HAL_RCC_ADC345_CLK_ENABLED==1){
+        __HAL_RCC_ADC345_CLK_ENABLE();
+      }
 
-  /* USER CODE END ADC5_MspInit 1 */
-  }
+      /* ADC5 DMA Init */
+      /* ADC5 Init */
+      hdma_adc5.Instance = DMA1_Channel5;
+      hdma_adc5.Init.Request = DMA_REQUEST_ADC5;
+      hdma_adc5.Init.Direction = DMA_PERIPH_TO_MEMORY;
+      hdma_adc5.Init.PeriphInc = DMA_PINC_DISABLE;
+      hdma_adc5.Init.MemInc = DMA_MINC_ENABLE;
+      hdma_adc5.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+      hdma_adc5.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+      hdma_adc5.Init.Mode = DMA_NORMAL;
+      hdma_adc5.Init.Priority = DMA_PRIORITY_LOW;
+      if (HAL_DMA_Init(&hdma_adc5) != HAL_OK)
+      {
+        Error_Handler();
+      }
+
+      __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc5);
+
+      /* USER CODE BEGIN ADC5_MspInit 1 */
+
+      /* USER CODE END ADC5_MspInit 1 */
+    }
+
 
 }
 

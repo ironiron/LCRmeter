@@ -59,10 +59,25 @@ bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
     }
   else
     {
-      loss_angle = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
-//      loss_angle =pi / 2-  (radians +  asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)) ;
-      printf("asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs) = %f\n",Rad_to_Deg(asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)));
-      printf("asin (amplitude2 * sin (radians) / voltage_rs) = %f\n",Rad_to_Deg(asin (amplitude2 * sin (radians) / voltage_rs)));
+      double loss_angle1 = pi/2 - radians - atan(-amplitude2*sin(radians)/(amplitude1 - amplitude2*cos(radians)));
+      double loss_angle2 = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
+      double loss_angle3 =pi / 2-  (radians +  asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)) ;
+      double loss_angle4 = (radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 ;
+
+      loss_angle = loss_angle3;
+//
+//      printf("loss_angle1= %f\n",Rad_to_Deg(loss_angle1));
+//      printf("loss_angle2= %f\n",Rad_to_Deg(loss_angle2));
+//      printf("loss_angle3= %f\n",Rad_to_Deg(loss_angle3));
+//      printf("loss_angle4= %f\n",Rad_to_Deg(loss_angle4));
+//      printf("asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs) = %f\n",Rad_to_Deg(asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)));
+//      printf("asin (amplitude2 * sin (radians) / voltage_rs) = %f\n",Rad_to_Deg(asin (amplitude2 * sin (radians) / voltage_rs)));
+//      printf("(radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 = %f\n",Rad_to_Deg((radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2));
+      if(loss_angle<0)
+      {
+          loss_angle = - loss_angle;
+          loss_angle = - loss_angle;
+      }
       voltage_lcr = amplitude2 * cos (loss_angle);
       reactance = voltage_lcr / current;
       capacitance = 1/reactance / 2 / frequency / pi;

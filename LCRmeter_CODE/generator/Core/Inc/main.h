@@ -72,8 +72,6 @@ void Error_Handler(void);
 #define V_USB_IN_Pin GPIO_PIN_11
 #define V_USB_IN_GPIO_Port GPIOB
 #define V_USB_IN_EXTI_IRQn EXTI15_10_IRQn
-#define ADC_2b_Pin GPIO_PIN_12
-#define ADC_2b_GPIO_Port GPIOB
 #define ADC_1b_Pin GPIO_PIN_13
 #define ADC_1b_GPIO_Port GPIOB
 #define EN_PATH_1_Pin GPIO_PIN_14

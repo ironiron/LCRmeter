@@ -14,11 +14,8 @@
 #define ADC_HPP_
 
 #include <stdint.h>
-#include "stm32g4xx_hal.h"
 #include <unordered_map>
-#include <map>
-
-//TODO ADC clock can be modifiable?? I think? check on-the-fly change of frequency is required
+#include "stm32g4xx_hal.h"
 
 ///@note ADC clock must be configured before using anything from this file.
 ///@note for current MCU (stm32f103c8) DMA channel 1 is used and interrupts need to be implemented
@@ -28,9 +25,18 @@ namespace Adc
 ///
 constexpr uint32_t size_of_adc_buffer = 1000;
 
-extern volatile uint32_t adc_buffer[size_of_adc_buffer];
-extern volatile uint32_t volt_temp[2]; ///array containing value of internal vref and temp.
+extern uint32_t adc_buffer[size_of_adc_buffer];
+extern uint32_t volt_temp[2]; ///array containing value of internal vref and temp.
 extern uint32_t vref;  ///battery voltage
+
+/*
+ * @brief For \ref volt_temp array as a helper
+ */
+enum VOLT_TEMP_ENUM
+{
+    VOLT_INDEX=0,
+    TEMP_INDEX=1,
+};
 
 enum SamplingTimeClocks
 	: uint32_t
@@ -57,25 +63,6 @@ static std::unordered_map<SamplingTimeClocks, uint32_t> SampleTime =
 { ADCCLK_247CYCLES5, 260 },
 { ADCCLK_640CYCLES5, 653 } };
 
-/**@brief Deinitializes ADC
- */
-void Deinitialize(void);
-
-/**@brief In oscilloscope and LCR mode DMA works in single conversion (normal mode)
- * after /ref adc_buffer is full DMA is automatically stopped and this function resumes DMA.
- */
-void Resume_DMA(void);
-
-/**@brief Sets ADC1 for osc. input. deinit adc2
- * @retval HAL error code
- */
-uint32_t Set_Oscilloscope(void);
-
-/**@brief Sets ADC1 and ADC2.
- * @retval HAL error code
- */
-uint32_t Set_LCR(void);
-//TODO fix docs
 /**@brief
  * @param Sample time can be value of #SamplingTimeClocks
  * @retval negative -> Error code; positive -> Duration of one sample point in microseconds
@@ -83,13 +70,14 @@ uint32_t Set_LCR(void);
  */
 double Set_Sampling_time(SamplingTimeClocks sampling_time);
 
+
+
 /**@brief Sets ADC1 for reading temperature and 1,2V internal reference. It is used
  * to check battery voltage.
  * @retval HAL error code
  */
-uint32_t Set_Voltage_Temperature(void);
-
 bool Start_LCR(void);
+bool Start_Oscilloscope(void);
 
 /**@brief Gets temperature.
  * @note #Set_Voltage_Temperature shall be executed prior to this function.

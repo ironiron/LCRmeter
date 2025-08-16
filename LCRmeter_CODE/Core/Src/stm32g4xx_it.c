@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdbool.h>
 #include "main.h"
 #include "stm32g4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
@@ -57,6 +58,11 @@
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern DMA_HandleTypeDef hdma_adc1;
+extern DMA_HandleTypeDef hdma_adc3;
+extern DMA_HandleTypeDef hdma_adc5;
+extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
+extern ADC_HandleTypeDef hadc5;
 extern DMA_HandleTypeDef hdma_dac1_ch1;
 extern DAC_HandleTypeDef hdac1;
 extern TIM_HandleTypeDef htim2;
@@ -66,6 +72,8 @@ extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
 /* USER CODE BEGIN EV */
 extern volatile int xD;
+extern volatile bool osc_complete;
+extern volatile bool vref_complete;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -234,6 +242,37 @@ void DMA1_Channel2_IRQHandler(void)
   /* USER CODE END DMA1_Channel2_IRQn 1 */
 }
 
+/**
+  * @brief This function handles DMA1 channel3 global interrupt.
+  */
+void DMA1_Channel3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel3_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc3);
+  /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
+  osc_complete = true;
+  /* USER CODE END DMA1_Channel3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles ADC1  * @brief This function handles DMA1 channel5 global interrupt.
+  */
+void DMA1_Channel5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc5);
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
+  vref_complete = true;
+  /* USER CODE END DMA1_Channel5_IRQn 1 */
+}
+
+/**
+ and ADC2 global interrupt.
+  */
 void ADC1_2_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC1_2_IRQn 0 */
@@ -346,6 +385,20 @@ void DMA2_Channel1_IRQHandler(void)
 
   /* USER CODE END DMA2_Channel1_IRQn 1 */
 }
+
+/**
+  * @brief This function handles ADC5 global interrupt.
+  */
+//void ADC5_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN ADC5_IRQn 0 */
+//
+//  /* USER CODE END ADC5_IRQn 0 */
+//  HAL_ADC_IRQHandler(&hadc5);
+//  /* USER CODE BEGIN ADC5_IRQn 1 */
+//
+//  /* USER CODE END ADC5_IRQn 1 */
+//}
 
 /* USER CODE BEGIN 1 */
 

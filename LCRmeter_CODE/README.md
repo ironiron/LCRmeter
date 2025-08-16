@@ -1,17 +1,21 @@
 
-I2C2 -> OLED display
+I2C1 -> OLED display
 
-DAC1 -> PA4 -> measuring
+DAC1 -> LCR sinewave generator
+DAC2 -> customizable output 
 
 DMA1 -> ADC
-DMA2 -> DAC1 //todo add double buffer mode to improve bus latency.
+DMA2 -> DAC1
+
+TIM6 -> trigger for DAC1.
 
 # what is working
 
 The resistive load when connected to 0V works fine there's +- 3 ohm variance on result, however the alpha resolution is to small.
 It has 16 degrees which is far to small. with dual ADC it can be moved to 8 degs. but it still not good. I guess frequency must be reduced (now it's ca. 121 KHz)
-Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average (TIM6 pres is 15)
+Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average (TIM6 prescaler is 15)
 
+However sometimes ESR of capacitor is negative. Not sure why.
 
 #TODO 
 
@@ -21,7 +25,12 @@ Up to 2.2 V DAC is working corectlly with current implementation 142 Khz average
 
 #ADC
 
-For now let's use only ADC 1&2. if bandwidth is not wide enough then let's use ADC 3,4 as well. 
+For now only ADC 1&2 is used. I've tried using ADC1,2,3,4 in dual interleaved mode to double sampling frequency, but for unknown reasons I coudn't managed to get ADC3,4 working.
+
+#DAC1
+
+DAC is triggerred regulary by timer in 170MHz/17 = 10 MHz frequency. 4 sinewave are preconfigured, which varing samples per period.
+Available 400, 200, 80, 40 samples, which corresponds to sinewave of 12.5 kHz, 25 kHz, 62.5 kHz, and 125 kHz respectively.
 
 
 ## CubeMX and Code generation
@@ -39,3 +48,8 @@ Instead use dummy project inside 'generator/' folder and copy-paste code.
 - Hardware holds hardware related files
 - Core holds main.cpp and essential program files
 - Drivers - mainly HAL library
+
+
+# Pinout
+
+see PCB schematic
