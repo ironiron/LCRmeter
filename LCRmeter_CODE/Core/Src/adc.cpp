@@ -110,16 +110,20 @@ int Get_Temperature(void)
 	return temp;
 }
 
-uint32_t Update_Vref(void)
+uint32_t Get_Vref(void)
 {
     //not divide by zero!
     if (volt_temp[VOLT_INDEX] ==0)
     {
-        vref = 0;
         return 0;
     }
-	vref =  3000 * VREF_CAL / volt_temp[VOLT_INDEX];// magic number from DT
-	return vref;
+    uint32_t v =  3000 * VREF_CAL / volt_temp[VOLT_INDEX];// magic number from DT
+	return v;
+}
+
+void Update_Vref(uint32_t vref)
+{
+    Adc::vref=vref;
 }
 
 uint32_t Adc_To_Milivolts(uint32_t adc)

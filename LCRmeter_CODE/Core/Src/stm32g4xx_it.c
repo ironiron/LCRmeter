@@ -327,34 +327,34 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
 
-extern volatile unsigned int b1;
-extern volatile unsigned int b2;
-extern volatile unsigned int b3;
-extern volatile unsigned int b4;
+extern volatile unsigned int button_up;
+extern volatile unsigned int button_down;
+extern volatile unsigned int button_ok;
+extern volatile unsigned int button_back;
 
 
 void EXTI2_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(BUTTON_UP_Pin);
-  b1++;
+  button_up++;
 }
 
 void EXTI1_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(BUTTON_DOWN_Pin);
-  b2++;
+  button_down++;
 }
 
 void EXTI4_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(BUTTON_OK_Pin);
-  b3++;
+  button_ok++;
 }
 
 void EXTI9_5_IRQHandler(void)
 {
   HAL_GPIO_EXTI_IRQHandler(BUTTON_BACK_Pin);
-  b4++;
+  button_back++;
 }
 
 /**

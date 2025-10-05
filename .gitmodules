@@ -1,3 +1,6 @@
 [submodule "LCRmeter_CODE/libs/MovingAverager"]
 	path = LCRmeter_CODE/libs/MovingAverager
 	url = https://github.com/ironiron/MovingAverager.git
+[submodule "LCRmeter_CODE/libs/menu01"]
+	path = LCRmeter_CODE/libs/menu01
+	url = https://github.com/ironiron/menu01.git

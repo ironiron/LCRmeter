@@ -89,7 +89,12 @@ int Get_Temperature(void);
  * @note #Set_Voltage_Temperature shall be executed prior to this function.
  * @retval voltage in milivolts.
  */
-uint32_t Update_Vref(void);
+uint32_t Get_Vref(void);
+
+/**@brief Updates voltage reference with value given
+ * @param vref reference voltage in milivolts
+ */
+void Update_Vref(uint32_t vref);
 
 /**@brief Converts ADC readings to milivolts
  * @param 12bit value
