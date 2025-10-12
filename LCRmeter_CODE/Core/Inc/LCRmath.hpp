@@ -54,7 +54,7 @@ public:
    * @param angle -phase swift angle in degrees
    * @param frequency -frequency of sine wave
    */
-  static bool Calculate (double amplitude1, double apmlitude2, double angle,
+  static bool Calculate (double amplitude1, double amplitude2, double angle,
 			 uint32_t frequency);
 
   /**@brief simple converter.

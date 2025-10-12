@@ -11,7 +11,7 @@
  */
 
 #include <stdio.h>
-#include "adc.hpp""
+#include "adc.hpp"
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc3;

@@ -1,6 +1,6 @@
 Debug/
 Unit_Tests/
-cppCeck_results/
+lcr-cppcheck-build-dir/
 .settings/
 *.launch
 .metadata
