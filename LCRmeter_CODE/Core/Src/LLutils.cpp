@@ -10,6 +10,9 @@
 #include "stm32g4xx_hal.h"
 #include "sine.hpp"
 #include "common_defines.hpp"
+#include "LCRmath.hpp"
+
+//FIXME add string for GUI for handling frequency change in the settings!
 
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
@@ -30,6 +33,13 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim6;
 
+static  inline const std::unordered_map<sine_samples_t,const uint16_t*> sine_option = {
+        { sine_samples_t::SINE_400_SAMPELS, sine_table_400s_12bit.data() },
+        { sine_samples_t::SINE_200_SAMPELS, sine_table_200samples_12bit.data()  },
+        { sine_samples_t::SINE_80_SAMPELS, sine_table_80samples_12bit.data()  },
+        { sine_samples_t::SINE_40_SAMPELS, sine_table_400s_12bit.data()  }
+};
+
 static inline const std::unordered_map<sine_samples_t,const int> sine_option_length = {
         { sine_samples_t::SINE_400_SAMPELS, sine_table_400s_12bit.size() },
         { sine_samples_t::SINE_200_SAMPELS, sine_table_200samples_12bit.size()  },
@@ -37,8 +47,18 @@ static inline const std::unordered_map<sine_samples_t,const int> sine_option_len
         { sine_samples_t::SINE_40_SAMPELS, sine_table_400s_12bit.size()  }
 };
 
+static inline const std::unordered_map<Rseries_t, float> r_series_option = {
+        {Rseries_t::R_100, 100 },
+        {Rseries_t::R_820, 820 },
+        {Rseries_t::R_6, 6 }
+};
+
+static sine_samples_t current_sine = sine_samples_t::SINE_400_SAMPELS;
+static Rseries_t current_rseries = Rseries_t::R_100;
+
 void Set_DAC_Frequency(sine_samples_t freq)
 {
+    current_sine = freq;
     htim6.Instance->CR1 &=~ TIM_CR1_CEN;//stop trigger
 
     HAL_DAC_Stop_DMA(&hdac1, DAC_CHANNEL_1);// close previous configuration
@@ -49,6 +69,8 @@ void Set_DAC_Frequency(sine_samples_t freq)
 
 void Set_Rseries(Rseries_t R)
 {
+    current_rseries = R;
+    LCR_math::series_resistance = static_cast<double>(R);
     HAL_GPIO_WritePin(EN_PATH_1_GPIO_Port, EN_PATH_1_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(EN_PATH_2_GPIO_Port, EN_PATH_2_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(EN_PATH_3_GPIO_Port, EN_PATH_3_Pin, GPIO_PIN_RESET);
@@ -67,3 +89,100 @@ void Set_Rseries(Rseries_t R)
             break;
     }
 }
+
+
+
+sine_samples_t Increase_DAC_frequncy(void)
+{
+    switch(current_sine)
+    {
+        case sine_samples_t::SINE_400_SAMPELS:
+            current_sine = sine_samples_t::SINE_200_SAMPELS;
+            break;
+        case sine_samples_t::SINE_200_SAMPELS:
+            current_sine = sine_samples_t::SINE_80_SAMPELS;
+            break;
+        case sine_samples_t::SINE_80_SAMPELS:
+            current_sine = sine_samples_t::SINE_40_SAMPELS;
+            break;
+        case sine_samples_t::SINE_40_SAMPELS:
+        default:
+            current_sine = sine_samples_t::SINE_40_SAMPELS;
+            break;
+    }
+    Set_DAC_Frequency(current_sine);
+    return current_sine;
+}
+
+sine_samples_t Decrease_DAC_frequncy(void)
+{
+    switch(current_sine)
+    {
+        case sine_samples_t::SINE_40_SAMPELS:
+            current_sine = sine_samples_t::SINE_80_SAMPELS;
+            break;
+        case sine_samples_t::SINE_80_SAMPELS:
+            current_sine = sine_samples_t::SINE_200_SAMPELS;
+            break;
+        case sine_samples_t::SINE_200_SAMPELS:
+            current_sine = sine_samples_t::SINE_400_SAMPELS;
+            break;
+        case sine_samples_t::SINE_400_SAMPELS:
+        default:
+            current_sine = sine_samples_t::SINE_400_SAMPELS;
+            break;
+    }
+    Set_DAC_Frequency(current_sine);
+    return current_sine;
+}
+
+sine_samples_t Get_DAC_Frequency(void)
+{
+    return current_sine;
+}
+
+
+Rseries_t Increase_Rseries(void)
+{
+    switch(current_rseries)
+    {
+        case Rseries_t::R_6:
+            current_rseries = Rseries_t::R_100;
+            break;
+        case Rseries_t::R_100:
+            current_rseries = Rseries_t::R_820;
+            break;
+        case Rseries_t::R_820:
+        default:
+            current_rseries = Rseries_t::R_820;
+            break;
+    }
+    Set_Rseries(current_rseries);
+    return current_rseries;
+}
+
+Rseries_t Decrease_Rseries(void)
+{
+    switch(current_rseries)
+    {
+        case Rseries_t::R_820:
+            current_rseries = Rseries_t::R_100;
+            break;
+        case Rseries_t::R_100:
+            current_rseries = Rseries_t::R_6;
+            break;
+        case Rseries_t::R_6:
+        default:
+            current_rseries = Rseries_t::R_6;
+            break;
+    }
+    Set_Rseries(current_rseries);
+    return current_rseries;
+}
+
+Rseries_t Get_Rseries(void)
+{
+    return current_rseries;
+}
+
+

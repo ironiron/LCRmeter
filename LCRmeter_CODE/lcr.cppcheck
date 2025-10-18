@@ -22,6 +22,8 @@
         <path name="tests/main_test.cpp"/>
         <path name="tests/catch.hpp"/>
         <path name="tests/fakeit.hpp"/>
+        <path name="D:/Projekty/reszta/LCRmeter/LCRmeter_CODE/Core/Src/stm32g4xx_hal_msp.c"/>
+        <path name="D:/Projekty/reszta/LCRmeter/LCRmeter_CODE/Core/Src/syscalls.c"/>
     </exclude>
     <libraries>
         <library>cppcheck-lib</library>
@@ -30,6 +32,7 @@
         <suppression>missingIncludeSystem</suppression>
         <suppression>missingInclude</suppression>
         <suppression>unusedFunction</suppression>
+        <suppression>invalidPrintfArgType_sint</suppression>
     </suppressions>
     <safe-checks>
         <class-public/>

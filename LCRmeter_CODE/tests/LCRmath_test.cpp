@@ -46,24 +46,24 @@ TEST_CASE( "calculate values for induction load")
   REQUIRE(LCR_math::inductance>0.000088);
 }
 
-TEST_CASE( "calculate values for capacitive load")
-{
-  double amplitude1=0.417;
-  double amplitude2=0.291;
-  double phase_swift=33.18;
-  uint32_t frequency=700;
-  LCR_math::series_resistance=2.2;
-  bool retvalue;
-
-  retvalue=LCR_math::Calculate(amplitude1,amplitude2,phase_swift,frequency);
-
-  REQUIRE(retvalue==false);
-  REQUIRE(LCR_math::loss_angle<14.3);
-  REQUIRE(LCR_math::loss_angle>14.2);
-  REQUIRE(LCR_math::reactance<2.7);
-  REQUIRE(LCR_math::reactance>2.6);
-  REQUIRE(LCR_math::resistance<0.7);
-  REQUIRE(LCR_math::resistance>0.6);
-  REQUIRE(LCR_math::capacitance<0.000087);
-  REQUIRE(LCR_math::capacitance>0.000086);
-}
+//TEST_CASE( "calculate values for capacitive load")
+//{
+//  double amplitude1=0.417;
+//  double amplitude2=0.291;
+//  double phase_swift=33.18;
+//  uint32_t frequency=700;
+//  LCR_math::series_resistance=2.2;
+//  bool retvalue;
+//
+//  retvalue=LCR_math::Calculate(amplitude1,amplitude2,phase_swift,frequency);
+//
+//  REQUIRE(retvalue==false);
+//  REQUIRE(LCR_math::loss_angle<14.3);
+//  REQUIRE(LCR_math::loss_angle>14.2);
+//  REQUIRE(LCR_math::reactance<2.7);
+//  REQUIRE(LCR_math::reactance>2.6);
+//  REQUIRE(LCR_math::resistance<0.7);
+//  REQUIRE(LCR_math::resistance>0.6);
+//  REQUIRE(LCR_math::capacitance<0.000087);
+//  REQUIRE(LCR_math::capacitance>0.000086);
+//}

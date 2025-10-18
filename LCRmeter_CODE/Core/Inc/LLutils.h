@@ -17,33 +17,72 @@
 
 enum class sine_samples_t : unsigned int
 {
- SINE_400_SAMPELS=0,
- SINE_200_SAMPELS,
- SINE_80_SAMPELS,
- SINE_40_SAMPELS,
-};
-
-static  inline const std::unordered_map<sine_samples_t,const uint16_t*> sine_option = {
-        { sine_samples_t::SINE_400_SAMPELS, sine_table_400s_12bit.data() },
-        { sine_samples_t::SINE_200_SAMPELS, sine_table_200samples_12bit.data()  },
-        { sine_samples_t::SINE_80_SAMPELS, sine_table_80samples_12bit.data()  },
-        { sine_samples_t::SINE_40_SAMPELS, sine_table_400s_12bit.data()  }
+    SINE_400_SAMPELS=0,
+    SINE_200_SAMPELS,
+    SINE_80_SAMPELS,
+    SINE_40_SAMPELS,
 };
 
 enum class Rseries_t : unsigned int
 {
- R_100=0,// in ohms
- R_820,
- R_6,
+    R_6 = 6, // in ohms
+    R_100 = 100,
+    R_820 = 820,
 };
 
-static inline const std::unordered_map<Rseries_t, float> r_series_option = {
-        {Rseries_t::R_100, 100 },
-        {Rseries_t::R_820, 820 },
-        {Rseries_t::R_6, 6 }
-};
-
+/**
+ * @brief Sets DAC frequncy at one of the predefined values
+ * Will stop and restart DAC transmission internally
+ * @note will not reset samples, etc so it might corrupt measurment
+ * @param freq to set
+ */
 void Set_DAC_Frequency(sine_samples_t freq);
+
+/**
+ * @brief Sets resistance value by switching GPIO
+ * Will update resistance value in \ref LCRmath module as well.
+ * @param R resistance to set
+ */
 void Set_Rseries(Rseries_t R);
+
+/**
+ * @brief Increase frequency by one enum value
+ * If max is achieved does nothing.
+ * @retval current frequency
+ */
+sine_samples_t Increase_DAC_frequncy(void);
+
+/**
+ * @brief Decrease frequency by one enum value
+ * If min is achieved does nothing.
+ * @retval current frequency
+ */
+sine_samples_t Decrease_DAC_frequncy(void);
+
+/**
+ * @brief Gets current frequency from internal state machine
+ * @retval current frequency
+ */
+sine_samples_t Get_DAC_Frequency(void);
+
+/**
+ * @brief Increase R series by one enum value
+ * If max is achieved does nothing.
+ * @retval current R series
+ */
+Rseries_t Increase_Rseries(void);
+
+/**
+ * @brief Decrease R series by one enum value
+ * If min is achieved does nothing.
+ * @retval current R series
+ */
+Rseries_t Decrease_Rseries(void);
+
+/**
+ * @brief Gets current R series from internal state machine
+ * @retval current R series
+ */
+Rseries_t Get_Rseries(void);
 
 #endif /* LLUTILS_H_ */
