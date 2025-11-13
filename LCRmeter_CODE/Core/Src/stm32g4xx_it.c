@@ -67,13 +67,7 @@ extern DMA_HandleTypeDef hdma_dac1_ch1;
 extern DAC_HandleTypeDef hdac1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim6;
-
-extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
 /* USER CODE BEGIN EV */
-extern volatile int xD;
-extern volatile bool osc_complete;
-extern volatile bool vref_complete;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -238,7 +232,7 @@ void DMA1_Channel2_IRQHandler(void)
   /* USER CODE END DMA1_Channel2_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA1_Channel2_IRQn 1 */
-  xD = 1;
+
   /* USER CODE END DMA1_Channel2_IRQn 1 */
 }
 
@@ -252,7 +246,7 @@ void DMA1_Channel3_IRQHandler(void)
   /* USER CODE END DMA1_Channel3_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc3);
   /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
-  osc_complete = true;
+
   /* USER CODE END DMA1_Channel3_IRQn 1 */
 }
 
@@ -266,7 +260,7 @@ void DMA1_Channel5_IRQHandler(void)
   /* USER CODE END DMA1_Channel5_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc5);
   /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
-  vref_complete = true;
+
   /* USER CODE END DMA1_Channel5_IRQn 1 */
 }
 

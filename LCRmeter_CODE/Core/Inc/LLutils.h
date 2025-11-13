@@ -12,12 +12,12 @@
 #include <unordered_map>
 #include <stdint.h>
 #include "sine.hpp"
-
-//todo maybe create those out of template?
+#include "adc.hpp"
 
 enum class sine_samples_t : unsigned int
 {
-    SINE_400_SAMPELS=0,
+    SINE_5000_SAMPELS=0,
+    SINE_400_SAMPELS,
     SINE_200_SAMPELS,
     SINE_80_SAMPELS,
     SINE_40_SAMPELS,
@@ -25,9 +25,9 @@ enum class sine_samples_t : unsigned int
 
 enum class Rseries_t : unsigned int
 {
-    R_6 = 6, // in ohms
-    R_100 = 100,
-    R_820 = 820,
+    R_6 =0, // in ohms
+    R_100,
+    R_820,
 };
 
 /**
@@ -84,5 +84,16 @@ Rseries_t Decrease_Rseries(void);
  * @retval current R series
  */
 Rseries_t Get_Rseries(void);
+
+
+uint8_t Decrease_Edge_Level(void);
+
+uint8_t Increase_Edge_Level(void);
+uint8_t Get_Edge_Level(void);
+
+Adc::SamplingTimeClocks Decrease_period(void);
+
+Adc::SamplingTimeClocks Increase_period(void);
+float Get_period(void);
 
 #endif /* LLUTILS_H_ */

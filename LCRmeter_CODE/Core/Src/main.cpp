@@ -23,15 +23,6 @@
  * \ref md_LICENSE.md
  */
 
-/* USER CODE END Header */
-/*TODO list
- osciloscope
- menu
- do hardware test (for buttons) and do not delete after pass!!!
- USB- mass storage of data
- */
-/* Includes ------------------------------------------------------------------*/
-
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -70,54 +61,9 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim6;
 
-
-
-
-////////////
-//template<typename port_type,
-//typename bval_type,
-//const port_type port,
-//const bval_type bval>
-//class button_template
-//{
-//public:
-//    button_template (){}
-////    static void
-////    Toggle ()
-////    {
-////        *reinterpret_cast<volatile bval_type*> (port) ^= bval;
-////    }
-//    static bool
-//    State ()
-//    {
-//        return (*reinterpret_cast<bval_type*> (port) & static_cast<bval_type> (bval));
-//    }
-//};
-//
-////namespace
-////{
-//    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<4)> button_OK;
-////    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<3)> button_DOWN;
-////    const button_template<uint32_t, uint32_t, &uint32_t(BUTTON_UP_GPIO_Port->IDR), BUTTON_UP_Pin> button_UP;
-////    const button_template<uint32_t, uint32_t, &uint32_t(GPIOA->IDR), (1<<5)> button_BACK;
-////}///
-/////////////
-//
-////typedef reg_access<std::uint8_t, std::uint8_t, mcal::reg::portb, pdir> port_dir_type;
-
-//void Fatal_Error(void);
-
-volatile int yolo = 0;
-volatile int xD = 0;
-volatile uint32_t error_flag = 0;
-
 extern "C"
 {
 #include "printf_redirection.h"
-
-
-//void SystemClock_Config(void);
-//static void MX_GPIO_Init(void);
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -141,7 +87,6 @@ ADC_HandleTypeDef adc;
 
 volatile unsigned int a1=0;
 volatile unsigned int a2=0;
-
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
 {
     if(hadc->Instance == ADC1)
@@ -181,40 +126,17 @@ static void Init(void)
 
 int main(void)
 {
-	Init();
-	HAL_Delay(100);
+    Init();
+    HAL_Delay(100);
 
-    Waveform_arythmetics::hysteresis_samples=10;
-    Waveform_arythmetics::user_point_time = 0.3529411;
+    Waveform_arythmetics::hysteresis_samples = 10;
+    Waveform_arythmetics::user_point_time = static_cast<float>(0.3529411);
 
-	UART_printf_init();
-	printf("hola!! \n");
+    UART_printf_init();
+    printf("hola!! \n");
 
-
-
-//	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
-//	pwm.Initialise();
-//	pwm.Set_Frequency(600);
-//	pwm.Set_Duty(80);
-//	pwm.Enable();
-//
-
-
-	auto lam = [](DMA_HandleTypeDef* d){
-	        printf("DMA has finished \n");
-	        printf("DMA has finished \n");
-	        printf("DMA has finished \n");
-	};
-	auto lam1 = [](DMA_HandleTypeDef* d){
-	        printf("Derrrrrr \n");
-	        printf("Derrrrrr \n");
-	        printf("Derrrrrr \n");
-	};
-	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_CPLT_CB_ID , lam);
-	HAL_DMA_RegisterCallback(&hdma_adc1,HAL_DMA_XFER_ERROR_CB_ID , lam1);
-
-      Loop();
-      //should never exit
+    Loop();
+    //should never exit
 }
 
 /**

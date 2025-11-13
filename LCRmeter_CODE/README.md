@@ -9,6 +9,11 @@ DMA2 -> DAC1
 
 TIM6 -> trigger for DAC1.
 
+ADC1 & ADC2 - LCR measurments
+ADC3 - oscilloscope
+ADC5 - Vbat and temperature monitoring
+ 
+
 # what is working
 
 The resistive load when connected to 0V works fine there's +- 3 ohm variance on result, however the alpha resolution is to small.
@@ -29,8 +34,8 @@ For now only ADC 1&2 is used. I've tried using ADC1,2,3,4 in dual interleaved mo
 
 #DAC1
 
-DAC is triggerred regulary by timer in 170MHz/17 = 10 MHz frequency. 4 sinewave are preconfigured, which varing samples per period.
-Available 400, 200, 80, 40 samples, which corresponds to sinewave of 12.5 kHz, 25 kHz, 62.5 kHz, and 125 kHz respectively.
+DAC is triggerred regulary by timer in 170MHz/17 = 10 MHz frequency. 4 sinewave are preconfigured, with varing samples per period.
+Available 400, 200, 80, 40 samples, which corresponds to sinewave of frequency 12.5 kHz, 25 kHz, 62.5 kHz, and 125 kHz respectively.
 
 
 ## CubeMX and Code generation

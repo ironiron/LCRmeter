@@ -31,7 +31,7 @@ uint32_t Waveform_arythmetics::mid_voltage[nbr_of_signals]; ////////////////////
 uint32_t Waveform_arythmetics::amplitude1 = 0;
 uint32_t Waveform_arythmetics::amplitude2 = 0;
 
-uint_fast16_t Waveform_arythmetics::hysteresis_samples = 0;
+uint_fast8_t Waveform_arythmetics::hysteresis_samples = 0;
 
 void Waveform_arythmetics::Calc_Moving_Average(const uint32_t *buffer, uint32_t size,
         uint8_t step)
@@ -53,8 +53,8 @@ void Waveform_arythmetics::Calc_Moving_Average(const uint32_t *buffer, uint32_t 
             temp2 = temp2 + ((buffer[k + i] >> 16) & 0xffff); //ADC2 input
         }
 
-        filtered_buffer[0][j] = (uint32_t) temp1 / step;
-        filtered_buffer[1][j] = (uint32_t) temp2 / step;
+        filtered_buffer[0][j] = static_cast<uint16_t>(static_cast<uint32_t>( temp1 / step));
+        filtered_buffer[1][j] = static_cast<uint16_t>(static_cast<uint32_t>( temp2 / step));
         temp1 = 0;
         temp2 = 0;
         average[0] += filtered_buffer[0][j];
@@ -112,7 +112,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                 else if (level == BELOW)
                 {
                     hysteresis_counter++;
-                    if (hysteresis_counter >= hysteresis_samples)
+                    if (hysteresis_counter >= static_cast<int8_t>(hysteresis_samples))
                     {
                         hysteresis_counter = 0;
                         level = ABOVE;
@@ -144,7 +144,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                 else if (level == ND)
                 {
                     hysteresis_counter++;
-                    if (hysteresis_counter >= hysteresis_samples)
+                    if (hysteresis_counter >= static_cast<int8_t>(hysteresis_samples))
                     {
                         hysteresis_counter = 0;
                         level = ABOVE;
@@ -160,7 +160,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                 if (level == ABOVE)
                 {
                     hysteresis_counter--;
-                    if (hysteresis_counter <= 0 - hysteresis_samples)
+                    if (hysteresis_counter <= static_cast<int8_t>(0 - hysteresis_samples))
                     {
                         hysteresis_counter = 0;
                         level = BELOW;
@@ -200,7 +200,7 @@ void Waveform_arythmetics::Find_Peaks(void)
                 else if (level == ND)
                 {
                     hysteresis_counter--;
-                    if (hysteresis_counter <= 0 - hysteresis_samples)
+                    if (hysteresis_counter <= static_cast<int8_t>(0 - hysteresis_samples))
                     {
                         hysteresis_counter = 0;
                         level = BELOW;
@@ -382,8 +382,8 @@ bool Waveform_arythmetics::Get_Indexes(uint32_t *first, uint32_t *second)
     }
     else
     {
-        *first=NULL;
-        *second=NULL;
+        first=nullptr;
+        second=nullptr;
     }
     return one_side;
 }
@@ -398,11 +398,11 @@ void Waveform_arythmetics::Calc_Frequency(void)
     {
         if(one_side==true)
         {
-            frequency=1000000/(i2-i1)/point_time;
+            frequency=static_cast<uint32_t>(static_cast<float>(1000000.0/static_cast<float>(i2-i1)/point_time));
         }
         else
         {
-            frequency=1000000/(i2-i1)/point_time/2;
+            frequency=static_cast<uint32_t>(static_cast<float>(1000000.0/static_cast<float>(i2-i1)/point_time/2.0));
         }
     }
     else
@@ -447,7 +447,7 @@ void Waveform_arythmetics::Calc_Alfa(void)
 
     if(i2-i1 < i1_1-i2)
     {
-        alfa = (i2-i1) * (point_time) * (frequency) * 360.0 / 1000000.0;
+        alfa = static_cast<float>(i2-i1) * (point_time) * static_cast<float>(frequency) * static_cast<float>(360.0 / 1000000.0);
             if (alfa >= 180)
             {
                 alfa = alfa - 360;
@@ -456,7 +456,7 @@ void Waveform_arythmetics::Calc_Alfa(void)
     else
     {
 
-        alfa =-(float)(i1_1-i2) * (point_time) * (float)(frequency) * 360.0 / 1000000.0;
+        alfa =-static_cast<float>(i1_1-i2) * (point_time) * static_cast<float>(frequency) * static_cast<float>(360.0 / 1000000.0);
 
     }
     return;
@@ -469,7 +469,7 @@ void Waveform_arythmetics::Calc_Amplitude(void)
 }
 
 void Waveform_arythmetics::Process_Signal(uint32_t *buffer, uint32_t size,
-        uint32_t point_time_lenght)
+        float point_time_lenght, uint8_t step)
 {
     user_point_time = point_time_lenght;
     Calc_Moving_Average(buffer, size, 5);

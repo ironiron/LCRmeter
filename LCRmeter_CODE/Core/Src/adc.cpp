@@ -43,41 +43,38 @@ void Clean_Buffer(void)
 #define TS_VREF 3000 // voltage at which calibration data has been obtained in millivolts
 
 
+///@note here sample time = sampling time + ADC conversion time (12.5 clock cycles)
+static std::unordered_map<SamplingTimeClocks, uint32_t> SampleTime =
+{
+{ ADCCLK_2CYCLES5, 15 },
+{ ADCCLK_6CYCLES5, 19 },
+{ ADCCLK_12CYCLES5, 25 },
+{ ADCCLK_24CYCLES5, 37 },
+{ ADCCLK_47CYCLES5, 60 },
+{ ADCCLK_92CYCLES5, 105 },
+{ ADCCLK_247CYCLES5, 260 },
+{ ADCCLK_640CYCLES5, 653 } };
+
 double Set_Sampling_time(SamplingTimeClocks sampling_time)
 {
-//	HAL_StatusTypeDef retval;
-//	if (state == CurrentState::OSCILLOSCOPE)
-//	{
-//		adc_ch.Channel = ADC_CHANNEL_7;
-//		adc_ch.Rank = ADC_REGULAR_RANK_1;
-//		adc_ch.SamplingTime = sampling_time;
-//		retval = HAL_ADC_ConfigChannel(&hadc1, &adc_ch);
-//		if (retval != HAL_OK)
-//		{
-//			return (-retval);
-//		}
-//	}
-//	if (state == CurrentState::LCR)
-//	{
-//		adc_ch.Channel = ADC_CHANNEL_8;
-//		adc_ch.Rank = ADC_REGULAR_RANK_1;
-//		adc_ch.SamplingTime = sampling_time;
-//		retval = HAL_ADC_ConfigChannel(&hadc1, &adc_ch);
-//		if (retval != HAL_OK)
-//		{
-//			return (-retval);
-//		}
-//
-//		adc_ch.Channel = ADC_CHANNEL_9;
-//		adc_ch.Rank = ADC_REGULAR_RANK_1;
-//		adc_ch.SamplingTime = sampling_time;
-//		retval = HAL_ADC_ConfigChannel(&hadc2, &adc_ch);
-//		if (retval != HAL_OK)
-//		{
-//			return (-retval);
-//		}
-//	}
-//	return 1 / adc_freq * SampleTime[sampling_time]; //microseconds, assuming ADC clock=12MHz
+    HAL_ADC_Stop_DMA(&hadc3);
+    ADC_ChannelConfTypeDef sConfig = {0};
+    sConfig.Channel = ADC_CHANNEL_12;
+    sConfig.Rank = ADC_REGULAR_RANK_1;
+    sConfig.SamplingTime = sampling_time;
+    sConfig.SingleDiff = ADC_SINGLE_ENDED;
+    sConfig.OffsetNumber = ADC_OFFSET_NONE;
+    sConfig.Offset = 0;
+    if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+    {
+      return -1.0;
+    }
+    Start_Oscilloscope();
+}
+
+float Get_sample_Time(SamplingTimeClocks sampling_time)
+{
+    return static_cast<float>(SampleTime.at(sampling_time))/42.5;
 }
 
 bool Start_LCR(void)

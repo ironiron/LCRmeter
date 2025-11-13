@@ -51,17 +51,7 @@ enum SamplingTimeClocks
 	ADCCLK_640CYCLES5 = ADC_SAMPLETIME_640CYCLES_5
 };
 
-///@note here sample time = sampling time + ADC conversion time (12.5 clock cycles)
-static std::unordered_map<SamplingTimeClocks, uint32_t> SampleTime =
-{
-{ ADCCLK_2CYCLES5, 15 },
-{ ADCCLK_6CYCLES5, 19 },
-{ ADCCLK_12CYCLES5, 25 },
-{ ADCCLK_24CYCLES5, 37 },
-{ ADCCLK_47CYCLES5, 60 },
-{ ADCCLK_92CYCLES5, 105 },
-{ ADCCLK_247CYCLES5, 260 },
-{ ADCCLK_640CYCLES5, 653 } };
+
 
 /**@brief
  * @param Sample time can be value of #SamplingTimeClocks
@@ -101,6 +91,8 @@ void Update_Vref(uint32_t vref);
  * @retval voltage in milivolts.
  */
 uint32_t Adc_To_Milivolts(uint32_t adc);
+
+float Get_sample_Time(SamplingTimeClocks sampling_time);
 
 }  //namespace
 

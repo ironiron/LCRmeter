@@ -76,7 +76,7 @@ public:
   static uint32_t nbr_of_peaks[nbr_of_signals] ;
   static uint32_t nbr_of_minimas[nbr_of_signals];
 
-  static uint_fast16_t hysteresis_samples;
+  static uint_fast8_t hysteresis_samples;
 
   ///phase swift with resolution of 0.001 degrees
   static float alfa; //TODO alfa is with resolution 330 or sth? why
@@ -122,9 +122,10 @@ public:
    * @param pointer to buffer array made of readings of ADC Data register
    * @param size of array
    * @param point_time_lenght sets #point_time class member
+   * @param moving average size step. Leave at 1 for no averaging.
    */
   static void Process_Signal (uint32_t *buffer, uint32_t size,
-			      uint32_t point_time_lenght);
+          float point_time_lenght, uint8_t step);
 
   /**@brief Function used in oscilloscope configuration for edge detection.
    * @param level of ADC value (0-4095)
