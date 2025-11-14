@@ -50,13 +50,7 @@ static inline const std::unordered_map<sine_samples_t,const int> sine_option_len
         { sine_samples_t::SINE_40_SAMPELS, sine_table_40samples_12bit.size()  }
 };
 
-static inline const std::unordered_map<Rseries_t, float> r_series_option = {
-        {Rseries_t::R_100, 100 },
-        {Rseries_t::R_820, 820 },
-        {Rseries_t::R_6, 6 }
-};
-
-static sine_samples_t current_sine = sine_samples_t::SINE_400_SAMPELS;
+static sine_samples_t current_sine = sine_samples_t::SINE_5000_SAMPELS;
 static Rseries_t current_rseries = Rseries_t::R_100;
 
 static uint8_t edge_level=50;

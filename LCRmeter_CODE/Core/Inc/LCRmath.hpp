@@ -40,7 +40,6 @@
 class LCR_math
 {
 public:
-  static double reactance;
   static double loss_angle;
   static double inductance;
   static double resistance;
@@ -48,13 +47,20 @@ public:
   static double series_resistance;
   static constexpr double pi = 3.14159;
 
+  enum class load_type_t
+  {
+      ERROR,
+      INDUCTIVE,
+      CAPACITIVE,
+      RESISTIVE
+  };
   /**@brief Do all the math stuff.
    * @param amplitude1 -amplitude across leads+series resistor
    * @param amplitude2 -amplitude across leads
    * @param angle -phase swift angle in degrees
    * @param frequency -frequency of sine wave
    */
-  static bool Calculate (double amplitude1, double amplitude2, double angle,
+  static load_type_t Calculate (double amplitude1, double amplitude2, double angle,
 			 uint32_t frequency);
 
   /**@brief simple converter.

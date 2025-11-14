@@ -14,78 +14,77 @@
 #include <cmath>
 #include <stdio.h>
 
-double LCR_math::reactance = 0;
 double LCR_math::loss_angle = 0;
 double LCR_math::inductance = 0;
 double LCR_math::resistance = 0;
 double LCR_math::capacitance = 0;
 double LCR_math::series_resistance = 100;
 
-bool LCR_math::Calculate (double amplitude1, double amplitude2, double angle,
+//todo return type should also be pure resistance
+LCR_math::load_type_t LCR_math::Calculate (double Vg, double Vx, double angle,
 			  uint32_t frequency)
 {
   double voltage_rs = 0;
   double current = 0;
   double voltage_lcr = 0; //across measuring leads
-  bool isinductive;
+  double reactance =0;
+  load_type_t retval;
 
   double radians = Deg_to_Rad (angle);
   // Calculate voltage across series resistor:
   voltage_rs = sqrt (
-      pow (amplitude1 - (amplitude2 * cos (radians)), 2)
-	  + pow (amplitude2 * sin (radians), 2));
+      pow (Vg - (Vx * cos (radians)), 2)
+	  + pow (Vx * sin (radians), 2));
   if(voltage_rs == 0)
   {
       inductance = NAN;
       capacitance = NAN;
       resistance = NAN;
-      isinductive = false;
-      return isinductive;
+      retval = load_type_t::ERROR;
+      return retval;
   }
+  capacitance = 0;
+  inductance = 0;
+
   //current
-  current = voltage_rs / series_resistance;//fixme add handling of voltage_rs equal 0
+  current = voltage_rs / series_resistance;
+
+  if (angle == 0)
+  {
+      resistance = Vx/current;
+      capacitance = 0;
+      inductance = 0;
+      retval = load_type_t::RESISTIVE;
+      return retval;
+  }
 
   if (angle < 0)
     {
       radians = - radians;
-      loss_angle = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
+      loss_angle = pi / 2 - (radians + asin (Vx * sin (radians) / voltage_rs));
 
-      voltage_lcr = amplitude2 * cos (loss_angle);
+      voltage_lcr = Vx * cos (loss_angle);
       reactance = voltage_lcr / current;
       inductance = reactance / 2 / frequency / pi;
-      resistance = amplitude2 * sin (loss_angle) / current;//ESR
-      isinductive = true;
-      capacitance = 0;
+      resistance = Vx * sin (loss_angle) / current;//ESR
+      retval = load_type_t::INDUCTIVE;
     }
   else
     {
-      double loss_angle1 = pi/2 - radians - atan(-amplitude2*sin(radians)/(amplitude1 - amplitude2*cos(radians)));
-      double loss_angle2 = pi / 2 - (radians + asin (amplitude2 * sin (radians) / voltage_rs));
-      double loss_angle3 =pi / 2-  (radians +  asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)) ;
-      double loss_angle4 = (radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 ;
+      loss_angle = (pi / 2) -  (radians +  acos ((Vg - Vx * cos (radians)) / voltage_rs)) ;
 
-      loss_angle = loss_angle3;
-//
-//      printf("loss_angle1= %f\n",Rad_to_Deg(loss_angle1));
-//      printf("loss_angle2= %f\n",Rad_to_Deg(loss_angle2));
-//      printf("loss_angle3= %f\n",Rad_to_Deg(loss_angle3));
-//      printf("loss_angle4= %f\n",Rad_to_Deg(loss_angle4));
-//      printf("asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs) = %f\n",Rad_to_Deg(asin ((amplitude1 - amplitude2 * cos (radians)) / voltage_rs)));
-//      printf("asin (amplitude2 * sin (radians) / voltage_rs) = %f\n",Rad_to_Deg(asin (amplitude2 * sin (radians) / voltage_rs)));
-//      printf("(radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2 = %f\n",Rad_to_Deg((radians + asin (amplitude2 * sin (radians) / voltage_rs)) - pi / 2));
-      if(loss_angle<0)
-      {
-          loss_angle = - loss_angle;
-          loss_angle = - loss_angle;
-      }
-      voltage_lcr = amplitude2 * cos (loss_angle);
+      voltage_lcr = Vx * cos (loss_angle);
       reactance = voltage_lcr / current;
       capacitance = 1/reactance / 2 / frequency / pi;
-      resistance = amplitude2 * sin (loss_angle) / current;//ESR
-      isinductive = false;
-      inductance = 0;
+      resistance = Vx * sin (loss_angle) / current;//ESR
+
+      if(loss_angle<0)
+      {
+          resistance = -NAN; // too small accuracy - discard measurment
+      }
+      retval = load_type_t::CAPACITIVE;
     }
 
   loss_angle = Rad_to_Deg (loss_angle);
-  return isinductive;
+  return retval;
 }

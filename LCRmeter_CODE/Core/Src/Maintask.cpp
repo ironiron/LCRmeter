@@ -88,6 +88,8 @@ auto menu_lcr_r_ser=Menu01_base::menu_list("",{""},&menu_lcr,1);
 auto menu_osc_period=Menu01_base::menu_list("",{""},&menu_osc,0);
 auto menu_osc_edge=Menu01_base::menu_list("",{""},&menu_osc,1);
 
+static  LCR_math::load_type_t load_type = LCR_math::load_type_t::ERROR;
+
 Menu01 menu=Menu01(&menu_main);
 
 void error_informer(int error,int line)
@@ -107,7 +109,7 @@ void error_informer(int error,int line)
 
 #define OLED_WAVEFORM_X 27
 #define OLED_WAVEFORM_Y 13
-#define OLED_LCR_X 35
+#define OLED_LCR_X 30
 
 #define LOG(x) error_informer(static_cast<int>((x)),__LINE__);
 
@@ -260,20 +262,36 @@ void Do_LCR_Calculations(void)
             || Waveform_arythmetics::nbr_of_peaks[0] < 2)
     {
         printf("WARNING!!!!!!! number of peaks too small!!\n");
-        printf("WARNING!!!!!!! number of peaks too small!!\n");
-        printf("WARNING!!!!!!! number of peaks too small!!\n");
+        load_type = LCR_math::load_type_t::ERROR;
+        return;
     }
     else
     {
-        LCR_math::Calculate(
+        load_type= LCR_math::Calculate(
                 Adc::Adc_To_Milivolts(Waveform_arythmetics::amplitude1),
                 Adc::Adc_To_Milivolts(Waveform_arythmetics::amplitude2),
                 double(Waveform_arythmetics::alfa),
                 Waveform_arythmetics::frequency);
 
-        cap.insert(LCR_math::capacitance);
-        in.insert(LCR_math::inductance);
-        res.insert(LCR_math::resistance);
+        if(load_type == LCR_math::load_type_t::ERROR)
+        {
+            return;
+        }
+        if(load_type == LCR_math::load_type_t::CAPACITIVE)
+        {
+            cap.insert(LCR_math::capacitance);
+        }
+        if(load_type == LCR_math::load_type_t::INDUCTIVE)
+        {
+            in.insert(LCR_math::inductance);
+        }
+        if(LCR_math::resistance>0)
+        {
+            res.insert(LCR_math::resistance);
+        }
+
+
+
         los.insert(LCR_math::loss_angle);
         ang.insert(Waveform_arythmetics::alfa);
     }
@@ -281,23 +299,38 @@ void Do_LCR_Calculations(void)
 
 void Print_LCR(void)
 {
-        printf("*********************************************************\n");
-        sprintf(buf, "C=%5.9f F\n", cap.average());
+    //        print_result();
+    if (load_type == LCR_math::load_type_t::ERROR)
+    {
+        sprintf(buf, "open load");
         oled.Set_Cursor(35, 25);
         oled.Write_String(buf);
-        sprintf(buf, "L=%5.9f H\n", in.average());
-        oled.Set_Cursor(35, 35);
+        return;
+    }
+    if (load_type == LCR_math::load_type_t::CAPACITIVE)
+    {
+        sprintf(buf, "%.9f F", cap.average());
+        oled.Set_Cursor(OLED_LCR_X, 25);
         oled.Write_String(buf);
-        sprintf(buf, "R=%5.9f R\n", res.average());
-        oled.Set_Cursor(35,45);
+    }
+    if (load_type == LCR_math::load_type_t::INDUCTIVE)
+    {
+        sprintf(buf, "%.9f H", in.average());
+        oled.Set_Cursor(OLED_LCR_X, 25);
         oled.Write_String(buf);
-        sprintf(buf, "al=%2.3f\n", los.average());
-        oled.Set_Cursor(35, 55);
-        oled.Write_String(buf);
-        sprintf(buf, "ang=%2.3f\n", ang.average());
-        oled.Set_Cursor(80, 55);
-        oled.Write_String(buf);
-    //        print_result();
+    }
+    sprintf(buf, "R=%3.2f R", res.average());
+    oled.Set_Cursor(OLED_LCR_X, 35);
+    oled.Write_String(buf);
+
+    sprintf(buf, "phi = %2.3f", los.average());
+    oled.Set_Cursor(OLED_LCR_X, 45);
+    oled.Write_String(buf);
+
+    sprintf(buf, "%lu Hz; %lu Ohm", Get_DAC_Frequency(), Get_Rseries());
+    oled.Set_Cursor(OLED_LCR_X, 55);
+    oled.Write_String(buf);
+
 }
 
 void adjust_LCR_rser_settings_clb([[maybe_unused]] unsigned int index)
@@ -322,7 +355,7 @@ void Init_V_Temp([[maybe_unused]] unsigned int i)
     vref_avg.reset();
     state = V_TEMP;
 
-    auto ret = HAL_ADC_Start_DMA(&hadc5, (uint32_t*) Adc::volt_temp, 2);
+    auto ret = HAL_ADC_Start_DMA(&hadc5, Adc::volt_temp, 2);
     if (ret != 0)
     {
         LOG(ret)
@@ -360,7 +393,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
             Adc::Update_Vref(vref_avg.average());
         }
 
-       auto  ret = HAL_ADC_Start_DMA(&hadc5, (uint32_t*) Adc::volt_temp, 2);
+       auto  ret = HAL_ADC_Start_DMA(&hadc5, Adc::volt_temp, 2);
         if (ret != 0)
         {
             LOG(ret)

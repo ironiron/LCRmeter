@@ -1,19 +1,32 @@
-# Note - Work in progress
-
-
-
 # About
 
-This is supposed to be a cheap LCR meter but due to wrong hardware currently is not very useful. DAC has slow I2C interface; 
-therefore measuring inductance of few microhenrys is impossible.
+My try at LCR measurment via sinewave and voltage measurment. Generally, it is working, however PCB layout is not great, and ADC is not used optymally, so measuring inductance is more or less futile.
+Results are a bit floaty. There is an unpolished oscilloscope mode.
 
-# Limitations
+Seems like PCB needs a bit of rerouting.
 
-Acievable frequency of sinewave for LCR measurments pins is 141,67 kHz, when 2 ADCs are enabled (If ADC is disabled it can go faster).
-Up to 2.2V LCR is working corectlly, otherwise op-amps have problems with driving sinewave.
+
+# Measuring principle. 
+
+See \ref misc folder for more in depth walkthrough. The principle is to measure voltage across known resistor and a DUT.
+Since it is sinewave that is used for measurments we can get phase angle, loss angle, etc. 
+
+Now measurment settings (frequency and series resistor), are done manually, but maybe implement automatic one in the future?
+eg. if loss angle is small then the capacitance can be calculated with greater accuracy than the ESR. If inductor is to be measured then the measuring frequency should be higher. 
 
 
 ![PCB bottom view](LCRmeter_PCB/pdfs_pictures/lcrmeter_bottom.png "PCB bottom view")
 
 
 ![PCB top view](./LCRmeter_PCB/pdfs_pictures/lcrmeter_top.png "PCB top view")
+
+
+# TODO 
+
+- add under sampling on ADC to increase range of frequency for sinewave
+- Add automatic frequency and Rseries adjustment for best possible accuracy.
+- reroute PCB
+- Add edge detection for oscilloscope mode
+- add handling of arbitrary waveform and PWM outputs
+- Remove USB stuff - not needed
+- 
