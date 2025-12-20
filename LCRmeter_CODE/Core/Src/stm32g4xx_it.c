@@ -229,7 +229,11 @@ void PendSV_Handler(void)
 void DMA1_Channel2_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel2_IRQn 0 */
-//    xD = 1;
+//    if ((0U != (hdma_adc1.DmaBaseAddress->ISR & ((uint32_t)DMA_FLAG_TC1 << (hdma_adc1.ChannelIndex & 0x1FU))))
+//              && (0U != (hdma_adc1.Instance->CCR & DMA_IT_TC)))
+//     {
+//    xD = 20;
+//     }
   /* USER CODE END DMA1_Channel2_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA1_Channel2_IRQn 1 */

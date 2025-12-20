@@ -192,14 +192,14 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
         a1=999;
     }
     printf("---%d\n",hadc->ErrorCode);
-//    ADC_CLEAR_ERRORCODE(hadc);
-//    CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));
+    ADC_CLEAR_ERRORCODE(hadc);
+    CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
   UNUSED(hadc);
-//  __HAL_TIM_DISABLE(&htim20);
+  __HAL_TIM_DISABLE(&htim20);
 xD ++;
 }
 
@@ -213,11 +213,10 @@ static void Init(void)
 	  MX_DAC2_Init();
 	  MX_ADC1_Init();
 	  MX_ADC2_Init();
-	  MX_ADC3_Init();
-	  MX_ADC4_Init();
-//	  MX_ADC5_Init();
+//	  MX_ADC3_Init();
+//	  MX_ADC4_Init();
+
 	  MX_CORDIC_Init();
-//	  MX_USB_Device_Init();
 	  MX_I2C1_Init();
 	  MX_TIM1_Init();
 	  MX_TIM2_Init();
@@ -234,74 +233,10 @@ int main(void)
 	uint8_t display_buffer[100];
 	uint32_t error = 0;
 	xD=0;
-
 	UART_HandleTypeDef* u1=UART_printf_init();
 	printf("hola!! \n");
 
-//	Pwm<TIM_TypeDef, uint16_t, 2> pwm(TIM1, 100);
-//	pwm.Initialise();
-//	pwm.Set_Frequency(600);
-//	pwm.Set_Duty(80);
-//	pwm.Enable();
-//
-//	SSD1306 oled(&hi2c1, 64);
-//	oled.Initialize();
-//	oled.Set_Brightness(0xff);
-//
-//	oled.Fill(SSD1306::WHITE);
-//	oled.Update_Screen();
-//	delay_ms(1000);
-//	oled.Fill(SSD1306::BLACK);
-//	oled.Update_Screen();
-//	delay_ms(500);
 
-	//Button tests!!!
-//	while(1)
-//	{
-//	    oled.Set_Cursor(0, 0);
-//	        sprintf (buf, "%d", ((GPIOA->IDR)>>2) & 0x01);
-//	        oled.Write_String (buf);
-//	    oled.Set_Cursor(0, 15);
-//	        sprintf (buf, "%d", ((GPIOA->IDR)>>3) & 0x01);
-//	        oled.Write_String (buf);
-//	    oled.Set_Cursor(0, 30);
-//	        sprintf (buf, "%d", ((GPIOA->IDR)>>4) & 0x01);
-//	        oled.Write_String (buf);
-//	    oled.Set_Cursor(0, 45);
-//	        sprintf (buf, "%d", ((GPIOA->IDR)>>5) & 0x01);
-//	        oled.Write_String (buf);
-//	        /////////////
-////	        oled.Set_Cursor(20, 0);
-////	            sprintf (buf, "|%d", button_UP.State());
-////	            oled.Write_String (buf);
-////	        oled.Set_Cursor(20, 15);
-////	            sprintf (buf, "|%d", button_DOWN.State());
-////	            oled.Write_String (buf);
-////	        oled.Set_Cursor(20, 30);
-////	            sprintf (buf, "|%d", button_OK.State());
-////	            oled.Write_String (buf);
-////	        oled.Set_Cursor(20, 45);
-////	            sprintf (buf, "|%d", button_BACK.State() );
-////	            oled.Write_String (buf);
-//	        /////////////
-//	        oled.Set_Cursor(60, 0);
-//	            sprintf (buf, "b1=%d", b1);
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(60, 15);
-//	            sprintf (buf, "b2=%d", b2);
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(60, 30);
-//	            sprintf (buf, "b3=%d",b3);
-//	            oled.Write_String (buf);
-//	        oled.Set_Cursor(60, 45);
-//	            sprintf (buf, "b4=%d",b4 );
-//	            oled.Write_String (buf);
-//	            oled.Update_Screen();
-//	            HAL_Delay(100);
-//	}
-//
-  //////////////////////////////////////////////////////////////////////////////////////////////
-  /////DAC built in
 
 	auto lam = [](DMA_HandleTypeDef* d){
 	        printf("DMA has finished \n");
@@ -336,13 +271,14 @@ int main(void)
           printf("retval = %d\n",retval);
       }
        retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
-              Adc::size_of_adc_buffer/2-10);
+              Adc::size_of_adc_buffer/2);
       if (retval != 0)
       {
           printf("AAA22222A\n");
                    printf("retval = %d\n",retval);
       }
-
+      HAL_Delay(100);
+      printf("uwu\n");
 //      retval = HAL_ADC_Start(&hadc4);
 //      if (retval != 0)
 //      {
@@ -359,16 +295,27 @@ int main(void)
 
 
       uint16_t shadwo_cr1 = htim20.Instance->CR1 & 0xfffe;
-      tim_dma.Instance->CMAR = (uint32_t)&shadwo_cr1;
-      tim_dma.Instance->CPAR = (uint32_t)&htim20.Instance->CR1;
-      htim20.Instance->DIER |= TIM_DIER_UDE;
-      tim_dma.Instance->CNDTR = 1;
-      __HAL_DMA_ENABLE(&tim_dma);
+//      tim_dma.Instance->CMAR = (uint32_t)&shadwo_cr1;
+//      tim_dma.Instance->CPAR = (uint32_t)&htim20.Instance->CR1;
+//      htim20.Instance->DIER |= TIM_DIER_UDE;
+//      tim_dma.Instance->CNDTR = 1;
+//      __HAL_DMA_ENABLE(&tim_dma);
+
+//      retval=  HAL_DMA_Start(&tim_dma, (uint32_t)&shadwo_cr1, (uint32_t)&TIM20->CR1, 1);
+//      if (retval != 0)
+//      {
+//          printf("AAA222____22A\n");
+//                   printf("retval = %d\n",retval);
+//      }
 
       if (HAL_TIM_Base_Start(&htim20) != HAL_OK)
       {
           printf("BBBBBBB\n");
       }
+//      if (HAL_TIM_OnePulse_Start(&htim20,1) != HAL_OK)
+//      {
+//          printf("BBBBBBB\n");
+//      }
 
       HAL_Delay(100);
 
@@ -401,26 +348,26 @@ int main(void)
                     printf("WARNING!!!!!!! number of peaks too small!!");
                 }
 
-                unsigned long int avg1=0;
-                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[0];i++)
-                {
-//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[0][i],Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
-                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]];
-                }
-                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[0];
-//                printf("peak average is %ld\n",avg1);
-                Waveform_arythmetics::amplitude1 = avg1;
+//                unsigned long int avg1=0;
+//                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[0];i++)
+//                {
+////                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[0][i],Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]]);
+//                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[0][Waveform_arythmetics::peaks[0][i]];
+//                }
+//                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[0];
+////                printf("peak average is %ld\n",avg1);
+//                Waveform_arythmetics::amplitude1 = avg1;
 
 
-                avg1=0;
-                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[1];i++)
-                {
-//                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[1][i],Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
-                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]];
-                }
-                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[1];
-//                printf("peak average is %ld\n",avg1);
-                Waveform_arythmetics::amplitude2 = avg1;
+//                avg1=0;
+//                for(int i=0;i<Waveform_arythmetics::nbr_of_peaks[1];i++)
+//                {
+////                    printf("peak%d at %03d = %d\n",i,Waveform_arythmetics::peaks[1][i],Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]]);
+//                    avg1 =avg1+ Waveform_arythmetics::filtered_buffer[1][Waveform_arythmetics::peaks[1][i]];
+//                }
+//                avg1= avg1/Waveform_arythmetics::nbr_of_peaks[1];
+////                printf("peak average is %ld\n",avg1);
+//                Waveform_arythmetics::amplitude2 = avg1;
 //
                 bool ind=LCR_math::Calculate (
               Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
@@ -463,19 +410,45 @@ int main(void)
           printf("a1= %d \n",a1);
           printf("a2= %d \n",a2);
 
+//          __HAL_TIM_DISABLE(&htim20);
+
+//          retval = HAL_ADCEx_MultiModeStop_DMA(&hadc1);
+//          if (retval != 0)
+//          {
+//              printf("AAAxczxczxv22222A\n");
+//                       printf("retval = %d\n",retval);
+//          }
+//          hadc1.Instance->ISR = 0x7ff; // clear all flags
+//          hadc2.Instance->ISR = 0x7ff; // clear all flags
+////          __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_AWD1);
+
           retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
                  Adc::size_of_adc_buffer/2);
          if (retval != 0)
          {
-             printf("AAA22222A\n");
+             printf("xdss\n");
                       printf("retval = %d\n",retval);
          }
+//         __HAL_TIM_ENABLE(&htim20);
 
-          __HAL_DMA_DISABLE(&tim_dma);
-          tim_dma.Instance->CMAR =(uint32_t)&shadwo_cr1;
-          tim_dma.Instance->CPAR = (uint32_t)&htim20.Instance->CR1;
-          tim_dma.Instance->CNDTR = 1;
-          __HAL_DMA_ENABLE(&tim_dma);
+//         retval=  HAL_DMA_Abort(&tim_dma);
+//         if (retval != 0)
+//         {
+//             printf("ttt\n");
+//                      printf("retval = %d\n",retval);
+//         }
+//
+//         retval=  HAL_DMA_Start(&tim_dma, (uint32_t)&shadwo_cr1, (uint32_t)&TIM20->CR1, 1);
+//         if (retval != 0)
+//         {
+//             printf("AAA222____22A\n");
+//                      printf("retval = %d\n",retval);
+//         }
+//          __HAL_DMA_DISABLE(&tim_dma);
+//          tim_dma.Instance->CMAR =(uint32_t)&shadwo_cr1;
+//          tim_dma.Instance->CPAR = (uint32_t)&htim20.Instance->CR1;
+//          tim_dma.Instance->CNDTR = 1;
+//          __HAL_DMA_ENABLE(&tim_dma);
           __HAL_TIM_ENABLE(&htim20);
 
           for(int i=0;i< Waveform_arythmetics::buffer_size;i++)
@@ -493,226 +466,6 @@ int main(void)
       }
 
 
-
-////////////////////////////////////////////////////
-////OSCILLOSCOPE
-///////////////////////////////////////////////////////////////////////////////
-////	int eh = 0;
-////	eh = Adc::Set_LCR();
-////	oled.Clean();
-////	oled.Set_Cursor(0, 0);
-////	sprintf(buf, "dac.error1=%d", eh);
-////	oled.Write_String(buf);
-////	HAL_Delay(100);
-////	eh = Adc::Set_Oscilloscope();
-////	double lala = 0;
-////
-////	lala = Adc::Set_Sampling_time(Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
-////
-////	oled.Set_Cursor(0, 20);
-////	sprintf(buf, "dac.error2=%d", eh);
-////	oled.Write_String(buf);
-////	oled.Set_Cursor(0, 30);
-////	sprintf(buf, "dac.error3=%f", lala);
-////	oled.Write_String(buf);
-////	oled.Update_Screen();
-////	HAL_Delay(1300);
-////	while (1)
-////	{
-////		while (xD == 0)
-////		{
-////
-////		}
-////
-////		xD = 0;
-////		HAL_Delay(100);
-////		oled.Clean();
-////		Waveform_arythmetics::Calc_Moving_Average((uint32_t*) Adc::adc_buffer,
-////				1024, 1);
-////		uint32_t edge = Waveform_arythmetics::Get_Edge_index(1000, false);
-////		if (edge >900)
-////		{
-////			Adc::Resume_DMA();
-////			continue;
-////		}
-////		for (int i = 0; i < 100; i++)
-////		{
-////			display_buffer[i] = Waveform_arythmetics::filtered_buffer[0][i
-////					+ edge] / 64;
-////		}
-////		sprintf(buf, "yol=%1.3f", lala);
-////		oled.Set_Cursor(0, 0), oled.Write_String(buf);
-////		sprintf(buf, "edge=%ld", edge);
-////		oled.Set_Cursor(63, 0), oled.Write_String(buf);
-////		oled.Draw_Waveform(10, 60, display_buffer, 100, SSD1306::WHITE);
-////		oled.Update_Screen();
-////
-////		Adc::Resume_DMA();
-////	}
-//////
-//////	HAL_Delay(1000);
-////	////////////////////////////////////////////
-////
-////	//TEMP
-////	/////////////////
-//  Adc::Set_Voltage_Temperature ();
-//  uint32_t Vmax=0;
-//  uint32_t Vmin=99999;
-//  uint32_t Vref=0;
-//  int co=0;
-//  while(1)
-//  {
-//      while (xD == 0)
-//	{
-//
-//	}
-//      xD = 0;
-//      oled.Clean ();
-//      Vref=Adc::Update_Vref ();
-//      if(Vref<Vmin)
-//      {
-//    	  Vmin=Vref;
-//      }
-//      if(Vref>Vmax)
-//      {
-//    	  Vmax=Vref;
-//      }
-//      sprintf (buf, "Vref=%ld",Vref);
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      sprintf (buf, "temp=%d", Adc::Get_Temperature ());
-//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-//      sprintf (buf, "Vmax=%d", Vmax);
-//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-//      sprintf (buf, "Vmin=%d", Vmin);
-//      oled.Set_Cursor (0, 30), oled.Write_String (buf);
-//      oled.Update_Screen ();
-//      HAL_Delay (100);
-//      co++;
-//      if(co>2)
-//      {
-//    	  break;
-//      }
-//    }
-//// ///////////////////////////////////////////////////////////////////////////////////
-//// //ADC
-//// //////////////////////////////////////////////////////
-//
-//  oled.Clean ();
-//  double lala = 0;
-//  error = Adc::Set_LCR ();
-//  lala = Adc::Set_Sampling_time (Adc::SamplingTimeClocks::ADCCLK_239CYCLES5);
-//
-//  Waveform_arythmetics::mid_voltage = 2000;
-//  Waveform_arythmetics::hysteresis_samples=10;
-//  Waveform_arythmetics::user_point_time = 21; //TODO get the Set_Sampling_time in uint
-//
-//  while (1)
-//    {
-//      while (xD == 0)
-//	{
-//
-//	}
-//      xD = 0;
-//      HAL_Delay (500);
-//      oled.Clean ();
-//
-//      Waveform_arythmetics::Calc_Moving_Average ((uint32_t*) Adc::adc_buffer,
-//						 Adc::size_of_adc_buffer, 7); //TODO with 1 it's to chaotic can proccessing be improved?
-//      Waveform_arythmetics::Find_Peaks ();
-//      Waveform_arythmetics::Calc_Frequency();
-//      Waveform_arythmetics::Calc_Alfa ();
-//      Waveform_arythmetics::Calc_Amplitude ();
-//
-//      bool ind=LCR_math::Calculate (
-//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude1),
-//	  Adc::Adc_To_Milivolts (Waveform_arythmetics::amplitude2),
-//	  double(Waveform_arythmetics::alfa/1000), Waveform_arythmetics::frequency);
-//
-//      sprintf (buf, "cap=%1.9f", LCR_math::capacitance);
-//      oled.Set_Cursor (0, 0), oled.Write_String (buf);
-//      sprintf (buf, "ind=%1.9f", LCR_math::inductance);
-//      oled.Set_Cursor (0, 10), oled.Write_String (buf);
-//      sprintf (buf, "res=%1.9f", LCR_math::resistance);
-//      oled.Set_Cursor (0, 20), oled.Write_String (buf);
-////
-//      sprintf (buf, "a1=%ld", Waveform_arythmetics::amplitude1);
-//      oled.Set_Cursor (0, 30), oled.Write_String (buf);
-//      sprintf (buf, "a2=%ld", Waveform_arythmetics::amplitude2);
-//      oled.Set_Cursor (60, 30), oled.Write_String (buf);
-//      sprintf (buf, "f=%ld", Waveform_arythmetics::frequency);
-//      oled.Set_Cursor (0, 40), oled.Write_String (buf);
-//      sprintf (buf, "a=%ld", Waveform_arythmetics::alfa);
-//      oled.Set_Cursor (60, 40), oled.Write_String (buf);
-//
-//            sprintf (buf, "min=%d", Waveform_arythmetics::nbr_of_minimas[0]);
-//            oled.Set_Cursor (00, 50), oled.Write_String (buf);
-//            sprintf (buf, "max=%d",  Waveform_arythmetics::nbr_of_peaks[0]);
-//            oled.Set_Cursor (40, 50), oled.Write_String (buf);
-//            sprintf (buf, "ind=%d", Waveform_arythmetics::minimas[0][0]);
-//            oled.Set_Cursor (80, 50), oled.Write_String (buf);
-//
-//        if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3) == 0)
-//        {
-//            uint8_t aaa123[] =
-//            { 0xff, 0x11, 0xab, 0xaa };     //start indication or sth
-//            for (uint32_t i = 0; i < Waveform_arythmetics::buffer_size; i++)
-//            {
-//                HAL_UART_Transmit(u1, (uint8_t*) (aaa123), 4, 1000);
-//                uint8_t x[4];
-//                x[0] = Waveform_arythmetics::filtered_buffer[0][i] >> 8;
-//                x[1] = Waveform_arythmetics::filtered_buffer[0][i] & 0xff;
-//                x[2] = Waveform_arythmetics::filtered_buffer[1][i] >> 8;
-//                x[3] = Waveform_arythmetics::filtered_buffer[1][i] & 0xff;
-//                if (i == Waveform_arythmetics::peaks[0][0] && i != 0)
-//                {
-//                    x[0] = 0x0f;
-//                    x[1] = 0x8f;
-//                }
-//                if (i == Waveform_arythmetics::minimas[0][0] && i != 0)
-//                {
-//                    x[0] = 0;
-//                    x[1] = 5;
-//                }
-//                if (i == Waveform_arythmetics::peaks[1][0] && i != 0)
-//                {
-//                    x[2] = 0x0f;
-//                    x[3] = 0x8f;
-//                }
-//                if (i == Waveform_arythmetics::minimas[1][0] && i != 0)
-//                {
-//                    x[2] = 0;
-//                    x[3] = 5;
-//                }
-//
-//                if (i == Waveform_arythmetics::peaks[0][1] && i != 0)
-//                {
-//                    x[0] = 0x0f;
-//                    x[1] = 0x8f;
-//                }
-//                if (i == Waveform_arythmetics::minimas[0][1] && i != 0)
-//                {
-//                    x[0] = 0;
-//                    x[1] = 5;
-//                }
-//                if (i == Waveform_arythmetics::peaks[1][1] && i != 0)
-//                {
-//                    x[2] = 0x0f;
-//                    x[3] = 0x8f;
-//                }
-//                if (i == Waveform_arythmetics::minimas[1][1] && i != 0)
-//                {
-//                    x[2] = 0;
-//                    x[3] = 5;
-//                }
-//                HAL_UART_Transmit(u1, &x[0], 4, 1000);
-//
-//            }
-//
-//            HAL_Delay(3000);
-//        }
-//        oled.Update_Screen();
-//        Adc::Resume_DMA();
-//    }
 }
 
 /**
@@ -791,11 +544,10 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+//  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-//  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-//  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO;
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
 //  hadc1.Init.DMAContinuousRequests = ENABLE;
@@ -863,11 +615,12 @@ static void MX_ADC2_Init(void)
   hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc2.Init.LowPowerAutoWait = DISABLE;
-  hadc2.Init.ContinuousConvMode = ENABLE;
+  hadc2.Init.ContinuousConvMode = DISABLE;
+//  hadc2.Init.ContinuousConvMode = ENABLE;
   hadc2.Init.NbrOfConversion = 1;
   hadc2.Init.DiscontinuousConvMode = DISABLE;
-//  hadc2.Init.DMAContinuousRequests = ENABLE;
   hadc2.Init.DMAContinuousRequests = DISABLE;
+//  hadc2.Init.DMAContinuousRequests = ENABLE;
   hadc2.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc2.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc2) != HAL_OK)
@@ -928,7 +681,8 @@ static void MX_ADC3_Init(void)
     hadc3.Init.DiscontinuousConvMode = DISABLE;
     hadc3.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO2;
     hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-    hadc3.Init.DMAContinuousRequests = ENABLE;
+    hadc3.Init.DMAContinuousRequests = DISABLE;
+//    hadc3.Init.DMAContinuousRequests = ENABLE;
     hadc3.Init.Overrun = ADC_OVR_DATA_PRESERVED;
     hadc3.Init.OversamplingMode = DISABLE;
     if (HAL_ADC_Init(&hadc3) != HAL_OK)
@@ -1396,58 +1150,6 @@ static void MX_TIM6_Init(void)
 
 }
 
-//static void MX_TIM15_Init(void)
-//{
-//
-//    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-//    TIM_MasterConfigTypeDef sMasterConfig = {0};
-//    TIM_OC_InitTypeDef sConfigOC = {0};
-//    TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
-//
-//    htim15.Instance = TIM15;
-//    htim15.Init.Prescaler = 0;
-//    htim15.Init.CounterMode = TIM_COUNTERMODE_UP;
-//    htim15.Init.Period = 65535;
-//    htim15.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-//    htim15.Init.RepetitionCounter = 0;
-//    htim15.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-//    if (HAL_TIM_Base_Init(&htim15) != HAL_OK)
-//    {
-//      Error_Handler();
-//    }
-//    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-//    if (HAL_TIM_ConfigClockSource(&htim15, &sClockSourceConfig) != HAL_OK)
-//    {
-//      Error_Handler();
-//    }
-//    if (HAL_TIM_OC_Init(&htim15) != HAL_OK)
-//    {
-//      Error_Handler();
-//    }
-//    sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC1REF;
-//    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-//    if (HAL_TIMEx_MasterConfigSynchronization(&htim15, &sMasterConfig) != HAL_OK)
-//    {
-//      Error_Handler();
-//    }
-//
-//
-//
-////    tim_dma.Instance = DMA2_Channel1;
-////    tim_dma.Init.Request = DMA_REQUEST_TIM15_UP;
-////    tim_dma.Init.Direction = DMA_MEMORY_TO_PERIPH;
-////    tim_dma.Init.PeriphInc = DMA_PINC_DISABLE;
-////    tim_dma.Init.MemInc = DMA_MINC_ENABLE;
-////    tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-////    tim_dma.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-////    tim_dma.Init.Mode = DMA_CIRCULAR;
-////    tim_dma.Init.Priority = DMA_PRIORITY_LOW;
-////    if (HAL_DMA_Init(&tim_dma) != HAL_OK)
-////    {
-////      Error_Handler();
-////    }
-//}
-
 /**
   * @brief TIM20 Initialization Function
   * @param None
@@ -1455,6 +1157,7 @@ static void MX_TIM6_Init(void)
   */
 static void MX_TIM20_Init(void)
 {
+
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_SlaveConfigTypeDef sSlaveConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
@@ -1463,11 +1166,15 @@ static void MX_TIM20_Init(void)
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   htim20.Instance = TIM20;
-  htim20.Init.Prescaler = 7;
+//  htim20.Init.Prescaler = 7;
+  htim20.Init.Prescaler = 210-1;
+//  htim20.Init.Prescaler = 21-1;
   htim20.Init.CounterMode = TIM_COUNTERMODE_UP;
+//  htim20.Init.Period = 160-1;
   htim20.Init.Period = 4-1;
   htim20.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim20.Init.RepetitionCounter = Adc::size_of_adc_buffer / 2;
+  htim20.Init.RepetitionCounter = 0;
+//  htim20.Init.RepetitionCounter = (Adc::size_of_adc_buffer / 2)-10;
   htim20.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim20) != HAL_OK)
   {
@@ -1477,8 +1184,14 @@ static void MX_TIM20_Init(void)
   {
     Error_Handler();
   }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC2REF;
-  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_OC3REF;
+//  if (HAL_TIM_OnePulse_Init(&htim20, TIM_OPMODE_SINGLE) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC2REF;
+//  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_OC3REF;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO_UPDATE;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim20, &sMasterConfig) != HAL_OK)
   {
@@ -1525,10 +1238,10 @@ static void MX_TIM20_Init(void)
   tim_dma.Init.Request = DMA_REQUEST_TIM20_UP;
   tim_dma.Init.Direction = DMA_MEMORY_TO_PERIPH;
   tim_dma.Init.PeriphInc = DMA_PINC_DISABLE;
-  tim_dma.Init.MemInc = DMA_MINC_ENABLE;
-  tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+  tim_dma.Init.MemInc = DMA_MINC_DISABLE;
+  tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
   tim_dma.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-  tim_dma.Init.Mode = DMA_NORMAL;
+  tim_dma.Init.Mode = DMA_CIRCULAR;
   tim_dma.Init.Priority = DMA_PRIORITY_VERY_HIGH;
   if (HAL_DMA_Init(&tim_dma) != HAL_OK)
   {
