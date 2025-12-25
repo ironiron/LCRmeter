@@ -42,3 +42,22 @@ TIM20 base:
 Maybe add extra buffer space, and just use interrupt to stop timer????
 
 OK the timer trigerring ADC is one time only, as the trigger is to start conversion, so if later DMA is used to transfer the data, then the sequence is running constantly without external trigger
+
+---
+
+OK so let's say that I want to have 9 samples per a one full sine period for measurment. so let's put it to test:
+freq of 12.5Khz so divided by 9 gives 1,3888.
+
+timer 6 is triggering with period 2-1 and prescaler 17 -1 so it gives 170/17/2 = 5 Mhz
+now timer 20 must be triggered 9 times slower???
+
+do I want 9 times a period, or 9 times slowr than dac sample generation?
+
+9*400*2-1 for period
+
+ok another approacgh so one full DAC generation needs 160 times 2 period times 17 presclaer = 5440 timer ticks to make one full period!
+so let's say Im doing half a samples per each of the flow. so I will have 2720 samples to work with. 
+In that case I need 5440 ticks plus that offset for each iteration which is 2 so we got 5442
+prescaler/period combination is e.g.  6&907
+
+to get time of single point we now that 2720 samples will reconstruct sinewave of 170/17/2/160 =  31.25Khz thus single point time is 1/31.25/2720 = 0.1131221719457014 us 

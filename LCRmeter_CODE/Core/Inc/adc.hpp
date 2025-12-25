@@ -26,7 +26,7 @@ namespace Adc
 {
 ///size of buffer for LCR and Oscilloscope mode
 ///
-constexpr uint32_t size_of_adc_buffer = 2000;//must be dividable by 2!
+constexpr uint32_t size_of_adc_buffer = 5000;//must be dividable by 2!
 
 extern volatile uint32_t adc_buffer[size_of_adc_buffer];
 extern volatile uint32_t volt_temp[2]; ///array containing value of internal vref and temp.

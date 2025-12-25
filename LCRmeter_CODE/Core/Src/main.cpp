@@ -271,7 +271,7 @@ int main(void)
           printf("retval = %d\n",retval);
       }
        retval = HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t*) Adc::adc_buffer,
-              Adc::size_of_adc_buffer/2);
+              Adc::size_of_adc_buffer);
       if (retval != 0)
       {
           printf("AAA22222A\n");
@@ -279,19 +279,6 @@ int main(void)
       }
       HAL_Delay(100);
       printf("uwu\n");
-//      retval = HAL_ADC_Start(&hadc4);
-//      if (retval != 0)
-//      {
-//          printf("AAAAfsdbfb  cvwes1111\n");
-//          printf("retval = %d\n",retval);
-//      }
-//       retval = HAL_ADCEx_MultiModeStart_DMA(&hadc3, (uint32_t*) &Adc::adc_buffer[Adc::size_of_adc_buffer/2],
-//              Adc::size_of_adc_buffer/2);
-//      if (retval != 0)
-//      {
-//          printf("1232213321  1dsfsdf\n");
-//                   printf("retval = %d\n",retval);
-//      }
 
 
       uint16_t shadwo_cr1 = htim20.Instance->CR1 & 0xfffe;
@@ -321,7 +308,7 @@ int main(void)
 
 //      Waveform_arythmetics::mid_voltage = 2000;
       Waveform_arythmetics::hysteresis_samples=10;
-      Waveform_arythmetics::user_point_time = 0.3529411;
+      Waveform_arythmetics::user_point_time = 0.1131221719457014;
 
 
 //      float avgC=0;
@@ -1166,12 +1153,13 @@ static void MX_TIM20_Init(void)
   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   htim20.Instance = TIM20;
-//  htim20.Init.Prescaler = 7;
-  htim20.Init.Prescaler = 210-1;
-//  htim20.Init.Prescaler = 21-1;
+//  htim20.Init.Prescaler = 17-1;
+  htim20.Init.Prescaler = 6-1;
+//  htim20.Init.Prescaler = 210-1;
   htim20.Init.CounterMode = TIM_COUNTERMODE_UP;
-//  htim20.Init.Period = 160-1;
-  htim20.Init.Period = 4-1;
+//  htim20.Init.Period = 4;
+//  htim20.Init.Period = 7200-1;
+  htim20.Init.Period = 907-1;
   htim20.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim20.Init.RepetitionCounter = 0;
 //  htim20.Init.RepetitionCounter = (Adc::size_of_adc_buffer / 2)-10;
