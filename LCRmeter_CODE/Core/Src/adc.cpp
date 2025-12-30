@@ -16,6 +16,8 @@
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc3;
 
+extern TIM_HandleTypeDef htim20;
+
 namespace Adc
 {
 int retval = 0;
@@ -70,6 +72,7 @@ double Set_Sampling_time(SamplingTimeClocks sampling_time)
       return -1.0;
     }
     Start_Oscilloscope();
+    return 0.0;
 }
 
 float Get_sample_Time(SamplingTimeClocks sampling_time)
@@ -86,6 +89,7 @@ bool Start_LCR(void)
                 printf("Start_LCR = %d\n",retval);
                 return true;
    }
+   __HAL_TIM_ENABLE(&htim20);
    return false;
 }
 

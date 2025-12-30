@@ -48,7 +48,7 @@ class Waveform_arythmetics
 {
 private:
   //size of buffer used for conditioning
-  static constexpr uint32_t max_buffer_size=10000;
+  static constexpr uint32_t max_buffer_size=15000;
   /// Will ignore data on buffer boundaries to avoid processing not reliable data.
   static const uint_least8_t boundary_ignore_percentage=5;
 
@@ -90,10 +90,23 @@ public:
   /// amplitude in ADC2
   static uint32_t amplitude2;
 
+  /**@brief swap every nth sample in the given array
+   * @param buffer pointer to array made of readings of ADC Data register
+   * @param size of array
+   * @param step of swapping e.g. 3 will swap every 3rd sample
+   */
+  static void Swap_Samples ( uint32_t *buffer, uint32_t size,
+				   uint8_t step);
+
+
+  static void  Transfer2Buffer(const uint32_t *buffer, uint32_t size,
+          uint8_t subbuffers, uint32_t subbuffers_length);
+
   /**@brief filtering data by moving mean
    * @param buffer pointer to array made of readings of ADC Data register
    * @param size of array
    * @param step of moving mean, if 0 function does nothing
+   * @warning implementation is no longer valid DO NOT use it!
    */
   static void Calc_Moving_Average (const uint32_t *buffer, uint32_t size,
 				   uint8_t step);

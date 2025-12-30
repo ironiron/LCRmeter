@@ -11,6 +11,7 @@
  */
 
 #include "LCRmath.hpp"
+#include "cstdio"
 #include <cmath>
 #include <stdio.h>
 

@@ -115,37 +115,40 @@ static uint32_t HAL_RCC_ADC345_CLK_ENABLED=0;
 */
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(hadc->Instance==ADC1)
-  {
-  /* USER CODE BEGIN ADC1_MspInit 0 */
-
-  /* USER CODE END ADC1_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
-    PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    GPIO_InitTypeDef GPIO_InitStruct =
+    { 0 };
+    RCC_PeriphCLKInitTypeDef PeriphClkInit =
+    { 0 };
+    if (hadc->Instance == ADC1)
     {
-      Error_Handler();
-    }
+        /* USER CODE BEGIN ADC1_MspInit 0 */
 
-    /* Peripheral clock enable */
-    HAL_RCC_ADC12_CLK_ENABLED++;
-    if(HAL_RCC_ADC12_CLK_ENABLED==1){
-      __HAL_RCC_ADC12_CLK_ENABLE();
-    }
+        /* USER CODE END ADC1_MspInit 0 */
 
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC1 GPIO Configuration
-    PA2     ------> ADC1_IN3
-    */
-    GPIO_InitStruct.Pin = ADC_1_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(ADC_1_GPIO_Port, &GPIO_InitStruct);
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+        PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC12_CLK_ENABLED++;
+        if (HAL_RCC_ADC12_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC12_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC1 GPIO Configuration
+         PA2     ------> ADC1_IN3
+         */
+        GPIO_InitStruct.Pin = ADC_1_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(ADC_1_GPIO_Port, &GPIO_InitStruct);
 
     /* ADC1 DMA Init */
     /* ADC1 Init */
@@ -157,54 +160,55 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
     hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
     hdma_adc1.Init.Mode = DMA_NORMAL;
-    hdma_adc1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
-    if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+        hdma_adc1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+        if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        __HAL_LINKDMA(hadc, DMA_Handle, hdma_adc1);
+        /* ADC1 interrupt Init */
+        HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+        /* USER CODE BEGIN ADC1_MspInit 1 */
+
+        /* USER CODE END ADC1_MspInit 1 */
+    }
+    else if (hadc->Instance == ADC2)
     {
-      Error_Handler();
+        /* USER CODE BEGIN ADC2_MspInit 0 */
+
+        /* USER CODE END ADC2_MspInit 0 */
+
+        /** Initializes the peripherals clocks
+         */
+        PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+        PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+        if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        /* Peripheral clock enable */
+        HAL_RCC_ADC12_CLK_ENABLED++;
+        if (HAL_RCC_ADC12_CLK_ENABLED == 1)
+        {
+            __HAL_RCC_ADC12_CLK_ENABLE();
+        }
+
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        /**ADC2 GPIO Configuration
+         PA1     ------> ADC2_IN2
+         */
+        GPIO_InitStruct.Pin = ADC_2_Pin;
+        GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
+        HAL_GPIO_Init(ADC_2_GPIO_Port, &GPIO_InitStruct);
+
+        /* USER CODE BEGIN ADC2_MspInit 1 */
+
+        /* USER CODE END ADC2_MspInit 1 */
     }
-
-    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);
-    /* ADC1 interrupt Init */
-    HAL_NVIC_SetPriority(ADC1_2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
-  /* USER CODE BEGIN ADC1_MspInit 1 */
-
-  /* USER CODE END ADC1_MspInit 1 */
-  }
-  else if(hadc->Instance==ADC2)
-  {
-  /* USER CODE BEGIN ADC2_MspInit 0 */
-
-  /* USER CODE END ADC2_MspInit 0 */
-
-  /** Initializes the peripherals clocks
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
-    PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    /* Peripheral clock enable */
-    HAL_RCC_ADC12_CLK_ENABLED++;
-    if(HAL_RCC_ADC12_CLK_ENABLED==1){
-      __HAL_RCC_ADC12_CLK_ENABLE();
-    }
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ADC2 GPIO Configuration
-    PA1     ------> ADC2_IN2
-    */
-    GPIO_InitStruct.Pin = ADC_2_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(ADC_2_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN ADC2_MspInit 1 */
-
-  /* USER CODE END ADC2_MspInit 1 */
-  }
   else if(hadc->Instance==ADC3)
   {
   /* USER CODE BEGIN ADC3_MspInit 0 */
@@ -759,6 +763,28 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 
   /* USER CODE END TIM6_MspInit 1 */
   }
+  else if(htim_base->Instance==TIM15)
+  {
+  /* USER CODE BEGIN TIM15_MspInit 0 */
+
+  /* USER CODE END TIM15_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM15_CLK_ENABLE();
+  /* USER CODE BEGIN TIM15_MspInit 1 */
+
+  /* USER CODE END TIM15_MspInit 1 */
+  }
+  else if(htim_base->Instance==TIM20)
+  {
+  /* USER CODE BEGIN TIM20_MspInit 0 */
+
+  /* USER CODE END TIM20_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM20_CLK_ENABLE();
+  /* USER CODE BEGIN TIM20_MspInit 1 */
+
+  /* USER CODE END TIM20_MspInit 1 */
+  }
 }
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef* htim)
@@ -820,6 +846,17 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
   /* USER CODE BEGIN TIM2_MspDeInit 1 */
 
   /* USER CODE END TIM2_MspDeInit 1 */
+  }
+  else if(htim_base->Instance==TIM20)
+  {
+  /* USER CODE BEGIN TIM20_MspDeInit 0 */
+
+  /* USER CODE END TIM20_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM20_CLK_DISABLE();
+  /* USER CODE BEGIN TIM20_MspDeInit 1 */
+
+  /* USER CODE END TIM20_MspDeInit 1 */
   }
 
 }

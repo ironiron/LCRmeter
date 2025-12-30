@@ -58,11 +58,16 @@
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern DMA_HandleTypeDef hdma_adc1;
 extern DMA_HandleTypeDef hdma_adc3;
+<<<<<<< HEAD
 extern DMA_HandleTypeDef hdma_adc5;
+=======
+>>>>>>> refs/heads/interleaved-ADC
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
+extern ADC_HandleTypeDef hadc3;
 extern DMA_HandleTypeDef hdma_dac1_ch1;
 extern DAC_HandleTypeDef hdac1;
+extern DMA_HandleTypeDef hdma_tim20_up;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim6;
 /* USER CODE BEGIN EV */
@@ -278,6 +283,7 @@ void DMA1_Channel3_IRQHandler(void)
 }
 
 /**
+<<<<<<< HEAD
   * @brief This function handles DMA1 channel5 global interrupt.
   */
 void DMA1_Channel5_IRQHandler(void)
@@ -289,6 +295,19 @@ void DMA1_Channel5_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
 
   /* USER CODE END DMA1_Channel5_IRQn 1 */
+=======
+  * @brief This function handles DMA1 channel4 global interrupt.
+  */
+void DMA1_Channel4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_tim20_up);
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 1 */
+>>>>>>> refs/heads/interleaved-ADC
 }
 
 /**
@@ -363,6 +382,20 @@ void EXTI15_10_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles ADC3 global interrupt.
+  */
+void ADC3_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC3_IRQn 0 */
+
+  /* USER CODE END ADC3_IRQn 0 */
+  HAL_ADC_IRQHandler(&hadc3);
+  /* USER CODE BEGIN ADC3_IRQn 1 */
+
+  /* USER CODE END ADC3_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM6 global interrupt, DAC1 and DAC3 channel underrun error interrupts.
   */
 void TIM6_DAC_IRQHandler(void)
@@ -389,6 +422,21 @@ void DMA2_Channel1_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Channel1_IRQn 1 */
 
   /* USER CODE END DMA2_Channel1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMAMUX overrun interrupt.
+  */
+void DMAMUX_OVR_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMAMUX_OVR_IRQn 0 */
+
+  /* USER CODE END DMAMUX_OVR_IRQn 0 */
+  // Handle DMA1_Channel2
+  HAL_DMAEx_MUX_IRQHandler(&hdma_adc1);
+  /* USER CODE BEGIN DMAMUX_OVR_IRQn 1 */
+
+  /* USER CODE END DMAMUX_OVR_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

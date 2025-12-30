@@ -27,9 +27,14 @@ extern DMA_HandleTypeDef hdma_adc1;
 
 extern DMA_HandleTypeDef hdma_adc3;
 
+<<<<<<< HEAD
 extern DMA_HandleTypeDef hdma_adc5;
 
+=======
+>>>>>>> refs/heads/interleaved-ADC
 extern DMA_HandleTypeDef hdma_dac1_ch1;
+
+extern DMA_HandleTypeDef hdma_tim20_up;
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
@@ -119,6 +124,7 @@ static uint32_t HAL_RCC_ADC345_CLK_ENABLED=0;
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  HAL_DMA_MuxSyncConfigTypeDef pSyncConfig;
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
   if(hadc->Instance==ADC1)
   {
@@ -162,6 +168,16 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc1.Init.Mode = DMA_CIRCULAR;
     hdma_adc1.Init.Priority = DMA_PRIORITY_VERY_HIGH;
     if (HAL_DMA_Init(&hdma_adc1) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_EXTI0;
+    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
+    pSyncConfig.SyncEnable = DISABLE;
+    pSyncConfig.EventEnable = ENABLE;
+    pSyncConfig.RequestNumber = 1;
+    if (HAL_DMAEx_ConfigMuxSync(&hdma_adc1, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
@@ -250,10 +266,17 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
+<<<<<<< HEAD
     hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
     hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
     hdma_adc3.Init.Mode = DMA_NORMAL;
     hdma_adc3.Init.Priority = DMA_PRIORITY_HIGH;
+=======
+    hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+    hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+    hdma_adc3.Init.Mode = DMA_CIRCULAR;
+    hdma_adc3.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+>>>>>>> refs/heads/interleaved-ADC
     if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
     {
       Error_Handler();
@@ -261,6 +284,12 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
     __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc3);
 
+<<<<<<< HEAD
+=======
+    /* ADC3 interrupt Init */
+    HAL_NVIC_SetPriority(ADC3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(ADC3_IRQn);
+>>>>>>> refs/heads/interleaved-ADC
     /* USER CODE BEGIN ADC3_MspInit 1 */
 
     /* USER CODE END ADC3_MspInit 1 */
@@ -319,7 +348,12 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     if(HAL_RCC_ADC345_CLK_ENABLED==1){
       __HAL_RCC_ADC345_CLK_ENABLE();
     }
+<<<<<<< HEAD
+=======
+    /* USER CODE BEGIN ADC5_MspInit 1 */
+>>>>>>> refs/heads/interleaved-ADC
 
+<<<<<<< HEAD
     /* ADC5 DMA Init */
     /* ADC5 Init */
     hdma_adc5.Instance = DMA1_Channel5;
@@ -340,6 +374,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
     /* USER CODE BEGIN ADC5_MspInit 1 */
 
+=======
+>>>>>>> refs/heads/interleaved-ADC
     /* USER CODE END ADC5_MspInit 1 */
   }
 
@@ -433,8 +469,18 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 
     /* ADC3 DMA DeInit */
     HAL_DMA_DeInit(hadc->DMA_Handle);
+<<<<<<< HEAD
+    /* USER CODE BEGIN ADC3_MspDeInit 1 */
+=======
+>>>>>>> refs/heads/interleaved-ADC
+
+<<<<<<< HEAD
+=======
+    /* ADC3 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(ADC3_IRQn);
     /* USER CODE BEGIN ADC3_MspDeInit 1 */
 
+>>>>>>> refs/heads/interleaved-ADC
     /* USER CODE END ADC3_MspDeInit 1 */
   }
   else if(hadc->Instance==ADC4)
@@ -467,11 +513,18 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     if(HAL_RCC_ADC345_CLK_ENABLED==0){
       __HAL_RCC_ADC345_CLK_DISABLE();
     }
+<<<<<<< HEAD
+=======
+    /* USER CODE BEGIN ADC5_MspDeInit 1 */
+>>>>>>> refs/heads/interleaved-ADC
 
+<<<<<<< HEAD
     /* ADC5 DMA DeInit */
     HAL_DMA_DeInit(hadc->DMA_Handle);
     /* USER CODE BEGIN ADC5_MspDeInit 1 */
 
+=======
+>>>>>>> refs/heads/interleaved-ADC
     /* USER CODE END ADC5_MspDeInit 1 */
   }
 
@@ -791,6 +844,51 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
 }
 
 /**
+<<<<<<< HEAD
+=======
+  * @brief TIM_OC MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param htim_oc: TIM_OC handle pointer
+  * @retval None
+  */
+void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* htim_oc)
+{
+  if(htim_oc->Instance==TIM20)
+  {
+    /* USER CODE BEGIN TIM20_MspInit 0 */
+
+    /* USER CODE END TIM20_MspInit 0 */
+    /* Peripheral clock enable */
+    __HAL_RCC_TIM20_CLK_ENABLE();
+
+    /* TIM20 DMA Init */
+    /* TIM20_UP Init */
+    hdma_tim20_up.Instance = DMA1_Channel4;
+    hdma_tim20_up.Init.Request = DMA_REQUEST_TIM20_UP;
+    hdma_tim20_up.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_tim20_up.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_tim20_up.Init.MemInc = DMA_MINC_DISABLE;
+    hdma_tim20_up.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_tim20_up.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_tim20_up.Init.Mode = DMA_NORMAL;
+    hdma_tim20_up.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+    if (HAL_DMA_Init(&hdma_tim20_up) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(htim_oc,hdma[TIM_DMA_ID_UPDATE],hdma_tim20_up);
+
+    /* USER CODE BEGIN TIM20_MspInit 1 */
+
+    /* USER CODE END TIM20_MspInit 1 */
+
+  }
+
+}
+
+/**
+>>>>>>> refs/heads/interleaved-ADC
   * @brief TIM_Base MSP De-Initialization
   * This function freeze the hardware resources used in this example
   * @param htim_base: TIM_Base handle pointer
@@ -848,6 +946,34 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 }
 
 /**
+<<<<<<< HEAD
+=======
+  * @brief TIM_OC MSP De-Initialization
+  * This function freeze the hardware resources used in this example
+  * @param htim_oc: TIM_OC handle pointer
+  * @retval None
+  */
+void HAL_TIM_OC_MspDeInit(TIM_HandleTypeDef* htim_oc)
+{
+  if(htim_oc->Instance==TIM20)
+  {
+    /* USER CODE BEGIN TIM20_MspDeInit 0 */
+
+    /* USER CODE END TIM20_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM20_CLK_DISABLE();
+
+    /* TIM20 DMA DeInit */
+    HAL_DMA_DeInit(htim_oc->hdma[TIM_DMA_ID_UPDATE]);
+    /* USER CODE BEGIN TIM20_MspDeInit 1 */
+
+    /* USER CODE END TIM20_MspDeInit 1 */
+  }
+
+}
+
+/**
+>>>>>>> refs/heads/interleaved-ADC
   * @brief UART MSP Initialization
   * This function configures the hardware resources used in this example
   * @param huart: UART handle pointer

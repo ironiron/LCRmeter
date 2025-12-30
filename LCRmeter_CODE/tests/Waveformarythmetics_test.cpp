@@ -1017,3 +1017,229 @@ TEST_CASE( "Gets index of rising edge for oscilloscope. PWM input starting at 0 
 
   REQUIRE(retval==8);
 }
+
+
+TEST_CASE( "swapps samples every N sample")
+{
+
+    uint32_t buf[15]={
+              1,
+              4,
+              7,
+              10,
+              2,
+              5,
+              8,
+              11,
+              3,
+              6,
+              9,
+              12,
+              0,
+              0,
+              0,
+    };
+
+    //make output zeroed for the sake of out-of-bonds test
+    Waveform_arythmetics::filtered_buffer[0][12]=1234;
+    Waveform_arythmetics::filtered_buffer[0][13]=1234;
+    Waveform_arythmetics::filtered_buffer[0][14]=1234;
+
+    Waveform_arythmetics::Transfer2Buffer(buf,12,3,4);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][5]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][6]==7);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][7]==8);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][8]==9);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][9]==10);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][10]==11);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][11]==12);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][12]==1234);// and not touched out of bounds
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][13]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][14]==1234);
+}
+
+TEST_CASE( "swapps samples every N sample 2nd example")
+{
+
+    uint32_t buf[18]={
+              1,
+              4,
+              7,
+              10,
+              13,
+              2,
+              5,
+              8,
+              11,
+              14,
+              3,
+              6,
+              9,
+              12,
+              15,
+              0,
+              0,
+              0,
+    };
+
+    //make output zeroed for the sake of out-of-bonds test
+    Waveform_arythmetics::filtered_buffer[0][15]=1234;
+    Waveform_arythmetics::filtered_buffer[0][16]=1234;
+    Waveform_arythmetics::filtered_buffer[0][17]=1234;
+
+    Waveform_arythmetics::Transfer2Buffer(buf,15,3,5);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][5]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][6]==7);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][7]==8);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][8]==9);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][9]==10);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][10]==11);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][11]==12);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][12]==13);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][13]==14);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][14]==15);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][15]==1234);// and not touched out of bounds
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][16]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][17]==1234);
+}
+
+TEST_CASE( "swapps samples every N sample 3rd example")
+{
+
+    uint32_t buf[18]={
+              1,
+              4,
+              7,
+              10,
+              13,
+              2,
+              5,
+              8,
+              11,
+              14,
+              3,
+              6,
+              9,
+              0,//end is not aligned to length of subbuffer only 13 samples
+              0,
+              0,
+              0,
+              0,
+    };
+
+    //make output zeroed for the sake of unaligned buffer
+    Waveform_arythmetics::filtered_buffer[0][9]=1234;
+    Waveform_arythmetics::filtered_buffer[0][10]=1234;
+    Waveform_arythmetics::filtered_buffer[0][11]=1234;
+    Waveform_arythmetics::filtered_buffer[0][12]=1234;
+    Waveform_arythmetics::filtered_buffer[0][13]=1234;
+    Waveform_arythmetics::filtered_buffer[0][14]=1234;
+    Waveform_arythmetics::filtered_buffer[0][15]=1234;
+    Waveform_arythmetics::filtered_buffer[0][16]=1234;
+    Waveform_arythmetics::filtered_buffer[0][17]=1234;
+
+    Waveform_arythmetics::Transfer2Buffer(buf,13,3,5);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][5]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][6]==7);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][7]==8);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][8]==9);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][9]==1234);//those samples are not full
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][10]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][11]==1234);//we don;t have number 12!
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][12]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][13]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][14]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][15]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][16]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][17]==1234);
+}
+
+TEST_CASE( "swapps samples every N sample 4th example")
+{
+
+    uint32_t buf[]={
+              1,
+              4,
+              7,
+              10,
+              2,
+              5,
+              8,
+              11,
+              3,
+              6,
+              9,
+              12,
+              1,
+              4,
+              7,
+              10,
+              2,
+              5,
+              8,
+              11,
+              3,
+              6,
+              9,
+              12,
+              0,
+              0,
+              0,
+    };
+
+    //make output zeroed for the sake of out-of-bonds test
+    Waveform_arythmetics::filtered_buffer[0][24]=1234;
+    Waveform_arythmetics::filtered_buffer[0][25]=1234;
+    Waveform_arythmetics::filtered_buffer[0][26]=1234;
+
+    Waveform_arythmetics::Transfer2Buffer(buf,24,3,4);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][0]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][1]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][2]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][3]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][4]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][5]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][6]==7);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][7]==8);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][8]==9);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][9]==10);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][10]==11);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][11]==12);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][12]==1);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][13]==2);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][14]==3);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][15]==4);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][16]==5);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][17]==6);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][18]==7);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][19]==8);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][20]==9);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][21]==10);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][22]==11);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][23]==12);
+
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][24]==1234);// and not touched out of bounds
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][25]==1234);
+  REQUIRE(Waveform_arythmetics::filtered_buffer[0][26]==1234);
+}
+

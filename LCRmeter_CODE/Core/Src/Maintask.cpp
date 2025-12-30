@@ -43,6 +43,8 @@ extern ADC_HandleTypeDef hadc3;
 extern ADC_HandleTypeDef hadc5;
 extern I2C_HandleTypeDef hi2c1; // for oled display
 
+extern TIM_HandleTypeDef htim20;
+
 
 volatile unsigned int button_up=0;
 volatile unsigned int button_down=0;
@@ -175,7 +177,6 @@ void print_result(void)
     }
     printf("hadc1---%ld\n", hadc1.ErrorCode);
     printf("hadc2---%ld\n", hadc2.ErrorCode);
-    HAL_Delay(2000);
 }
 
 void Init_Oscilloscope([[maybe_unused]] unsigned int i)
@@ -249,14 +250,28 @@ void Init_LCR_Measurment([[maybe_unused]] unsigned int i)
 
 void Do_LCR_Calculations(void)
 {
-    Waveform_arythmetics::Calc_Moving_Average( Adc::adc_buffer,
-            Adc::size_of_adc_buffer, 1);
+//    Waveform_arythmetics::Calc_Moving_Average( Adc::adc_buffer,
+//            Adc::size_of_adc_buffer, 1);
+
+    Waveform_arythmetics::Transfer2Buffer(Adc::adc_buffer,Adc::size_of_adc_buffer,3,2833);
 
     Waveform_arythmetics::Find_Peaks();
     Waveform_arythmetics::Calc_Frequency();
     Waveform_arythmetics::Calc_Alfa();
     Waveform_arythmetics::Calc_Amplitude();
 
+//    print_result();
+    for (unsigned int i = 0; i < 8500; i++)
+    {
+
+        printf("%d, %d\n", Waveform_arythmetics::filtered_buffer[0][i],
+                Waveform_arythmetics::filtered_buffer[1][i]);
+        if (Waveform_arythmetics::filtered_buffer[0][i] == 0)
+        {
+            printf("i= %d (from back = %ld\n", i, Adc::size_of_adc_buffer - i);
+            break;
+        }
+    }
 
     if (Waveform_arythmetics::nbr_of_peaks[1] < 2
             || Waveform_arythmetics::nbr_of_peaks[0] < 2)
@@ -295,11 +310,12 @@ void Do_LCR_Calculations(void)
         los.insert(LCR_math::loss_angle);
         ang.insert(Waveform_arythmetics::alfa);
     }
+
 }
 
 void Print_LCR(void)
 {
-    //        print_result();
+
     if (load_type == LCR_math::load_type_t::ERROR)
     {
         sprintf(buf, "open load");
@@ -371,6 +387,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 //    printf("dd\n");
     if(hadc == &hadc1) // LCR
     {
+        __HAL_TIM_DISABLE(&htim20);
         Do_LCR_Calculations();
         if (Adc::Start_LCR())
         {

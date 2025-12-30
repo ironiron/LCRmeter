@@ -33,6 +33,64 @@ uint32_t Waveform_arythmetics::amplitude2 = 0;
 
 uint_fast8_t Waveform_arythmetics::hysteresis_samples = 0;
 
+void Waveform_arythmetics::Swap_Samples(uint32_t *buffer, uint32_t size,
+        uint8_t step)
+{
+    for (uint32_t i = 1; i  < size/step-1; i ++)
+    {
+        std::swap(buffer[i],buffer[i*step-i]);
+    }
+}
+
+void Waveform_arythmetics::Transfer2Buffer(const uint32_t *buffer, uint32_t size,
+        uint8_t subbuffers, uint32_t subbuffers_length)
+{
+    //todo some refractoring
+    point_time = user_point_time;//legacy code
+    buffer_size = size; //update end of buffer
+    mid_voltage[0] = 2000;
+    mid_voltage[1] = 2000;
+
+    uint32_t max_buffers_space = size/(subbuffers_length * subbuffers);
+    uint32_t single_space = subbuffers_length * subbuffers;
+    uint32_t remainder = size%(subbuffers_length * subbuffers);
+    uint32_t remainder2 = ((max_buffers_space) * single_space)-remainder;
+    if(remainder == 0 )
+    {
+        remainder2 = 0; // when buferrs are perfectly aligned
+    }
+
+    remainder = remainder/subbuffers;
+
+    uint32_t max2 =  single_space - (remainder2 * subbuffers);
+
+    for (uint32_t s = 0; s < max_buffers_space; s++)
+    {
+        for (uint32_t i = 0, k = 0; i < subbuffers_length*subbuffers; i += subbuffers, k++)
+        {
+            for (uint32_t j = 0; j < subbuffers; j++)
+            {
+                filtered_buffer[0][i+j+s*subbuffers*subbuffers_length]  = (buffer[k+(j*subbuffers_length) + (s*subbuffers*subbuffers_length)] & 0xffff); //ADC1 input
+                filtered_buffer[1][i+j+s*subbuffers*subbuffers_length]  = ((buffer[k+(j*subbuffers_length) + (s*subbuffers*subbuffers_length)] >> 16) & 0xffff); //ADC2 input
+           }
+        }
+    }
+    if(remainder == 0 )
+    {
+        return ;
+    }
+
+    for (uint32_t i = max_buffers_space, k = max_buffers_space; i < max2; i += subbuffers, k++)
+    {
+
+        for (uint32_t j = 0; j < subbuffers; j++)
+        {
+            filtered_buffer[0][i+j]  = (buffer[k+(j*subbuffers_length)] & 0xffff); //ADC1 input
+            filtered_buffer[1][i+j]  = ((buffer[k+(j*subbuffers_length)] >> 16) & 0xffff); //ADC2 input
+       }
+    }
+}
+
 void Waveform_arythmetics::Calc_Moving_Average(const uint32_t *buffer, uint32_t size,
         uint8_t step)
 {

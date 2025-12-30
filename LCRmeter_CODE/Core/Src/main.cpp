@@ -60,6 +60,8 @@ I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim20;
+TIM_HandleTypeDef htim15;
 
 extern "C"
 {
@@ -80,6 +82,8 @@ static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM6_Init(void);
+static void MX_TIM20_Init(void);
+static void MX_TIM15_Init(void);
 
 
 ADC_HandleTypeDef adc;
@@ -93,13 +97,16 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
     {
         a1++;
     }
-    if(hadc->Instance == ADC2)
+    else if(hadc->Instance == ADC2)
     {
         a2++;
     }
-//    printf("---%d\n",hadc->ErrorCode);
-//    ADC_CLEAR_ERRORCODE(hadc);
-//    CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));
+    else {
+        a1=999;
+    }
+    printf("---%d\n",hadc->ErrorCode);
+    ADC_CLEAR_ERRORCODE(hadc);
+    CLEAR_BIT(hadc->ErrorCode, (HAL_ADC_ERROR_OVR | HAL_ADC_ERROR_DMA));
 }
 
 static void Init(void)
@@ -121,6 +128,7 @@ static void Init(void)
     MX_TIM1_Init();
     MX_TIM2_Init();
     MX_TIM6_Init();
+    MX_TIM20_Init();
 }
 
 
@@ -130,10 +138,15 @@ int main(void)
     HAL_Delay(100);
 
     Waveform_arythmetics::hysteresis_samples = 10;
-    Waveform_arythmetics::user_point_time = static_cast<float>(0.3529411);
+    Waveform_arythmetics::user_point_time = static_cast<float>(0.1176470588235294);
+//    Waveform_arythmetics::user_point_time = static_cast<float>(0.3529411);
 
     UART_printf_init();
     printf("hola!! \n");
+
+
+//      Waveform_arythmetics::user_point_time = 0.1131221719457014;
+
 
     Loop();
     //should never exit
@@ -215,11 +228,13 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+//  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+//  hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc1.Init.OversamplingMode = DISABLE;
@@ -284,10 +299,12 @@ static void MX_ADC2_Init(void)
   hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc2.Init.LowPowerAutoWait = DISABLE;
-  hadc2.Init.ContinuousConvMode = ENABLE;
+  hadc2.Init.ContinuousConvMode = DISABLE;
+//  hadc2.Init.ContinuousConvMode = ENABLE;
   hadc2.Init.NbrOfConversion = 1;
   hadc2.Init.DiscontinuousConvMode = DISABLE;
   hadc2.Init.DMAContinuousRequests = DISABLE;
+//  hadc2.Init.DMAContinuousRequests = ENABLE;
   hadc2.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc2.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc2) != HAL_OK)
@@ -325,12 +342,11 @@ static void MX_ADC3_Init(void)
 
   /* USER CODE END ADC3_Init 0 */
 
-  ADC_MultiModeTypeDef multimode = {0};
-  ADC_ChannelConfTypeDef sConfig = {0};
 
-  /* USER CODE BEGIN ADC3_Init 1 */
+    ADC_MultiModeTypeDef multimode = {0};
+    ADC_ChannelConfTypeDef sConfig = {0};
 
-  /* USER CODE END ADC3_Init 1 */
+    /* USER CODE BEGIN ADC3_Init 1 */
 
   /** Common config
   */
@@ -355,13 +371,29 @@ static void MX_ADC3_Init(void)
     Error_Handler();
   }
 
-  /** Configure the ADC multi-mode
-  */
-  multimode.Mode = ADC_MODE_INDEPENDENT;
-  if (HAL_ADCEx_MultiModeConfigChannel(&hadc3, &multimode) != HAL_OK)
-  {
-    Error_Handler();
-  }
+    /** Common config
+    */
+    hadc3.Instance = ADC3;
+    hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+    hadc3.Init.Resolution = ADC_RESOLUTION_12B;
+    hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    hadc3.Init.GainCompensation = 0;
+    hadc3.Init.ScanConvMode = ADC_SCAN_DISABLE;
+    hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+    hadc3.Init.LowPowerAutoWait = DISABLE;
+    hadc3.Init.ContinuousConvMode = ENABLE;
+    hadc3.Init.NbrOfConversion = 1;
+    hadc3.Init.DiscontinuousConvMode = DISABLE;
+    hadc3.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T20_TRGO2;
+    hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+    hadc3.Init.DMAContinuousRequests = DISABLE;
+//    hadc3.Init.DMAContinuousRequests = ENABLE;
+    hadc3.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+    hadc3.Init.OversamplingMode = DISABLE;
+    if (HAL_ADC_Init(&hadc3) != HAL_OK)
+    {
+      Error_Handler();
+    }
 
   /** Configure Regular Channel
   */
@@ -409,13 +441,11 @@ static void MX_ADC4_Init(void)
   hadc4.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc4.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc4.Init.LowPowerAutoWait = DISABLE;
-  hadc4.Init.ContinuousConvMode = DISABLE;
+  hadc4.Init.ContinuousConvMode = ENABLE;
   hadc4.Init.NbrOfConversion = 1;
   hadc4.Init.DiscontinuousConvMode = DISABLE;
-  hadc4.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc4.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc4.Init.DMAContinuousRequests = DISABLE;
-  hadc4.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  hadc4.Init.DMAContinuousRequests = ENABLE;
+  hadc4.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
   hadc4.Init.OversamplingMode = DISABLE;
   if (HAL_ADC_Init(&hadc4) != HAL_OK)
   {
@@ -806,6 +836,106 @@ static void MX_TIM6_Init(void)
 
 }
 
+/**
+  * @brief TIM20 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM20_Init(void)
+{
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+
+  htim20.Instance = TIM20;
+//  htim20.Init.Prescaler = 17-1;
+  htim20.Init.Prescaler = 3-1;
+//  htim20.Init.Prescaler = 210-1;
+  htim20.Init.CounterMode = TIM_COUNTERMODE_UP;
+//  htim20.Init.Period = 4;
+//  htim20.Init.Period = 7200-1;
+  htim20.Init.Period = 20-1;
+  htim20.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim20.Init.RepetitionCounter = 0;
+//  htim20.Init.RepetitionCounter = (Adc::size_of_adc_buffer / 2)-10;
+  htim20.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim20) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_Init(&htim20) != HAL_OK)
+  {
+    Error_Handler();
+  }
+//  if (HAL_TIM_OnePulse_Init(&htim20, TIM_OPMODE_SINGLE) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC2REF;
+//  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_OC3REF;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim20, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  sConfigOC.OCMode = TIM_OCMODE_ACTIVE;
+  sConfigOC.Pulse = 4-1;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  if (HAL_TIM_OC_ConfigChannel(&htim20, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  __HAL_TIM_ENABLE_OCxPRELOAD(&htim20, TIM_CHANNEL_2);
+  sConfigOC.Pulse = 2-1;
+  if (HAL_TIM_OC_ConfigChannel(&htim20, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  __HAL_TIM_ENABLE_OCxPRELOAD(&htim20, TIM_CHANNEL_3);
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  sBreakDeadTimeConfig.BreakFilter = 0;
+  sBreakDeadTimeConfig.BreakAFMode = TIM_BREAK_AFMODE_INPUT;
+  sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
+  sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
+  sBreakDeadTimeConfig.Break2Filter = 0;
+  sBreakDeadTimeConfig.Break2AFMode = TIM_BREAK_AFMODE_INPUT;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  if (HAL_TIMEx_ConfigBreakDeadTime(&htim20, &sBreakDeadTimeConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+//  tim_dma.Instance = DMA1_Channel4;
+//  tim_dma.Init.Request = DMA_REQUEST_TIM20_UP;
+//  tim_dma.Init.Direction = DMA_MEMORY_TO_PERIPH;
+//  tim_dma.Init.PeriphInc = DMA_PINC_DISABLE;
+//  tim_dma.Init.MemInc = DMA_MINC_DISABLE;
+//  tim_dma.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+//  tim_dma.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+//  tim_dma.Init.Mode = DMA_CIRCULAR;
+//  tim_dma.Init.Priority = DMA_PRIORITY_VERY_HIGH;
+//  if (HAL_DMA_Init(&tim_dma) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+}
+
 
 /**
   * Enable DMA controller clock
@@ -831,6 +961,10 @@ static void MX_DMA_Init(void)
   HAL_NVIC_SetPriority(DMA2_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Channel1_IRQn);
 
+
+  /* DMA1_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
 
 }
 

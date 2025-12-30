@@ -4,7 +4,7 @@ For now only ADC 1&2 is used. I've tried using ADC1,2,3,4 in dual interleaved mo
 
 # DAC 
 
-DAC is triggerred regulary by timer in 170MHz/17 = 10 MHz frequency. 4 sinewave are preconfigured, with varing samples per period.
+DAC is triggerred regulary by timer in 170MHz/17 = 5 MHz frequency. 4 sinewave are preconfigured, with varing samples per period.
 Available 5000, 400, 200, 80, 40 samples, which corresponds to sinewave of frequency 1 kHz, 12.5 kHz, 25 kHz, 62.5 kHz, and 125 kHz respectively.
 
 # Misc

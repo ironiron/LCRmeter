@@ -12,7 +12,7 @@
 #define VERSION_MAJOR 2
 #define VERSION_MINOR 1
 #define VERSION_PATCH 0
-#define VERSION_BUILD 621
+#define VERSION_BUILD 653
 
 #define VERSION_STRINGIFY(a) #a
 
