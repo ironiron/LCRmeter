@@ -10,3 +10,18 @@
 - remove connection to 2nd ADCs
 - Are there  better opamps??
 - remove option for 1.5 V ref
+- reduce number of caps, and increase its capacitance
+- think about Rseries diagnosis
+- make programming interface coherent with stlink or make something with proper connnection
+- think about connections to from MCU
+- is there MCU with bigger RAM?
+
+# Decision documentation
+
+74LVC1G66 Switches needs to be placed before Rseries so that ADC measurments do no take into account resistance of switches itself.
+
+PCB should be 4 layer to improve EMC. inner layers should be GND only, VCC is not so critical that needs a power plane.
+
+Capacitors should be 0603 or lower
+
+
