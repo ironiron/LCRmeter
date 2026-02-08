@@ -4435,6 +4435,466 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "lcrmeter-rescue:Conn_01x04_Female"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04_Female"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_??x*mm* Connector*:*1x??x*mm* Socket?Strip?Straight?1X* Socket?Strip?Angled?1X*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x04_Female_1_1"
+				(polyline
+					(pts
+						(xy -1.27 2.54) (xy -0.508 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -5.08) (xy -0.508 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 2.032)
+					(mid -0.5058 2.54)
+					(end 0 3.048)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -0.508)
+					(mid -0.5058 0)
+					(end 0 0.508)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -3.048)
+					(mid -0.5058 -2.54)
+					(end 0 -2.032)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -5.588)
+					(mid -0.5058 -5.08)
+					(end 0 -4.572)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "lcrmeter-rescue:Conn_01x04_Male"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04_Male"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_??x*mm* Connector*:*1x??x*mm* Pin?Header?Straight?1X* Pin?Header?Angled?1X*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x04_Male_1_1"
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 2.54) (xy 0.8636 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -5.08) (xy 0.8636 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -5.08 180)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "lcrmeter-rescue:Conn_01x06_Female-Connector"
 			(pin_names
 				(offset 1.016)
@@ -6120,7 +6580,7 @@
 		)
 		(uuid "95def3b8-a2b9-4584-b669-df656a187669")
 	)
-	(text "miscellaneous\nconnectors"
+	(text "\nconnectors"
 		(exclude_from_sim no)
 		(at 226.695 164.465 0)
 		(effects
@@ -6181,12 +6641,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "06b4e09b-1e74-452e-a2be-e9290fc3d3eb")
-	)
-	(junction
-		(at 23.495 181.61)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0837619c-2035-4e77-8f9f-47cd2791a196")
 	)
 	(junction
 		(at 37.592 181.61)
@@ -6351,6 +6805,12 @@
 		(uuid "65c980fb-d195-46e8-9002-65a2d3ca27b0")
 	)
 	(junction
+		(at 101.6 153.67)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "676d76fb-f799-4c7c-83ca-7a3829ab0f74")
+	)
+	(junction
 		(at 29.21 181.61)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6363,6 +6823,12 @@
 		(uuid "6cb4636d-b1e3-48ea-b9ed-8bc15fabf9d2")
 	)
 	(junction
+		(at 229.87 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6d9ebc5a-853b-4123-b29c-1d717a3c172b")
+	)
+	(junction
 		(at 87.63 107.95)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6373,12 +6839,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "78982c2e-ed23-4be8-8348-46481a578b4e")
-	)
-	(junction
-		(at 23.495 189.23)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "80dfbaa2-2f09-4b46-86cb-b9e4aa096184")
 	)
 	(junction
 		(at 134.112 187.198)
@@ -6399,6 +6859,12 @@
 		(uuid "9305f1b6-d353-4fbb-b1e1-886ae3d246c2")
 	)
 	(junction
+		(at 227.33 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a65ae3e6-5e4b-470b-b34f-60ff242e19ef")
+	)
+	(junction
 		(at 196.85 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6417,6 +6883,12 @@
 		(uuid "bc4a3739-e09e-4c23-9d9f-35d81e4f7d2b")
 	)
 	(junction
+		(at 101.6 144.78)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "be6dea2e-8c8c-407c-8898-4fa29379927b")
+	)
+	(junction
 		(at 50.8 189.23)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6427,6 +6899,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c78ad281-7425-45c8-a3ff-9f98fb6e1ae9")
+	)
+	(junction
+		(at 232.41 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c79fb904-9aa2-40a9-b845-b964d22b339a")
 	)
 	(junction
 		(at 39.37 73.66)
@@ -6493,6 +6971,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f86acd2e-1729-4934-8105-9d5489a1c3fa")
+	)
+	(junction
+		(at 224.79 132.08)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "faf2075a-f227-4a59-9c76-030224128a4e")
 	)
 	(junction
 		(at 59.69 63.5)
@@ -6698,6 +7182,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 132.08) (xy 224.79 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d407b74-28a6-49c8-a747-3c51ca241b51")
+	)
+	(wire
+		(pts
 			(xy 121.031 175.26) (xy 121.031 163.068)
 		)
 		(stroke
@@ -6848,6 +7342,16 @@
 	)
 	(wire
 		(pts
+			(xy 239.014 134.62) (xy 239.014 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1acd74bb-50ab-4621-97d5-70d9a41b5439")
+	)
+	(wire
+		(pts
 			(xy 69.85 99.06) (xy 69.85 100.33)
 		)
 		(stroke
@@ -6865,6 +7369,16 @@
 			(type default)
 		)
 		(uuid "1bff927b-1c12-4075-97cb-6b3d0721844a")
+	)
+	(wire
+		(pts
+			(xy 220.98 132.08) (xy 224.79 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1c656b0d-2563-41c5-9392-b243e07c331a")
 	)
 	(polyline
 		(pts
@@ -6905,6 +7419,16 @@
 			(type default)
 		)
 		(uuid "1f6ea3a8-b279-461b-8c09-917b3e3bbb7f")
+	)
+	(wire
+		(pts
+			(xy 101.6 153.67) (xy 101.6 154.178)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "227f824c-c3d1-4e97-9f7a-17383713d9e5")
 	)
 	(wire
 		(pts
@@ -7005,6 +7529,16 @@
 			(type default)
 		)
 		(uuid "34581502-c468-452f-a8fc-3a509fa571da")
+	)
+	(wire
+		(pts
+			(xy 227.33 130.81) (xy 227.33 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3cf6df84-9ace-4c7a-a6eb-4e675daafbbe")
 	)
 	(wire
 		(pts
@@ -7158,6 +7692,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 130.81) (xy 224.79 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4fb6e003-ad42-4a13-b6f6-ef2c68fb00f1")
+	)
+	(wire
+		(pts
 			(xy 182.372 81.788) (xy 182.372 82.55)
 		)
 		(stroke
@@ -7268,6 +7812,16 @@
 	)
 	(wire
 		(pts
+			(xy 232.41 132.08) (xy 232.41 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58899129-8609-4bab-a6fc-90ffcf1e20f2")
+	)
+	(wire
+		(pts
 			(xy 144.145 151.384) (xy 144.145 151.511)
 		)
 		(stroke
@@ -7275,6 +7829,16 @@
 			(type default)
 		)
 		(uuid "58bf24d2-b2a7-46f3-bee8-8191ceda51b0")
+	)
+	(wire
+		(pts
+			(xy 229.87 130.81) (xy 229.87 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5954ec0d-239a-4e4e-82d0-e52a78029992")
 	)
 	(wire
 		(pts
@@ -7305,6 +7869,16 @@
 			(type default)
 		)
 		(uuid "5bd6828d-7323-4280-9521-f2cb8c3e7897")
+	)
+	(wire
+		(pts
+			(xy 232.41 132.08) (xy 239.014 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c3c7478-d658-4dbc-b0a8-e9b44e6aec22")
 	)
 	(wire
 		(pts
@@ -7358,6 +7932,16 @@
 	)
 	(wire
 		(pts
+			(xy 229.87 132.08) (xy 232.41 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6afc1c77-0ca2-4e76-bc93-a74e5cd652ce")
+	)
+	(wire
+		(pts
 			(xy 100.33 21.59) (xy 90.17 21.59)
 		)
 		(stroke
@@ -7375,6 +7959,16 @@
 			(type default)
 		)
 		(uuid "7043c810-fefd-406a-8e38-2c06cd060269")
+	)
+	(wire
+		(pts
+			(xy 224.79 132.08) (xy 227.33 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71519a28-12a5-48d2-b741-41f8bf3cc14e")
 	)
 	(wire
 		(pts
@@ -7518,6 +8112,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 146.05) (xy 91.44 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83d9a73c-8efb-4441-89f5-6bebcfdc309a")
+	)
+	(wire
+		(pts
 			(xy 115.951 178.181) (xy 134.112 178.181)
 		)
 		(stroke
@@ -7538,7 +8142,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 152.4) (xy 101.6 154.178)
+			(xy 101.6 152.4) (xy 101.6 153.67)
 		)
 		(stroke
 			(width 0)
@@ -7575,6 +8179,16 @@
 			(type default)
 		)
 		(uuid "87ee521b-f95c-4594-a1ad-a9186bc96bd3")
+	)
+	(wire
+		(pts
+			(xy 91.44 153.67) (xy 101.6 153.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89900d06-99fd-4242-bf3c-48c4e13ead3f")
 	)
 	(wire
 		(pts
@@ -7675,16 +8289,6 @@
 			(type default)
 		)
 		(uuid "97304f12-9c05-4b6e-9648-3d61891005b2")
-	)
-	(wire
-		(pts
-			(xy 17.018 189.23) (xy 23.495 189.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "97d205bf-e487-456d-a575-8b3dc9a966fd")
 	)
 	(wire
 		(pts
@@ -7795,6 +8399,16 @@
 			(type default)
 		)
 		(uuid "a2b94cb7-c165-49c8-8087-0e3c6d70903d")
+	)
+	(wire
+		(pts
+			(xy 227.33 132.08) (xy 227.33 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a661d5fc-a3fb-4012-af54-f6c7389c2c80")
 	)
 	(wire
 		(pts
@@ -7955,6 +8569,16 @@
 			(type default)
 		)
 		(uuid "c021ec7a-8e1e-4933-b7cb-3efee559840b")
+	)
+	(wire
+		(pts
+			(xy 91.44 144.78) (xy 101.6 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1817d94-d577-438d-af31-c09ef795c05e")
 	)
 	(wire
 		(pts
@@ -8176,16 +8800,6 @@
 		)
 		(uuid "d5bae53d-1611-48d6-8dce-58394585b1da")
 	)
-	(wire
-		(pts
-			(xy 23.495 181.61) (xy 17.018 181.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d69ac2ad-a900-4adb-bd59-d1b9501bd64c")
-	)
 	(polyline
 		(pts
 			(xy 212.598 127.127) (xy 113.665 127.127)
@@ -8285,6 +8899,16 @@
 			(type default)
 		)
 		(uuid "e102ddfc-c632-43cb-ac04-42dffc7858ab")
+	)
+	(wire
+		(pts
+			(xy 229.87 134.62) (xy 229.87 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1962128-0d4a-44b9-b213-640b2a1e8a37")
 	)
 	(wire
 		(pts
@@ -8536,6 +9160,16 @@
 		)
 		(uuid "f5f7d440-1fbc-4624-bc0b-908a74ec7f27")
 	)
+	(wire
+		(pts
+			(xy 232.41 130.81) (xy 232.41 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f6a7e9da-cc1f-4084-8ad1-dd0a123f8e48")
+	)
 	(polyline
 		(pts
 			(xy 76.708 185.801) (xy 76.708 170.307)
@@ -8626,7 +9260,7 @@
 		)
 		(uuid "0677af88-c4d8-4503-b96f-3c616c42c53d")
 	)
-	(label "Vx"
+	(label "Vx_FILTERED"
 		(at 223.52 36.83 0)
 		(effects
 			(font
@@ -8676,7 +9310,7 @@
 		)
 		(uuid "1359bae7-53d9-400b-87b8-7f980ed63c66")
 	)
-	(label "Vg"
+	(label "Vg_FILTERED"
 		(at 223.52 39.37 0)
 		(effects
 			(font
@@ -8926,6 +9560,16 @@
 		)
 		(uuid "99277a78-497a-4d75-86f8-4542734f15e2")
 	)
+	(label "Vx"
+		(at 220.98 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a4c9587b-ca65-46f1-8486-42b4edd525ef")
+	)
 	(label "RST"
 		(at 241.3 74.93 180)
 		(effects
@@ -9006,6 +9650,16 @@
 		)
 		(uuid "c7610dc6-5633-451e-a296-faf260039839")
 	)
+	(label "Vx"
+		(at 158.75 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "cb3aa64a-f75e-4742-bae5-a3bcd820287c")
+	)
 	(label "EN_PATH_6"
 		(at 125.73 109.22 180)
 		(effects
@@ -9016,7 +9670,7 @@
 		)
 		(uuid "d01d8344-4bf9-4e66-860c-fae79ac35c50")
 	)
-	(label "Vg"
+	(label "Vx_FILTERED"
 		(at 158.75 99.06 0)
 		(effects
 			(font
@@ -9166,7 +9820,7 @@
 		)
 		(uuid "f9c3acff-b97d-42c1-b887-b2a199ef80d8")
 	)
-	(label "Vg"
+	(label "Vg_FILTERED"
 		(at 158.75 96.52 0)
 		(effects
 			(font
@@ -9204,7 +9858,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "2u2"
 			(at 29.845 187.96 0)
 			(effects
 				(font
@@ -9213,7 +9867,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 30.1752 189.23 0)
 			(effects
 				(font
@@ -9272,7 +9926,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "2u2"
 			(at 35.687 187.96 0)
 			(effects
 				(font
@@ -9281,7 +9935,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 36.0172 189.23 0)
 			(effects
 				(font
@@ -9349,7 +10003,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 41.3512 189.23 0)
 			(effects
 				(font
@@ -9805,7 +10459,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 51.7652 189.23 0)
 			(effects
 				(font
@@ -10035,6 +10689,150 @@
 			(project "lcrmeter"
 				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
 					(reference "#PWR034")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "lcrmeter-rescue:Conn_01x04_Female")
+		(at 227.33 125.73 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005a14b3c8")
+		(property "Reference" "J5"
+			(at 222.25 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LCR_input"
+			(at 227.965 123.825 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical"
+			(at 227.33 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 227.33 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 227.33 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4c9f8a9c-5794-4cfc-92b4-7737445432e1")
+		)
+		(pin "4"
+			(uuid "d880e832-e4a4-4af1-a98b-1a61231b1d42")
+		)
+		(pin "3"
+			(uuid "d65cccab-4c35-4ae0-b672-1fb774e3ff58")
+		)
+		(pin "2"
+			(uuid "27182c73-b046-4e2c-8d05-6988a0674e8a")
+		)
+		(instances
+			(project "lcrmeter"
+				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
+					(reference "J5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "lcrmeter-rescue:Conn_01x04_Male")
+		(at 227.33 139.7 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "00000000-0000-0000-0000-00005a14b89a")
+		(property "Reference" "J6"
+			(at 222.25 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LCR_input"
+			(at 228.727 140.97 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 227.33 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 227.33 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 227.33 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fcc46144-3aba-4ad7-9c0c-844a43acff93")
+		)
+		(pin "2"
+			(uuid "6a45530a-a601-4e8f-8e92-8643b33ecc04")
+		)
+		(pin "4"
+			(uuid "bc6c929c-f7cc-42c4-8f59-3b112af724cb")
+		)
+		(pin "3"
+			(uuid "3df5cd83-9123-4364-90a7-1aab98923d84")
+		)
+		(instances
+			(project "lcrmeter"
+				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -10473,7 +11271,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+		(property "Footprint" "Connector_Harwin:Harwin_M20-89006xx_1x06_P2.54mm_Horizontal"
 			(at 246.38 69.85 0)
 			(effects
 				(font
@@ -11363,7 +12161,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 175.26 41.91 0)
 			(effects
 				(font
@@ -11680,7 +12478,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "2u2"
 			(at 24.13 187.96 0)
 			(effects
 				(font
@@ -11689,7 +12487,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 24.4602 189.23 0)
 			(effects
 				(font
@@ -12081,7 +12879,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 144.145 154.051 0)
 			(effects
 				(font
@@ -12511,7 +13309,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 144.272 165.735 0)
 			(effects
 				(font
@@ -12775,7 +13573,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 144.018 177.927 0)
 			(effects
 				(font
@@ -13039,7 +13837,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 144.018 189.865 0)
 			(effects
 				(font
@@ -13684,7 +14482,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 17.018 185.42 0)
+		(at 91.44 149.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13692,7 +14490,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005ca5f813")
 		(property "Reference" "C1"
-			(at 17.653 182.88 0)
+			(at 92.075 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13701,7 +14499,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 17.653 187.96 0)
+			(at 92.075 152.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13710,7 +14508,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 17.9832 189.23 0)
+			(at 92.4052 153.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13719,7 +14517,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 17.018 185.42 0)
+			(at 91.44 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13728,7 +14526,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 17.018 185.42 0)
+			(at 91.44 149.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13777,7 +14575,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 58.4962 189.23 0)
 			(effects
 				(font
@@ -14131,7 +14929,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 63.5 35.56 0)
 			(effects
 				(font
@@ -14201,7 +14999,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 69.85 24.13 0)
 			(effects
 				(font
@@ -14530,7 +15328,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 42.672 44.45 90)
 			(effects
 				(font
@@ -14600,7 +15398,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 29.972 67.31 90)
 			(effects
 				(font
@@ -15265,7 +16063,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 100.33 24.13 0)
 			(effects
 				(font
@@ -15400,7 +16198,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 67.818 105.41 90)
 			(effects
 				(font
@@ -15664,7 +16462,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 			(at 37.592 67.31 90)
 			(effects
 				(font
@@ -15804,7 +16602,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 69.85 102.87 0)
 			(effects
 				(font
@@ -16071,7 +16869,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
 			(at 36.83 99.06 0)
 			(effects
 				(font
@@ -16211,7 +17009,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Harwin:Harwin_M20-89003xx_1x03_P2.54mm_Horizontal"
 			(at 35.56 142.24 0)
 			(effects
 				(font
@@ -16229,7 +17027,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x03, script generated"
+		(property "Description" ""
 			(at 35.56 142.24 0)
 			(effects
 				(font
@@ -16283,7 +17081,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 186.3852 148.59 0)
 			(effects
 				(font
@@ -16418,7 +17216,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 50.8 63.5 0)
 			(effects
 				(font
@@ -16519,6 +17317,70 @@
 			(project "lcrmeter"
 				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
 					(reference "#PWR029")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 239.014 134.62 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cf533c1d-ad55-44db-bbe9-2389e30a457a")
+		(property "Reference" "#PWR059"
+			(at 239.014 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 239.014 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 239.014 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 239.014 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 239.014 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "11e0811f-55ed-4654-a835-2dcdb0324ff2")
+		)
+		(instances
+			(project "lcrmeter"
+				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -16706,7 +17568,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 77.47 24.13 0)
 			(effects
 				(font
@@ -16970,7 +17832,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
 			(at 63.5 43.18 0)
 			(effects
 				(font
@@ -17154,6 +18016,16 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+			)
+		)
+		(pin "Vx" output
+			(at 158.75 104.14 0)
+			(uuid "de4ad33e-0180-47ef-b8bc-f18d5a4d7a5f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
