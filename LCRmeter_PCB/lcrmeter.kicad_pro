@@ -48,7 +48,7 @@
         "silk_text_thickness": 0.15,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.25
+          "min_clearance": 0.2
         }
       },
       "diff_pair_dimensions": [
@@ -63,7 +63,16 @@
           "width": 0.25
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "courtyards_overlap|127485000|70620000|0770beb0-9f93-4658-92c3-eba706b906e3|dc46bd38-4fe6-4039-b32e-13af4dc24f19",
+          ""
+        ],
+        [
+          "courtyards_overlap|143307396|70645000|5d1e2994-9d7b-498e-942c-06385cfffc0b|be2f2ae1-d29a-4cd2-ab4c-26231cfc16a1",
+          ""
+        ]
+      ],
       "meta": {
         "filename": "board_design_settings.json",
         "version": 2
@@ -132,7 +141,7 @@
         "max_error": 0.005,
         "min_clearance": 0.2,
         "min_connection": 0.2,
-        "min_copper_edge_clearance": 0.2,
+        "min_copper_edge_clearance": 0.5,
         "min_groove_width": 0.0,
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
@@ -141,11 +150,11 @@
         "min_resolved_spokes": 2,
         "min_silk_clearance": 0.2,
         "min_text_height": 1.0,
-        "min_text_thickness": 0.2,
-        "min_through_hole_diameter": 0.4,
+        "min_text_thickness": 0.15,
+        "min_through_hole_diameter": 0.3,
         "min_track_width": 0.2,
         "min_via_annular_width": 0.2,
-        "min_via_diameter": 0.4,
+        "min_via_diameter": 0.3,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -201,6 +210,7 @@
         0.6,
         0.8,
         1.0,
+        1.8,
         2.0
       ],
       "tuning_pattern_settings": {
@@ -282,6 +292,10 @@
       ],
       [
         "pin_to_pin|1022350|1377950|ff90ad9b-1620-4062-a9a5-20c98f0c621f|1d7baf01-5c5b-4d7a-a469-6df39c12ff20|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e",
+        ""
+      ],
+      [
+        "pin_to_pin|1022350|1377950|ff90ad9b-1620-4062-a9a5-20c98f0c621f|a0e4fc2d-7825-46ae-bf13-3b5223a03075|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e|/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e",
         ""
       ],
       [
@@ -516,7 +530,7 @@
       "similar_labels": "warning",
       "similar_power": "warning",
       "simulation_model_issue": "ignore",
-      "single_global_label": "ignore",
+      "single_global_label": "warning",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
       "unit_value_mismatch": "error",
