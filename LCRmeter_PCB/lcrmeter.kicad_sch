@@ -1117,6 +1117,33 @@
 					(hide yes)
 				)
 			)
+			(property "Sim.Device" "V"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Type" "DC"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Pins" "1=+ 2=-"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
 			(property "ki_keywords" "battery cell"
 				(at 0 0 0)
 				(effects
@@ -6887,6 +6914,12 @@
 		(uuid "c79fb904-9aa2-40a9-b845-b964d22b339a")
 	)
 	(junction
+		(at 38.1 40.64)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cd06faaa-444b-4e1e-9eeb-784bf50738e8")
+	)
+	(junction
 		(at 39.37 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7242,6 +7275,16 @@
 	)
 	(wire
 		(pts
+			(xy 38.1 40.64) (xy 38.1 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "146737fc-17dd-4b3b-ad92-ca033e7956bb")
+	)
+	(wire
+		(pts
 			(xy 208.28 107.95) (xy 208.28 110.49)
 		)
 		(stroke
@@ -7492,6 +7535,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 40.64) (xy 38.1 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30dd20d2-d898-4a9a-9a10-269326017f07")
+	)
+	(wire
+		(pts
 			(xy 71.12 35.56) (xy 71.12 33.02)
 		)
 		(stroke
@@ -7679,6 +7732,16 @@
 			(type default)
 		)
 		(uuid "4dd2f8d5-800e-41bd-a38c-dd8f6acb2db6")
+	)
+	(wire
+		(pts
+			(xy 44.45 40.64) (xy 38.1 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e58542c-00da-4d62-910d-8a6c4e8c4161")
 	)
 	(wire
 		(pts
@@ -8389,16 +8452,6 @@
 			(type default)
 		)
 		(uuid "a090d162-655b-47ea-8cb5-cf52e14c1b25")
-	)
-	(wire
-		(pts
-			(xy 30.48 40.64) (xy 44.45 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a17f64f5-6aaf-4f4d-83da-1fb35075fcaa")
 	)
 	(wire
 		(pts
@@ -9380,16 +9433,6 @@
 		)
 		(uuid "35191968-383c-49fc-a19a-61f84ea43327")
 	)
-	(label "Display_VCC"
-		(at 33.02 40.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "41d581a2-040b-4a1a-8bfd-aa5bad6e7496")
-	)
 	(label "EN_PATH_4"
 		(at 187.96 97.79 180)
 		(effects
@@ -10228,7 +10271,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "~"
 			(at 101.6 148.336 90)
 			(effects
 				(font
@@ -10243,6 +10286,33 @@
 				(font
 					(size 1.27 1.27)
 				)
+			)
+		)
+		(property "Sim.Device" "V"
+			(at 101.6 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" "DC"
+			(at 101.6 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=+ 2=-"
+			(at 101.6 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -16586,6 +16656,72 @@
 			(project "lcrmeter"
 				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
 					(reference "D5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VCC")
+		(at 38.1 39.37 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7f07ce77-8eb9-47db-9cd5-2b6a3513bef9")
+		(property "Reference" "#PWR015"
+			(at 38.1 43.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VCC"
+			(at 38.1 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 38.1 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 38.1 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 38.1 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "52cefd0b-4292-4376-b584-a5058cc11ffb")
+		)
+		(instances
+			(project "lcrmeter"
+				(path "/cf9a12ad-2fa3-4d0e-8bc4-f65b698e427e"
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)

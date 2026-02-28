@@ -69,7 +69,19 @@
           ""
         ],
         [
-          "courtyards_overlap|143307396|70645000|5d1e2994-9d7b-498e-942c-06385cfffc0b|be2f2ae1-d29a-4cd2-ab4c-26231cfc16a1",
+          "courtyards_overlap|143355198|70645000|5d1e2994-9d7b-498e-942c-06385cfffc0b|be2f2ae1-d29a-4cd2-ab4c-26231cfc16a1",
+          ""
+        ],
+        [
+          "silk_over_copper|113629444|78499353|97d143be-c290-43ab-b88e-c9d9c37f26a7|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|117657707|84818903|775eefc5-ddac-498c-af57-858335d64d7a|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|118889826|77799890|1e008c3e-06fc-4869-b169-3666a9a547c6|00000000-0000-0000-0000-000000000000",
           ""
         ]
       ],
@@ -104,7 +116,7 @@
         "items_not_allowed": "error",
         "length_out_of_range": "error",
         "lib_footprint_issues": "warning",
-        "lib_footprint_mismatch": "warning",
+        "lib_footprint_mismatch": "ignore",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "mirrored_text_on_front_layer": "warning",
@@ -533,6 +545,7 @@
       "single_global_label": "warning",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
